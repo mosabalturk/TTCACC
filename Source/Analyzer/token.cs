@@ -8,6 +8,8 @@ namespace Analyzer
     public class token
     {
         public int id { get; set; }
+        public static int idCounter=0;
+        public static void zeroIdCounter() { idCounter = 0; }
         protected string lexeme;
         private string type;
         // type is equla to
@@ -30,28 +32,28 @@ namespace Analyzer
         public bool isVstring() { if (getType() == "vstring") return true; else return false; }
         public bool isLibrary() { if (getType() == "library") return true; else return false; }
 
-        public token(int id,string lexeme)
+        public token(string lexeme)
         {
-            this.id = id;
+            this.id = idCounter++;
             this.lexeme = lexeme;
             count = 0;
         }
-        public token(int id, string lexeme,int count)
+        public token(string lexeme,int count)
         {
-            this.id = id;
+            this.id = idCounter++;
             this.lexeme = lexeme;
             this.count = count;
         }
-        public token(int id, string lexeme, string type)
+        public token(string lexeme, string type)
         {
-            this.id = id;
+            this.id = idCounter++;
             this.lexeme = lexeme;
             this.type = type;
             this.count = 0;
         }
-        public token(int id, string lexeme, string type, int count)
+        public token(string lexeme, string type, int count)
         {
-            this.id = id;
+            this.id = idCounter++;
             this.lexeme = lexeme;
             this.type = type;
             this.count = count;
@@ -107,14 +109,13 @@ namespace Analyzer
             }
             else
             {
-                int id = tkn.Count + 1;
-                token temp = new token(id,sToken, 1);
+                token temp = new token(sToken, 1);
                 tkn.Add(temp);
             }
         }
         public token Copy()
         {
-            var result = new token(this.id,this.lexeme);
+            var result = new token(this.lexeme);
             result.id = this.id;
             result.lexeme = this.lexeme;
             result.Pointer = this.Pointer;

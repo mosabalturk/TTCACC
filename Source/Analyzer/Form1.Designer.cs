@@ -26,6 +26,8 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.button6 = new System.Windows.Forms.Button();
+            this.showCodebtn = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
             this.funcCompBtn = new System.Windows.Forms.Button();
@@ -39,8 +41,7 @@
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
-            this.showCodebtn = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
+            this.structObjectsGS = new System.Windows.Forms.Button();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -81,6 +82,7 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.structObjectsGS);
             this.splitContainer1.Panel1.Controls.Add(this.button6);
             this.splitContainer1.Panel1.Controls.Add(this.showCodebtn);
             this.splitContainer1.Panel1.Controls.Add(this.button5);
@@ -104,6 +106,28 @@
             this.splitContainer1.SplitterDistance = 77;
             this.splitContainer1.SplitterWidth = 5;
             this.splitContainer1.TabIndex = 9;
+            // 
+            // button6
+            // 
+            this.button6.Location = new System.Drawing.Point(96, 3);
+            this.button6.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button6.Name = "button6";
+            this.button6.Size = new System.Drawing.Size(117, 29);
+            this.button6.TabIndex = 19;
+            this.button6.Text = "show GS tokens";
+            this.button6.UseVisualStyleBackColor = true;
+            this.button6.Click += new System.EventHandler(this.button6_Click);
+            // 
+            // showCodebtn
+            // 
+            this.showCodebtn.Location = new System.Drawing.Point(216, 3);
+            this.showCodebtn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.showCodebtn.Name = "showCodebtn";
+            this.showCodebtn.Size = new System.Drawing.Size(85, 28);
+            this.showCodebtn.TabIndex = 18;
+            this.showCodebtn.Text = "show code";
+            this.showCodebtn.UseVisualStyleBackColor = true;
+            this.showCodebtn.Click += new System.EventHandler(this.showCodebtn_Click);
             // 
             // button5
             // 
@@ -259,27 +283,16 @@
             this.richTextBox2.Text = "";
             this.richTextBox2.TextChanged += new System.EventHandler(this.richTextBox2_TextChanged);
             // 
-            // showCodebtn
+            // structObjectsGS
             // 
-            this.showCodebtn.Location = new System.Drawing.Point(216, 3);
-            this.showCodebtn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.showCodebtn.Name = "showCodebtn";
-            this.showCodebtn.Size = new System.Drawing.Size(85, 28);
-            this.showCodebtn.TabIndex = 18;
-            this.showCodebtn.Text = "show code";
-            this.showCodebtn.UseVisualStyleBackColor = true;
-            this.showCodebtn.Click += new System.EventHandler(this.showCodebtn_Click);
-            // 
-            // button6
-            // 
-            this.button6.Location = new System.Drawing.Point(96, 3);
-            this.button6.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(117, 29);
-            this.button6.TabIndex = 19;
-            this.button6.Text = "show GS tokens";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
+            this.structObjectsGS.Location = new System.Drawing.Point(619, 4);
+            this.structObjectsGS.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.structObjectsGS.Name = "structObjectsGS";
+            this.structObjectsGS.Size = new System.Drawing.Size(158, 28);
+            this.structObjectsGS.TabIndex = 20;
+            this.structObjectsGS.Text = "struct objects inGS";
+            this.structObjectsGS.UseVisualStyleBackColor = true;
+            this.structObjectsGS.Click += new System.EventHandler(this.structObjects_Click);
             // 
             // Form1
             // 
@@ -320,6 +333,7 @@
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button showCodebtn;
         private System.Windows.Forms.Button button6;
+        private System.Windows.Forms.Button structObjectsGS;
     }
 }
 

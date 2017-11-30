@@ -17,6 +17,8 @@ namespace Analyzer
         private List<function> func_prototypes = new List<function>();//done
         private List<code> classes = new List<code>();//done
         private List<code> structes = new List<code>();//done
+        private List<token> classObjects = new List<token>();
+        private List<token> structObjects = new List<token>();
         private List<token> GlobalScobeGlobalVariablesCounter = new List<token>();
         private List<token> GlobalScobeKeyWordsCounter = new List<token>();
         private List<token> GlobalScobeDataTypesCounter = new List<token>();
@@ -27,12 +29,12 @@ namespace Analyzer
         public List<function> Allfunctions { get { return functions; } }
         public List<function> Allfunc_prototypes { get { return func_prototypes; } }
         public List<code> Allclasses { get { return classes; } }
+        public List<token> structObjectsGS { get { return structObjects; } }
         public List<code> Allstructs { get { return structes; } }
         public List<string> getLibraries { get { return libraries; } }
         public List<token> getDefines { get { return defines; } }
         public void findValDataTypesKeywsGlblVarOp()
         {
-
         }
         public code(string codestr, string filename)
         {
@@ -47,11 +49,8 @@ namespace Analyzer
             globalScobeTokens = new List<token>(allCodeTokens); // copy allCodeTokens list
             findClassesAndStructs();
             Analyzer.structAsIdentifiers(allCodeTokens, globalScobeTokens, structes.Select(a => a.filename).ToList());
-            //globalScobeTokens = Analyzer.newIdanalysiss(globalScobeTokens, structes.Select(a => a.filename).ToList());
             findMain();
             findFunctionsAndPrototypes();
-            
-            
         }
 
 
@@ -85,7 +84,7 @@ namespace Analyzer
                     i++;
                     while ((allCodeTokens[i].getLexeme() != "}") || (parentheses != 0))
                     {
-                        funcBody += allCodeTokens[i].getLexeme();
+                        funcBody += allCodeTokens[i].getLexeme()+" ";
                         funcTokens.Add(allCodeTokens[i]);
                         globalScobeTokens.Remove(allCodeTokens[i]);
                         if (allCodeTokens[i].getLexeme() == "{")
@@ -103,20 +102,52 @@ namespace Analyzer
         }
         public void findFunctionsAndPrototypes()
         {
-            for (int i = 0; i < allCodeTokens.Count; i++)
+            for (int i = 0; i < allCodeTokens.Count-2; i++)
             {
                 int parentheses = 0;
                 int j=0;
-                
+                if ((allCodeTokens[i].getLexeme() == "main")||(allCodeTokens[i].getLexeme() == "struct")||( allCodeTokens[i].getLexeme() == "class"))
+                {
+                    while (allCodeTokens[i].getLexeme() != "{")
+                    {
+                        i++;
+                    }
+                    i++;
+                    while ((allCodeTokens[i].getLexeme() != "}") || (parentheses != 0))
+                    {
+                        if (allCodeTokens[i].getLexeme() == "{")
+                            parentheses++;
+                        if (allCodeTokens[i].getLexeme() == "}")
+                            parentheses--;
+                        i++;
+                    }
+                    i++;
+                    continue;
+                }
                 List<token> parameters=new List<token>();
                 bool func= ((allCodeTokens[i].isDatatype()) && (allCodeTokens[i + 1].isIdentifier())&&  (allCodeTokens[i + 2].getLexeme() == "("));
                 bool funcWithoutDATATYPE = ((allCodeTokens[i].isIdentifier()) && (allCodeTokens[i + 1].getLexeme() == "("));
                 //bool funcprotoType = ((tokens[i].getType() == "datatype") && (tokens[i + 1].getType() == "identifier") && (tokens[j = i + 2].getLexeme() == "("));
                 // bool funcAsterisk = ((tokens[i].getType() == "datatype") && (tokens[i+1].getLexeme() == "*") && (tokens[i + 2].getType() == "identifier") && (tokens[j = i + 3].getLexeme() == "("));
-
-
+                if (funcWithoutDATATYPE)
+                {
+                    int y = i + 2;
+                    while (allCodeTokens[y].getLexeme() != ")")
+                        y++;
+                    if (allCodeTokens[y + 1].getLexeme() == ";")
+                        funcWithoutDATATYPE = false;
+                }
                 if (func || funcWithoutDATATYPE)
                 {
+                    string datatype;
+                    string funcName;
+                    if (func)
+                    { datatype = allCodeTokens[i].getLexeme(); funcName = allCodeTokens[i + 1].getLexeme(); }
+                    else
+                    {
+                        datatype = "void"; funcName = allCodeTokens[i].getLexeme();
+                    }
+
                     globalScobeTokens.Remove(allCodeTokens[i]);
                     globalScobeTokens.Remove(allCodeTokens[i + 1]);
                     if (func)
@@ -142,18 +173,10 @@ namespace Analyzer
                     {//خطأ عندما يكون الباراميتر ستركت أو بوينتر او مصفوفة
                         if ((allCodeTokens[s].isDatatype() && (allCodeTokens[s + 1].getType() == "identifier")))
                         {
-                            parameters.Add(new token(allCodeTokens.Count + 1, allCodeTokens[s + 1].getLexeme(), 0));
+                            parameters.Add(new token( allCodeTokens[s + 1].getLexeme(), 0));
                         }
                     }
-                    string datatype;
-                    string funcName;
-                    if (func)
-                    { datatype = allCodeTokens[i].getLexeme(); funcName = allCodeTokens[i + 1].getLexeme(); }
-                    else
-                    {
-                        datatype = "void"; funcName = allCodeTokens[i].getLexeme();
-                    }
-
+                    
                     if (!prototype)//function
                     {
                         string funcBody = "";
@@ -211,7 +234,7 @@ namespace Analyzer
                     if ((allCodeTokens[i].getLexeme() == "#") && (allCodeTokens[i + 1].getLexeme() == "define"))
                     {
                         
-                        defines.Add(new token(allCodeTokens.Count+1,allCodeTokens[i + 2].getLexeme(), 0));
+                        defines.Add(new token(allCodeTokens[i + 2].getLexeme(), 0));
                         allCodeTokens.RemoveAt(i);
                         allCodeTokens.RemoveAt(i);
                         allCodeTokens.RemoveAt(i);//error it could be operation like (2/2)
@@ -247,13 +270,25 @@ namespace Analyzer
                             parentheses--;
                         i++;
                     }
+                    //now i reffer to }
                     globalScobeTokens.Remove(allCodeTokens[i]);
-                    globalScobeTokens.Remove(allCodeTokens[i+1]);
-                    i += 1;
+
+
                     if (Isclass)
+                    {
                         classes.Add(new code(Body, Name));
+                        globalScobeTokens.Remove(allCodeTokens[++i]);
+                    }
                     else
+                    {
                         structes.Add(new code(Body, Name));
+                        while (allCodeTokens[++i].isIdentifier())
+                        {
+                            structObjects.Add(new token(allCodeTokens[i].getLexeme(), "identifier"));
+                            globalScobeTokens.Remove(allCodeTokens[i]);
+                        }
+                        globalScobeTokens.Remove(allCodeTokens[i]);
+                    }
                 }
             }
         }

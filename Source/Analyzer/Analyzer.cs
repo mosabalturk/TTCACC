@@ -234,7 +234,8 @@ namespace Analyzer {
                     case 26:
                     case 27:
                     case 28:
-                        if (cChar != '-' && cChar != '=')
+                    case 73:
+                        if (cChar != '-' && cChar != '='&& cChar != '>')
                         { flag = false; token.addOne(sToken, operations); }
                         else
                         { sToken += cChar; token.addOne(sToken, operations); }
@@ -371,7 +372,7 @@ namespace Analyzer {
                 {
                     case 0:
                         if ((cChar != '\n') && (cChar != '\t') && (cChar != ' '))
-                            resultlist.Add(new token(idCounter++,cChar.ToString()));
+                            resultlist.Add(new token(cChar.ToString()));
                         result += cChar;
                         iState = 0;
                         sToken = "";
@@ -409,44 +410,44 @@ namespace Analyzer {
                         break;
                     case 2:
                         if (isKeyword(sToken))
-                            resultlist.Add(new token(idCounter++, sToken, "keyword"));
+                            resultlist.Add(new token(sToken, "keyword"));
                         else if (isDataType(sToken))
-                            resultlist.Add(new token(idCounter++, sToken, "datatype"));
+                            resultlist.Add(new token(sToken, "datatype"));
                         else
                         {
-                            resultlist.Add(new token(idCounter++, sToken, "identifier"));
+                            resultlist.Add(new token(sToken, "identifier"));
                         }
                         iState = 0;
                         flag = false;
                         sToken = "";
                         break;
                     case 7:
-                        resultlist.Add(new token(idCounter++, sToken, "vfloat"));
+                        resultlist.Add(new token(sToken, "vfloat"));
                         iState = 0;
                         flag = false;
                         sToken = "";
                         break;
                     case 8:
-                        resultlist.Add(new token(idCounter++, sToken, "vint"));
+                        resultlist.Add(new token(sToken, "vint"));
                         iState = 0;
                         flag = false;
                         sToken = "";
                         break;
                     case 11:
-                        resultlist.Add(new token(idCounter++, sToken, "op"));
+                        resultlist.Add(new token( sToken, "op"));
                         flag = false;
                         iState = 0;
                         sToken = "";
                         break;
                     case 71:
                     case 68:
-                        resultlist.Add(new token(idCounter++, sToken, "vchar"));
+                        resultlist.Add(new token( sToken, "vchar"));
                         iState = 0;
                         sToken = "";
                         break;
                     case 15:
                         sToken += cChar;
-                        resultlist.Add(new token(idCounter++, sToken, "vstring"));
+                        resultlist.Add(new token( sToken, "vstring"));
                         iState = 0;
                         sToken = "";
                         break;
@@ -455,7 +456,7 @@ namespace Analyzer {
                         sToken = "";
                         break;
                     case 43:
-                        resultlist.Add(new token(idCounter++, sToken, "op"));
+                        resultlist.Add(new token( sToken, "op"));
                         iState = 0;
                         sToken = "";
                         break;
@@ -469,10 +470,10 @@ namespace Analyzer {
                     case 23:
                     case 24:
                         if (cChar != '+' && cChar != '=')
-                        { flag = false; resultlist.Add(new token(idCounter++, sToken, "op"));
+                        { flag = false; resultlist.Add(new token( sToken, "op"));
                         }
                         else
-                        { sToken += cChar; resultlist.Add(new token(idCounter++, sToken, "op"));
+                        { sToken += cChar; resultlist.Add(new token( sToken, "op"));
                         }
                         iState = 0;
                         sToken = "";
@@ -481,10 +482,10 @@ namespace Analyzer {
                     case 27:
                     case 28:
                         if (cChar != '-' && cChar != '=')
-                        { flag = false; resultlist.Add(new token(idCounter++, sToken, "op"));
+                        { flag = false; resultlist.Add(new token( sToken, "op"));
                         }
                         else
-                        { sToken += cChar; resultlist.Add(new token(idCounter++, sToken, "op"));
+                        { sToken += cChar; resultlist.Add(new token( sToken, "op"));
                         }
                         iState = 0;
                         sToken = "";
@@ -508,10 +509,10 @@ namespace Analyzer {
                     case 65:
                     case 66:
                         if (cChar != '=')
-                        { flag = false; resultlist.Add(new token(idCounter++, sToken, "op"));
+                        { flag = false; resultlist.Add(new token( sToken, "op"));
                         }
                         else
-                        { sToken += cChar; resultlist.Add(new token(idCounter++, sToken, "op"));
+                        { sToken += cChar; resultlist.Add(new token( sToken, "op"));
                         }
                         iState = 0;
                         sToken = "";
@@ -526,10 +527,10 @@ namespace Analyzer {
                     case 46:
                     case 47:
                         if (cChar != '&' && cChar != '=')
-                        { flag = false; resultlist.Add(new token(idCounter++, sToken, "op"));
+                        { flag = false; resultlist.Add(new token( sToken, "op"));
                         }
                         else
-                        { sToken += cChar; resultlist.Add(new token(idCounter++, sToken, "op"));
+                        { sToken += cChar; resultlist.Add(new token( sToken, "op"));
                         }
                         iState = 0;
                         sToken = "";
@@ -538,10 +539,10 @@ namespace Analyzer {
                     case 50:
                     case 51:
                         if (cChar != '|' && cChar != '=')
-                        { flag = false; resultlist.Add(new token(idCounter++, sToken, "op"));
+                        { flag = false; resultlist.Add(new token( sToken, "op"));
                         }
                         else
-                        { sToken += cChar; resultlist.Add(new token(idCounter++, sToken, "op"));
+                        { sToken += cChar; resultlist.Add(new token( sToken, "op"));
 
                         }
                         iState = 0;
@@ -551,10 +552,10 @@ namespace Analyzer {
                     case 60:
                         if (cChar != '+' && cChar != '-' && cChar != '/'
                             && cChar != '>' && cChar != '<' && cChar != '=')
-                        { flag = false; resultlist.Add(new token(idCounter++, sToken, "op"));
+                        { flag = false; resultlist.Add(new token( sToken, "op"));
                         }
                         else
-                        { sToken += cChar; resultlist.Add(new token(idCounter++, sToken, "op"));
+                        { sToken += cChar; resultlist.Add(new token( sToken, "op"));
                         }
                         iState = 0;
                         sToken = "";

@@ -103,10 +103,11 @@ namespace Analyzer
                 richTextBox2.Text += cd.filename + "\n-----\n";
                 foreach (function func in cd.Allfunctions)
                 {
+                    richTextBox2.Text += "\nfunction name:" + func.funcname+"\n";
                     richTextBox2.Text += "parameters: ";
                     foreach (token t in func.funcParameters)
                         richTextBox2.Text +=  t.getType() + " " + t.getLexeme()+" , " ;
-                    richTextBox2.Text += "\nfunction name:" + func.funcname + "\nData type: " + func.funcDataType + "\nbody :\n" + func.funcAsStr + "\n--------------\n--------------\n";
+                    richTextBox2.Text += "\nData type: " + func.funcDataType + "\nbody :\n" + func.funcAsStr + "\n--------------\n--------------\n";
                     
                 }
             }
@@ -190,6 +191,19 @@ namespace Analyzer
                 foreach (token t in cd.getGSTokens())
                 {
                     richTextBox1.Text += "< "+t.id.ToString() + " " + t.getType() + " , " + t.getLexeme() + " >\n";
+                }
+            }
+        }
+
+        private void structObjects_Click(object sender, EventArgs e)
+        {
+            richTextBox2.Text = "";
+            foreach (code cd in Program.codes)
+            {
+                richTextBox2.Text += "file name: " + cd.filename + "\n";
+                foreach (token t in cd.structObjectsGS)
+                {
+                    richTextBox2.Text += "< " + t.id.ToString() + " type: " + t.getType() + " , " + t.getLexeme() + " >\n";
                 }
             }
         }
