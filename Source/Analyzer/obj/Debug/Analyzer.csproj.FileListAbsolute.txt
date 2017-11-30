@@ -40,3 +40,5 @@ C:\Users\Mosab AlTurk\Desktop\git\Source\Analyzer\obj\Debug\Analyzer.csproj.Gene
 C:\Users\Mosab AlTurk\Desktop\git\Source\Analyzer\obj\Debug\Analyzer.csproj.CoreCompileInputs.cache
 C:\Users\Mosab AlTurk\Desktop\git\Source\Analyzer\obj\Debug\Analyzer.exe
 C:\Users\Mosab AlTurk\Desktop\git\Source\Analyzer\obj\Debug\Analyzer.pdb
+C:\Users\Muhammad Tibi\Desktop\TTCACC\Source\Analyzer\obj\Debug\Analyzer.exe
+C:\Users\Muhammad Tibi\Desktop\TTCACC\Source\Analyzer\obj\Debug\Analyzer.pdb

@@ -312,6 +312,8 @@ namespace Analyzer
         }
         
     }
+
+    // The class Tibi is working on
     public class function 
     {
         bool protoType = false;
