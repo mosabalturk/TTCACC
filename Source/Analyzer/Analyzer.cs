@@ -593,10 +593,10 @@ namespace Analyzer {
                     continue;
                 }
                 
-                bool Isarray = result[i].isDatatype() && result[i+1].isIdentifier() && result[i+2].getLexeme() == "[";
-                if (Isarray)
+                bool IsarrayInit =  result[i].isIdentifier() && result[i+1].getLexeme() == "[";
+                if (IsarrayInit)
                 {
-                    int j = i + 2;
+                    int j = i + 1;
                     List<int> arr = new List<int>();
 
                     while ((result[j].getLexeme() == "[") &&(result[j + 2].getLexeme() == "]"))
@@ -614,8 +614,8 @@ namespace Analyzer {
                         result.Remove(result[j]);
                         result.Remove(result[j]);
                     }
-                    result[i + 1].arrayBoundariy = new List<int>(arr);
-                    result[i + 1].isArray = true;
+                    result[i ].arrayIndecies = new List<int>(arr);
+                    result[i ].isArray = true;
                     continue;
                 }
             }

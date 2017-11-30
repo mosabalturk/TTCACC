@@ -13,7 +13,10 @@ namespace Analyzer
         private string cStr;//done
         private string fname;//done
         private List<string> libraries = new List<string>();//done
-        private List<token> defines = new List<token>();//done
+        private List<token> defines = new List<token>();
+        //# define varName value
+        // define.type = value of define 
+        // defin.lexeme = varName
         private List<function> func_prototypes = new List<function>();//done
         private List<code> classes = new List<code>();//done
         private List<code> structes = new List<code>();//done
@@ -44,8 +47,9 @@ namespace Analyzer
             Analyzer temp = new Analyzer(); // anlyzer class is the class that analyze code to tokens and lexemes
             allCodeTokens = temp.Result2(codestr);//analyze code to tokens and lexemes to this list
             findLibrariesAndDefines();
-            temp.pointersArraysAnalzer(allCodeTokens, getDefines);//remove *s pointers and make pointer true to the identifier that defined as pointer
-            //globalScobeTokens = allCodeTokens.Select(a=>a.Copy()).ToList();
+            temp.pointersArraysAnalzer(allCodeTokens, getDefines);
+            //remove *s pointers and make pointer true to the identifier that defined as pointer
+            // remove [ , ] and the value between them from arrays and add them to the propreties of identifier that defined as an array
             globalScobeTokens = new List<token>(allCodeTokens); // copy allCodeTokens list
             findClassesAndStructs();
             Analyzer.structAsIdentifiers(allCodeTokens, globalScobeTokens, structes.Select(a => a.filename).ToList());

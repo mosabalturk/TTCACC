@@ -67,24 +67,15 @@ namespace Analyzer
         #region identifiers region
         public bool Pointer = false;
         public bool array = false;
-        public List<int> arrayBoundariy;
+        private List<int> arrayIndex;
         public bool isPointer { get { return Pointer; } set { Pointer = value; } }
         public int pointerLevel { get; set; }
         public bool isArray { get { return array; } set { array = value; } }
-        public int arrayDimensions { get; set; }
-        private List<int> arrayBoundaries
+        public List<int> arrayIndecies
         {
-            get { return arrayBoundariy; }
+            get { return arrayIndex; }
             set
-            {
-
-                if (value.Count != arrayDimensions)
-                {
-                    throw new System.ArgumentException("arrayDimension must be equal to arrayBoundaries list elements count (EXCEPTION 1) ", "arrayBoundaries");
-                }
-                else
-                    value = arrayBoundariy;
-            }
+            { value = arrayIndex;}
         }
 
         #endregion
@@ -115,7 +106,6 @@ namespace Analyzer
             result.lexeme = this.lexeme;
             result.Pointer = this.Pointer;
             result.array = this.array;
-            result.arrayBoundariy = this.arrayBoundariy;
             result.count = this.count;
             result.type = this.type;
             return result;
