@@ -1,0 +1,23 @@
+L
+D
+_ (underscore)
+"
+'
+.
+e
+E
++
+- (minus)
+*
+/
+%
+=
+!
+~
+&
+|
+^
+<
+>
+\
+other (zeroth column, last return)
