@@ -594,6 +594,23 @@ namespace Analyzer {
             }
             return result;
         }
+        public static void structAsIdentifiers(List<token> result, List<token> result2, List<string> strcts)
+        {
+            for (int i = 0; i < result.Count-1; i++)
+            {
+                bool structPtr = (result[i].getLexeme() == "struct") && (strcts.Contains(result[i+1].getLexeme()));
+                if (structPtr)
+                {
+                    string temp = result[i].getLexeme() + " " + result[i + 1].getLexeme();
+                    result[i+1].setType("datatype");
+                    result[i+1].setLexeme(temp);
+                    token t = result[i];
+                    result.Remove(t);
+                    result2.Remove(t);
+
+                }
+            }
+        }
 
 
     }

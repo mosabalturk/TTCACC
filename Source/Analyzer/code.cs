@@ -43,11 +43,18 @@ namespace Analyzer
             allCodeTokens = temp.Result2(codestr);
             allCodeTokens = temp.PAanlysiss(allCodeTokens);
             findLibrariesAndDefines();
+            //globalScobeTokens = allCodeTokens.Select(a=>a.Copy()).ToList();
             globalScobeTokens = new List<token>(allCodeTokens); // copy allCodeTokens list
+            findClassesAndStructs();
+            Analyzer.structAsIdentifiers(allCodeTokens, globalScobeTokens, structes.Select(a => a.filename).ToList());
+            //globalScobeTokens = Analyzer.newIdanalysiss(globalScobeTokens, structes.Select(a => a.filename).ToList());
             findMain();
             findFunctionsAndPrototypes();
-            findClassesAndStructs();
+            
+            
         }
+
+
         public void findMain()
         {
             int parentheses = 0;
@@ -58,11 +65,23 @@ namespace Analyzer
             {
                 if (allCodeTokens[i].getLexeme() == "main")
                 {
-                    if(allCodeTokens[i - 1].getType()== "datatype")
-                        datatype = allCodeTokens[i - 1].getLexeme();
+
+                    {
+                        globalScobeTokens.Remove(allCodeTokens[i]);
+                        if (allCodeTokens[i - 1].getType() == "datatype")
+                        {
+                            datatype = allCodeTokens[i - 1].getLexeme();
+                            globalScobeTokens.Remove(allCodeTokens[i-1]);
+                        }
+                    }
                     i++;
+                    globalScobeTokens.Remove(allCodeTokens[i]);
                     while (allCodeTokens[i].getLexeme() != "{")
+                    {
+                        globalScobeTokens.Remove(allCodeTokens[i]);
                         i++;
+                    }
+                    globalScobeTokens.Remove(allCodeTokens[i]);
                     i++;
                     while ((allCodeTokens[i].getLexeme() != "}") || (parentheses != 0))
                     {
@@ -75,6 +94,7 @@ namespace Analyzer
                             parentheses--;
                         i++;
                     }
+                    globalScobeTokens.Remove(allCodeTokens[i]);
                     main = new function(funcBody, funcTokens,new List<token>(), datatype, "main");
                     main.funcDataType = datatype;
                     break;
@@ -90,46 +110,57 @@ namespace Analyzer
                 
                 List<token> parameters=new List<token>();
                 bool func= ((allCodeTokens[i].isDatatype()) && (allCodeTokens[i + 1].isIdentifier())&&  (allCodeTokens[i + 2].getLexeme() == "("));
+                bool funcWithoutDATATYPE = ((allCodeTokens[i].isIdentifier()) && (allCodeTokens[i + 1].getLexeme() == "("));
                 //bool funcprotoType = ((tokens[i].getType() == "datatype") && (tokens[i + 1].getType() == "identifier") && (tokens[j = i + 2].getLexeme() == "("));
                 // bool funcAsterisk = ((tokens[i].getType() == "datatype") && (tokens[i+1].getLexeme() == "*") && (tokens[i + 2].getType() == "identifier") && (tokens[j = i + 3].getLexeme() == "("));
 
 
-                if (func)
+                if (func || funcWithoutDATATYPE)
                 {
-                    j = i + 3;
                     globalScobeTokens.Remove(allCodeTokens[i]);
                     globalScobeTokens.Remove(allCodeTokens[i + 1]);
-                    globalScobeTokens.Remove(allCodeTokens[i + 2]);
+                    if (func)
+                    { j = i + 3; globalScobeTokens.Remove(allCodeTokens[i + 2]); }
+                    else
+                        j = i + 2;
                     bool prototype = false;
                     int k = j;
                     while (allCodeTokens[k].getLexeme() != ")")
                     {
-                        k++;
                         globalScobeTokens.Remove(allCodeTokens[k]);
+                        k++;
                     }
                     globalScobeTokens.Remove(allCodeTokens[k]);// deleting )
-                    if ((k+1 < allCodeTokens.Count))
+                    if ((k + 1 < allCodeTokens.Count))
                         if (allCodeTokens[k + 1].getLexeme() == ";")// void func (int blabla);
-                            {
+                        {
                             prototype = true;
-                                globalScobeTokens.Remove(allCodeTokens[k+1]);
-                            }
+                            globalScobeTokens.Remove(allCodeTokens[k + 1]);
+                        }
                     //parameters are frome j to k
                     for (int s = j; s < k; s++)
                     {//خطأ عندما يكون الباراميتر ستركت أو بوينتر او مصفوفة
-                        if ((allCodeTokens[s].getType() == "datatype") && (allCodeTokens[s + 1].getType() == "identifier"))
+                        if ((allCodeTokens[s].isDatatype() && (allCodeTokens[s + 1].getType() == "identifier")))
                         {
-                            parameters.Add(new token(allCodeTokens.Count + 1,allCodeTokens[s + 1].getLexeme(),0));
+                            parameters.Add(new token(allCodeTokens.Count + 1, allCodeTokens[s + 1].getLexeme(), 0));
                         }
                     }
-                    string datatype = allCodeTokens[i].getLexeme();
-                    string funcName = allCodeTokens[i + 1].getLexeme();
+                    string datatype;
+                    string funcName;
+                    if (func)
+                    { datatype = allCodeTokens[i].getLexeme(); funcName = allCodeTokens[i + 1].getLexeme(); }
+                    else
+                    {
+                        datatype = "void"; funcName = allCodeTokens[i].getLexeme();
+                    }
+
                     if (!prototype)//function
                     {
                         string funcBody = "";
                         List<token> funcTokens = new List<token>();
                         while (allCodeTokens[j].getLexeme() != "{")
                             j++;
+                        globalScobeTokens.Remove(allCodeTokens[j]);
                         j++;
                         while ((allCodeTokens[j].getLexeme() != "}") || (parentheses != 0))
                         {

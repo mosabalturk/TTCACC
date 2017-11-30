@@ -112,6 +112,18 @@ namespace Analyzer
                 tkn.Add(temp);
             }
         }
+        public token Copy()
+        {
+            var result = new token(this.id,this.lexeme);
+            result.id = this.id;
+            result.lexeme = this.lexeme;
+            result.Pointer = this.Pointer;
+            result.array = this.array;
+            result.arrayBoundariy = this.arrayBoundariy;
+            result.count = this.count;
+            result.type = this.type;
+            return result;
+        }
     }
 
 }

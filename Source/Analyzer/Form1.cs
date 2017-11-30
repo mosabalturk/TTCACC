@@ -103,9 +103,10 @@ namespace Analyzer
                 richTextBox2.Text += cd.filename + "\n-----\n";
                 foreach (function func in cd.Allfunctions)
                 {
+                    richTextBox2.Text += "parameters: ";
                     foreach (token t in func.funcParameters)
-                        richTextBox2.Text += "parameters:\n" + t.getType() + " " + t.getLexeme() + "\n";
-                    richTextBox2.Text += "function name:" + func.funcname + "\nData type: " + func.funcDataType + "\nbody :\n" + func.funcAsStr + "\n--------------\n--------------\n";
+                        richTextBox2.Text +=  t.getType() + " " + t.getLexeme()+" , " ;
+                    richTextBox2.Text += "\nfunction name:" + func.funcname + "\nData type: " + func.funcDataType + "\nbody :\n" + func.funcAsStr + "\n--------------\n--------------\n";
                     
                 }
             }
