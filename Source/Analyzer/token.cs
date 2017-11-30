@@ -22,6 +22,7 @@ namespace Analyzer
         // vchar (char as value)
         // vstring (string as value)
         // library
+        private int count;
         public bool isIdentifier() {  if (getType() == "identifier") return true; else return false;   }
         public bool isDatatype() { if (getType() == "datatype") return true; else return false; }
         public bool isKeyword() { if (getType() == "keyword") return true; else return false; }
@@ -63,11 +64,6 @@ namespace Analyzer
         public string getType() { return type; }
         public string getLexeme() { return lexeme; }
 
-
-
-
-
-        private int count;
         #region identifiers region
         public bool Pointer = false;
         public bool array = false;
@@ -93,7 +89,6 @@ namespace Analyzer
 
         #endregion
         public void SetCount(int count) { this.count = count; }
-
         public int GetCount() { return count; }
         public void incCount() { this.count++; }
         /// <summary>

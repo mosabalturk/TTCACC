@@ -38,12 +38,12 @@ namespace Analyzer
         }
         public code(string codestr, string filename)
         {
-            codestr = Program.RemoveCommentsAndSpaces(codestr);
-            this.cStr = codestr;
-            this.fname = filename;
+            codestr = Program.RemoveCommentsAndSpaces(codestr);//delete comments
+            this.cStr = codestr;//add hole code to cStr string
+            this.fname = filename;//filename or class or struct name
             Analyzer temp = new Analyzer();
-            allCodeTokens = temp.Result2(codestr);
-            allCodeTokens = temp.PAanlysiss(allCodeTokens);
+            allCodeTokens = temp.Result2(codestr);//analyze code to tokens and lexemes to this list
+            allCodeTokens = temp.PAanlysiss(allCodeTokens);//remove *s pointers and make pointer true to the identifier that defined as pointer
             findLibrariesAndDefines();
             //globalScobeTokens = allCodeTokens.Select(a=>a.Copy()).ToList();
             globalScobeTokens = new List<token>(allCodeTokens); // copy allCodeTokens list
