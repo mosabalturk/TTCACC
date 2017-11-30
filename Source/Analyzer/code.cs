@@ -41,10 +41,10 @@ namespace Analyzer
             codestr = Program.RemoveCommentsAndSpaces(codestr);//delete comments
             this.cStr = codestr;//add hole code to cStr string
             this.fname = filename;//filename or class or struct name
-            Analyzer temp = new Analyzer();
+            Analyzer temp = new Analyzer(); // anlyzer class is the class that analyze code to tokens and lexemes
             allCodeTokens = temp.Result2(codestr);//analyze code to tokens and lexemes to this list
-            allCodeTokens = temp.PAanlysiss(allCodeTokens);//remove *s pointers and make pointer true to the identifier that defined as pointer
             findLibrariesAndDefines();
+            temp.pointersArraysAnalzer(allCodeTokens, getDefines);//remove *s pointers and make pointer true to the identifier that defined as pointer
             //globalScobeTokens = allCodeTokens.Select(a=>a.Copy()).ToList();
             globalScobeTokens = new List<token>(allCodeTokens); // copy allCodeTokens list
             findClassesAndStructs();
@@ -106,7 +106,7 @@ namespace Analyzer
             {
                 int parentheses = 0;
                 int j=0;
-                if ((allCodeTokens[i].getLexeme() == "main")||(allCodeTokens[i].getLexeme() == "struct")||( allCodeTokens[i].getLexeme() == "class"))
+                if (allCodeTokens[i].getLexeme() == "main")
                 {
                     while (allCodeTokens[i].getLexeme() != "{")
                     {
@@ -233,15 +233,29 @@ namespace Analyzer
                     }
                     if ((allCodeTokens[i].getLexeme() == "#") && (allCodeTokens[i + 1].getLexeme() == "define"))
                     {
-                        
-                        defines.Add(new token(allCodeTokens[i + 2].getLexeme(), 0));
+                        allCodeTokens[i + 2].setType(allCodeTokens[i + 3].getLexeme());
+                        defines.Add(allCodeTokens[i + 2]);
                         allCodeTokens.RemoveAt(i);
                         allCodeTokens.RemoveAt(i);
                         allCodeTokens.RemoveAt(i);//error it could be operation like (2/2)
                         allCodeTokens.RemoveAt(i);
+                        i--;
                     }
                 }
+            //foreach (token tt in defines)
+            //    foreach (token t in allCodeTokens)
+            //    {
+            //        if (t.isIdentifier())
+            //        {
+            //            if (tt.getLexeme() == t.getLexeme())
+            //            {
+            //                t.setType("");
+            //                t.setLexeme(tt.arrayDimensions.ToString());
+            //            }
+            //        }
+            //    }
         }
+
         public void findClassesAndStructs()
         {
             for (int i = 0; i < allCodeTokens.Count; i++)
@@ -292,33 +306,7 @@ namespace Analyzer
                 }
             }
         }
-        //public static void findClassesOrStructs(string strSource, string strStart)
-        //{
-        //    string strEnd = "};";
-        //    int Start, End;
-        //    bool f = false;
-        //    if (strSource.Contains(strStart) )
-        //    {
-        //        f = true;
-        //        Start = strSource.IndexOf(strStart, 0)+6;
-        //        End = strSource.IndexOf("};", Start)+2;
-        //        int tEnd;
-        //        while (((tEnd = strSource.IndexOf(strStart, End)) != -1))
-        //            if (tEnd > End)
-        //                break;
-        //            else
-        //                End = strSource.IndexOf(strEnd, tEnd)+2;
-        //        string get = strSource.Substring(Start, End - Start);//CLASS 
-        //        System.Windows.Forms.MessageBox.Show(get);
-        //        if (!f)
-        //            return ;
-        //        else findClassesOrStructs(strSource.Replace(get,""), strStart);
-        //    }
-        //    else
-        //    {
-        //        return ;
-        //    }
-        //}
+        
     }
     public class function 
     {

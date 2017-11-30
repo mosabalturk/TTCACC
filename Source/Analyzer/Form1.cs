@@ -80,7 +80,7 @@ namespace Analyzer
             {
                 richTextBox2.Text += cd.filename + "\n";
                 foreach (token def in cd.getDefines)
-                    richTextBox2.Text += def.getLexeme() + "     " + def.GetCount().ToString()+" \n";
+                    richTextBox2.Text += def.getLexeme() + "     " + def.getType().ToString()+" \n";
             }
         }
 

@@ -564,9 +564,8 @@ namespace Analyzer {
             }
             return resultlist;
         }
-        public List<token> PAanlysiss(List<token> lst)
+        public void pointersArraysAnalzer(List<token> result,List<token> def)
         {
-            List<token> result = new List<token>(lst);
             for (int i = 0; i < result.Count; i++)
             {
                 bool structPtr = i > 1 ? ((result[i-1].getLexeme()=="struct")&&(result[i].isIdentifier())&& (result[i + 1].getLexeme() == "*")) : (false);
@@ -591,9 +590,35 @@ namespace Analyzer {
                         howManyPointers--;
                     }
                     i--;
+                    continue;
+                }
+                
+                bool Isarray = result[i].isDatatype() && result[i+1].isIdentifier() && result[i+2].getLexeme() == "[";
+                if (Isarray)
+                {
+                    int j = i + 2;
+                    List<int> arr = new List<int>();
+
+                    while ((result[j].getLexeme() == "[") &&(result[j + 2].getLexeme() == "]"))
+                    {
+                        int valu=0;
+                        if (result[j + 1].isValue())
+                            valu = Convert.ToInt32(result[j + 1].getLexeme());
+
+                        if (result[j + 1].isIdentifier())
+                            foreach (token t in def)
+                                if (t.getLexeme() == result[j + 1].getLexeme())
+                                    valu = Convert.ToInt32(t.getType());
+                        arr.Add(valu);
+                        result.Remove(result[j]);
+                        result.Remove(result[j]);
+                        result.Remove(result[j]);
+                    }
+                    result[i + 1].arrayBoundariy = new List<int>(arr);
+                    result[i + 1].isArray = true;
+                    continue;
                 }
             }
-            return result;
         }
         public static void structAsIdentifiers(List<token> result, List<token> result2, List<string> strcts)
         {

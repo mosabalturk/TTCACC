@@ -72,7 +72,7 @@ namespace Analyzer
         public int pointerLevel { get; set; }
         public bool isArray { get { return array; } set { array = value; } }
         public int arrayDimensions { get; set; }
-        public List<int> arrayBoundaries
+        private List<int> arrayBoundaries
         {
             get { return arrayBoundariy; }
             set
