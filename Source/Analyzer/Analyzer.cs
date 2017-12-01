@@ -78,7 +78,7 @@ namespace Analyzer {
             if ((sToken).Length > 16 || (sToken).Length == 0)
                 return false;
             var sKeywords = new List<string>(){
-                "include","stdio","stdlib","system","include","bool","break","case","catch","class","const",
+                "include","NULL","stdio","stdlib","system","include","bool","break","case","catch","class","const",
                 "continue","default","delete","do","else","enum","explicit",
                 "export","false","for","goto","if",
                 "main","mutable","namespace","new","operator","private","protected","public",
@@ -92,8 +92,8 @@ namespace Analyzer {
             if ((sToken).Length > 16 || (sToken).Length == 0)
                 return false;
             var sDataType = new List<string>(){
-                "bool", "char","short","float","int","int32","double","long","void"};
-            return sDataType.Exists(element => (sToken.ToLower()) == element);
+                "bool", "char","short","float","int","FILE","int32","double","long","void"};
+            return sDataType.Exists(element => sToken == element);
         }
         public string Result(string txt, string tt = @"matrix.txt")
         {
@@ -312,24 +312,24 @@ namespace Analyzer {
             //System.Windows.Forms.MessageBox.Show(str);
             //str = "";
             foreach (token i in operations)
-                str += i.getLexeme() + " " + i.GetCount().ToString() + "\n";
+                str += i.getLexeme() + " " + i.getCount().ToString() + "\n";
             str += "# if operations is : " + operations.Count.ToString() + "\n";
             //System.Windows.Forms.MessageBox.Show(str);
             //str = "";
             foreach (token i in DataTypes)
-                str += i.getLexeme() + " " + i.GetCount().ToString() + "\n";
+                str += i.getLexeme() + " " + i.getCount().ToString() + "\n";
             str += "# if DataTypes is : " + DataTypes.Count.ToString() + "\n";
 
             //System.Windows.Forms.MessageBox.Show(str);
             //str = "";
             foreach (token i in keyWords)
-                str += i.getLexeme() + " " + i.GetCount().ToString() + "\n";
+                str += i.getLexeme() + " " + i.getCount().ToString() + "\n";
             str += "# if keyWords is : " + keyWords.Count.ToString() + "\n";
 
             //System.Windows.Forms.MessageBox.Show(str);
             //str = "";
             foreach (token i in values)
-                str += i.getLexeme() + " " + i.GetCount().ToString() + "\n";
+                str += i.getLexeme() + " " + i.getCount().ToString() + "\n";
             str += "# if values is : " + values.Count.ToString() + "\n";
 
             return str;
@@ -481,7 +481,8 @@ namespace Analyzer {
                     case 26:
                     case 27:
                     case 28:
-                        if (cChar != '-' && cChar != '=')
+                    case 73:
+                        if (cChar != '-' && cChar != '=' && cChar != '>')
                         { flag = false; resultlist.Add(new token( sToken, "op"));
                         }
                         else
@@ -564,9 +565,9 @@ namespace Analyzer {
             }
             return resultlist;
         }
-        public void pointersArraysAnalzer(List<token> result,List<token> def)
+        public void pointersArraysAnalzer(List<token> result,List<token> def, List<token> result2)
         {
-            for (int i = 0; i < result.Count; i++)
+            for (int i = 0; i < result.Count-1; i++)
             {
                 bool structPtr = i > 1 ? ((result[i-1].getLexeme()=="struct")&&(result[i].isIdentifier())&& (result[i + 1].getLexeme() == "*")) : (false);
                 if ((result[i].isDatatype()||(structPtr)) && result[i + 1].getLexeme() == "*")
@@ -585,56 +586,78 @@ namespace Analyzer {
                     int howManyPointers = j - i ;
                     while (howManyPointers>0)
                     {
+                        token t = result[i];
                         //remove all *s from result list
-                        result.Remove(result[i]);
+                        result.Remove(t);
+                        if (result2!=null)
+                            result2.Remove(t);
                         howManyPointers--;
                     }
                     i--;
                     continue;
                 }
                 
-                bool IsarrayInit =  result[i].isIdentifier() && result[i+1].getLexeme() == "[";
+                bool IsarrayInit = i < result.Count-1?  result[i].isIdentifier() && result[i+1].getLexeme() == "[":false;
                 if (IsarrayInit)
                 {
                     int j = i + 1;
                     List<int> arr = new List<int>();
-
-                    while ((result[j].getLexeme() == "[") &&(result[j + 2].getLexeme() == "]"))
+                    bool arrayWithoutBoundaies = (result[j].getLexeme() == "[") && (result[j + 1].getLexeme() == "]");
+                    if (!arrayWithoutBoundaies)
                     {
-                        int valu=0;
-                        if (result[j + 1].isValue())
-                            valu = Convert.ToInt32(result[j + 1].getLexeme());
+                        while ((result[j].getLexeme() == "[") && (result[j + 2].getLexeme() == "]"))
+                        {
+                            int valu = 0;
+                            if (result[j + 1].isValue())
+                                valu = Convert.ToInt32(result[j + 1].getLexeme());
 
-                        if (result[j + 1].isIdentifier())
-                            foreach (token t in def)
-                                if (t.getLexeme() == result[j + 1].getLexeme())
-                                    valu = Convert.ToInt32(t.getType());
+                            if (result[j + 1].isIdentifier())
+                                foreach (token t in def)
+                                    if (t.getLexeme() == result[j + 1].getLexeme())
+                                        valu = Convert.ToInt32(t.getType());
+                            arr.Add(valu);
+                            result.Remove(result[j]);
+                            result.Remove(result[j]);
+                            result.Remove(result[j]);
+                        }
+                        result[i].arrayIndecies = new List<int>(arr);
+                        result[i].isArray = true;
+                    }
+                    else
+                    {
+                        int valu = result[j+3].getLexeme().Length - 2;
                         arr.Add(valu);
                         result.Remove(result[j]);
                         result.Remove(result[j]);
-                        result.Remove(result[j]);
+                        result[i].arrayIndecies = new List<int>(arr);
+                        result[i].isArray = true;
+
                     }
-                    result[i ].arrayIndecies = new List<int>(arr);
-                    result[i ].isArray = true;
-                    continue;
                 }
             }
         }
-        public static void structAsIdentifiers(List<token> result, List<token> result2, List<string> strcts)
+        public static void structAsDatatype(List<token> result, List<token> result2, List<string> strcts, List<string> typedefNames)
         {
-            for (int i = 0; i < result.Count-1; i++)
+            for (int i = 0; i < result.Count - 1; i++)
             {
-                bool structPtr = (result[i].getLexeme() == "struct") && (strcts.Contains(result[i+1].getLexeme()));
+                bool structPtr = (result[i].getLexeme() == "struct") && (strcts.Contains(result[i + 1].getLexeme()));
+                bool structInitFromTypedefNames = typedefNames.Contains(result[i].getLexeme());
                 if (structPtr)
                 {
                     string temp = result[i].getLexeme() + " " + result[i + 1].getLexeme();
-                    result[i+1].setType("datatype");
-                    result[i+1].setLexeme(temp);
+                    result[i + 1].setType("datatype");
+                    result[i + 1].setLexeme(temp);
                     token t = result[i];
                     result.Remove(t);
                     result2.Remove(t);
 
                 }
+                if (structInitFromTypedefNames)
+                {
+                    result[i].setType("datatype");
+                    result[i].setLexeme(result[i].getLexeme());
+                }
+            
             }
         }
 

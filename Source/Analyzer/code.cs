@@ -6,13 +6,13 @@ using System.Text;
 namespace Analyzer
 {
 
-    //musaab class 
     public class code
     {
         List<token> allCodeTokens;//done
         List<token> globalScobeTokens;//no
         private string cStr;//done
         private string fname;//done
+        public string typedefName { get; set; }
         private List<string> libraries = new List<string>();//done
         private List<token> defines = new List<token>();
         //# define varName value
@@ -37,27 +37,34 @@ namespace Analyzer
         public List<code> Allstructs { get { return structes; } }
         public List<string> getLibraries { get { return libraries; } }
         public List<token> getDefines { get { return defines; } }
-        public void findValDataTypesKeywsGlblVarOp()
-        {
-        }
+    
         public code(string codestr, string filename)
         {
             codestr = Program.RemoveCommentsAndSpaces(codestr);//delete comments
+
             this.cStr = codestr;//add hole code to cStr string
+
             this.fname = filename;//filename or class or struct name
+
             Analyzer temp = new Analyzer(); // anlyzer class is the class that analyze code to tokens and lexemes
+
             allCodeTokens = temp.Result2(codestr);//analyze code to tokens and lexemes to this list
+
             findLibrariesAndDefines();
-            temp.pointersArraysAnalzer(allCodeTokens, getDefines);
+
+            temp.pointersArraysAnalzer(allCodeTokens, getDefines,null);
             //remove *s pointers and make pointer true to the identifier that defined as pointer
             // remove [ , ] and the value between them from arrays and add them to the propreties of identifier that defined as an array
             globalScobeTokens = new List<token>(allCodeTokens); // copy allCodeTokens list
             findClassesAndStructs();
-            Analyzer.structAsIdentifiers(allCodeTokens, globalScobeTokens, structes.Select(a => a.filename).ToList());
+            Analyzer.structAsDatatype(allCodeTokens, globalScobeTokens, structes.Select(a => a.filename).ToList(),structes.Select(a => a.typedefName).ToList());
+            temp.pointersArraysAnalzer(allCodeTokens, getDefines, globalScobeTokens);
             findMain();
             findFunctionsAndPrototypes();
         }
-
+        public void findValDataTypesKeywsGlblVarOp()
+        {
+        }
 
         public void findMain()
         {
@@ -126,12 +133,11 @@ namespace Analyzer
                             parentheses--;
                         i++;
                     }
-                    i++;
                     continue;
                 }
                 List<token> parameters=new List<token>();
                 bool func= ((allCodeTokens[i].isDatatype()) && (allCodeTokens[i + 1].isIdentifier())&&  (allCodeTokens[i + 2].getLexeme() == "("));
-                bool funcWithoutDATATYPE = ((allCodeTokens[i].isIdentifier()) && (allCodeTokens[i + 1].getLexeme() == "("));
+                bool funcWithoutDATATYPE = ((allCodeTokens[i].isIdentifier()) && (allCodeTokens[i + 1].getLexeme() == "("));// like balabla(int bla)
                 //bool funcprotoType = ((tokens[i].getType() == "datatype") && (tokens[i + 1].getType() == "identifier") && (tokens[j = i + 2].getLexeme() == "("));
                 // bool funcAsterisk = ((tokens[i].getType() == "datatype") && (tokens[i+1].getLexeme() == "*") && (tokens[i + 2].getType() == "identifier") && (tokens[j = i + 3].getLexeme() == "("));
                 if (funcWithoutDATATYPE)
@@ -263,18 +269,23 @@ namespace Analyzer
 
         public void findClassesAndStructs()
         {
-            for (int i = 0; i < allCodeTokens.Count; i++)
+            for (int i = 0; i < allCodeTokens.Count-2; i++)
             {
                 int parentheses = 0;
                 List<token> parameters = new List<token>();
                 bool Isclass =(allCodeTokens[i].getLexeme() == "class") && (allCodeTokens[i + 1].getType() == "identifier") && (allCodeTokens[i + 2].getLexeme() == "{");
                 bool Isstruct = (allCodeTokens[i].getLexeme() == "struct") && (allCodeTokens[i + 1].getType() == "identifier") && (allCodeTokens[i + 2].getLexeme() == "{");
-                if (Isclass|| Isstruct)
+
+                bool typedefStruct = (allCodeTokens[i].getLexeme() == "typedef") && (allCodeTokens[i + 1].getLexeme() == "struct") && (allCodeTokens[i + 2].getLexeme() == "{");
+                bool typedefStructName = i>0? (allCodeTokens[i-1].getLexeme() == "typedef") &&(allCodeTokens[i].getLexeme() == "struct") && (allCodeTokens[i + 1].getType() == "identifier") && (allCodeTokens[i + 2].getLexeme() == "{"):false;
+                if (typedefStructName)
+                    globalScobeTokens.Remove(allCodeTokens[i-1]);
+                if (Isclass|| Isstruct|| typedefStruct)
                 {
                     globalScobeTokens.Remove(allCodeTokens[i]);
                     globalScobeTokens.Remove(allCodeTokens[i+1]);
                     globalScobeTokens.Remove(allCodeTokens[i+2]);
-                    string Name = allCodeTokens[i + 1].getLexeme();
+                    string Name = allCodeTokens[i + 1].getLexeme();//it will change for typedefStruct down
                     i += 3;
                     string Body = "";
                     List<token> Tokens = new List<token>();
@@ -291,23 +302,44 @@ namespace Analyzer
                     }
                     //now i reffer to }
                     globalScobeTokens.Remove(allCodeTokens[i]);
-
-
                     if (Isclass)
                     {
                         classes.Add(new code(Body, Name));
                         globalScobeTokens.Remove(allCodeTokens[++i]);
                     }
-                    else
+                    else if (typedefStruct)
                     {
-                        structes.Add(new code(Body, Name));
-                        while (allCodeTokens[++i].isIdentifier())
+                        if ((allCodeTokens[++i].isIdentifier()) && (typedefStruct))
                         {
-                            structObjects.Add(new token(allCodeTokens[i].getLexeme(), "identifier"));
-                            globalScobeTokens.Remove(allCodeTokens[i]);
+                            Name = allCodeTokens[i].getLexeme();
+                        }
+                        globalScobeTokens.Remove(allCodeTokens[i]);
+                        globalScobeTokens.Remove(allCodeTokens[++i]);
+                        code temp = new code(Body, Name);
+                        temp.typedefName = Name;
+                        structes.Add(temp);
+                    }
+                    else if(Isstruct)
+                    {
+                        code temp = new code(Body, Name);
+                        structes.Add(temp);
+                        if (!typedefStructName)
+                            while (allCodeTokens[++i].isIdentifier())
+                            {
+                                structObjects.Add(new token(allCodeTokens[i].getLexeme(), "identifier"));
+                                globalScobeTokens.Remove(allCodeTokens[i]);
+                            }
+                        else
+                        {
+                            if (allCodeTokens[++i].isIdentifier())
+                            {
+                                temp.typedefName = allCodeTokens[i].getLexeme();
+                                globalScobeTokens.Remove(allCodeTokens[i++]);//i++ not ++i they are different ! MUS
+                            }
                         }
                         globalScobeTokens.Remove(allCodeTokens[i]);
                     }
+                    
                 }
             }
         }
