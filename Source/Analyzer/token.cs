@@ -23,16 +23,22 @@ namespace Analyzer
         // vstring (string as value)
         // library
         private int count;
-        public bool isIdentifier() {  if (getType() == "identifier") return true; else return false;   }
+        #region isBlabla
+        public bool isOperation() { if (getType() == "op") return true; else return false; }
+        public bool isIdentifier() { if (getType() == "identifier") return true; else return false; }
         public bool isDatatype() { if (getType() == "datatype") return true; else return false; }
         public bool isKeyword() { if (getType() == "keyword") return true; else return false; }
         public bool isValue() { if ((getType() == "vint") || (getType() == "vchar") || (getType() == "vstring") || (getType() == "vfloat")) return true; else return false; }
+        public bool isInt() { if (getType() == "vint") return true; else return false; }
+        public bool isFloat() { if (getType() == "vfloat") return true; else return false; }
+        public bool isChar() { if (getType() == "vchar") return true; else return false; }
+        public bool isString() { if (getType() == "vstring") return true; else return false; }
         public bool isVfloat() { if (getType() == "vfloat") return true; else return false; }
         public bool isVint() { if (getType() == "vint") return true; else return false; }
         public bool isVchar() { if (getType() == "vchar") return true; else return false; }
         public bool isVstring() { if (getType() == "vstring") return true; else return false; }
         public bool isLibrary() { if (getType() == "library") return true; else return false; }
-
+        #endregion
         public token(string lexeme)
         {
             this.id = idCounter++;
@@ -79,6 +85,10 @@ namespace Analyzer
         }
 
         #endregion
+        public static List<string> getLexemesFromList(List<token> tkns)
+        {
+            return tkns.Select(a => a.lexeme).ToList();
+        }
         public void setCount(int count) { this.count = count; }
         public int getCount() { return count; }
         public void incCount() { this.count++; }
@@ -87,16 +97,34 @@ namespace Analyzer
         /// </summary>
         /// <param name="sToken"></param>
         /// <param name="tkn"></param>
-        public static void addOne(string sToken, List<token> tkn)
+        public static void addOne(token TknObj, List<token> tkn, bool byLexeme)
         {
-            if (tkn.Exists(x => x.getLexeme() == sToken))
+            if (byLexeme)
             {
-                tkn.Find(x => x.getLexeme() == sToken).incCount();
+                string sToken = TknObj.getLexeme();
+                if (tkn.Exists(x => x.getLexeme() == sToken))
+                {
+                    tkn.Find(x => x.getLexeme() == sToken).incCount();
+                }
+                else
+                {
+                    TknObj.count = 1;
+                    tkn.Add(TknObj);
+                }
             }
             else
             {
-                token temp = new token(sToken, 1);
-                tkn.Add(temp);
+                string dt = TknObj.getType();
+                if (tkn.Exists(x => x.getType() == dt))
+                {
+                    tkn.Find(x => x.getType() == dt).incCount();
+                }
+                else
+                {
+                    token temp = new token("", TknObj.getType(), 1);
+                    tkn.Add(temp);
+                }
+
             }
         }
         public token Copy()

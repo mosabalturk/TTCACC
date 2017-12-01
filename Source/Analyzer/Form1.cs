@@ -173,18 +173,6 @@ namespace Analyzer
                 }
             }
         }
-
-        private void showCodebtn_Click(object sender, EventArgs e)
-        {
-            richTextBox2.Text = "the code naked :D \n";
-            foreach (code cd in Program.codes)
-            {
-                richTextBox2.Text += cd.filename + "\n-----\nthe code:\n";
-                richTextBox2.Text += cd.codeAsStr;
-            }
-
-        }
-
         private void button6_Click(object sender, EventArgs e)
         {
             richTextBox2.Text = "";

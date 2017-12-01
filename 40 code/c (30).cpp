@@ -78,7 +78,7 @@ main()
 	cikti();
 	
 	getch();
-}
+ }
 okut_islem(FILE *read) // operation larý okutma
 {
 	
@@ -121,7 +121,7 @@ okut_siparis(FILE *read) // orders larý okutma
 
 	
 }
-sýralama() // deadline sürelerine göre sýralama
+siralama() // deadline sürelerine göre sýralama
 {
 	int tempkod;
 	int tempmiktar;

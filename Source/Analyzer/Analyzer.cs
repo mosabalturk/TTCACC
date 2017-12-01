@@ -95,245 +95,245 @@ namespace Analyzer {
                 "bool", "char","short","float","int","FILE","int32","double","long","void"};
             return sDataType.Exists(element => sToken == element);
         }
-        public string Result(string txt, string tt = @"matrix.txt")
-        {
-            try
-            {
-                loadTransitionTable(tt);
-            }
-            catch (Exception)
-            {
-                System.Windows.Forms.MessageBox.Show("Unable to open the input file.\nPress any key to exit.\n");
-                return "";
-            }
-            if (txt.Length == 0)
-                return "";
-            var result = "";
-            int txtIndex = 0, iState = 0;
-            char cTemp = txt[txtIndex], cChar = ' ';
-            string sToken = "";
-            bool flag = true;
-            txt += " ";
-            while (txtIndex != txt.Length)
-            {
-                //System.Windows.Forms.MessageBox.Show(txt[txtIndex].ToString());
-                if (flag)
-                {
-                    cChar = cTemp;
-                    if (txt.Length - 1 == txtIndex)
-                    { cTemp = ' '; ++txtIndex; }
-                    else cTemp = txt[++txtIndex];
-                }
-                else
-                    flag = true;
-                iState = getNextState(iState, cChar);
-                switch (iState)
-                {
-                    case 0:
-                        result += cChar;
-                        iState = 0;
-                        sToken = "";
-                        break;
-                    case 1:
-                    case 3:
-                    case 4:
-                    case 5:
-                    case 6:
-                    case 9:
-                    case 10:
-                    case 12:
-                    case 13:
-                    case 14:
-                    case 16:
-                    case 18:
-                    case 19:
-                    case 21:
-                    case 25:
-                    case 29:
-                    case 34:
-                    case 37:
-                    case 40:
-                    case 44:
-                    case 48:
-                    case 52:
-                    case 55:
-                    case 56:
-                    case 61:
-                    case 62:
-                    case 69:
-                    case 70:
-                    case 72:
-                        sToken += cChar;
-                        break;
-                    case 2:
-                        if (isKeyword(sToken))
-                            token.addOne(sToken, keyWords);
-                        else if (isDataType(sToken))
-                            token.addOne(sToken, DataTypes);
-                        else
-                        {
-                            token.addOne(sToken, identifiers);
-                        }
-                        iState = 0;
-                        flag = false;
-                        sToken = "";
-                        break;
-                    case 7:
-                        token.addOne("FLOAT", values);
-                        iState = 0;
-                        flag = false;
-                        sToken = "";
-                        break;
-                    case 8:
-                        token.addOne("INT", values);
-                        iState = 0;
-                        flag = false;
-                        sToken = "";
-                        break;
-                    case 11:
-                        token.addOne(sToken, operations);
-                        iState = 0;
-                        sToken = "";
-                        break;
-                    case 71:
-                    case 68:
-                        token.addOne("CHAR", values);
-                        iState = 0;
-                        sToken = "";
-                        break;
-                    case 15:
-                        token.addOne("STR", values);
-                        iState = 0;
-                        sToken = "";
-                        break;
-                    case 20:
-                        iState = 0;
-                        sToken = "";
-                        break;
-                    case 43:
-                        token.addOne(sToken, operations);
-                        iState = 0;
-                        sToken = "";
-                        break;
-                    case 67:
-                        flag = false;
-                        result += "<ERR,\'" + sToken + "\'>";
-                        iState = 0;
-                        sToken = "";
-                        break;
-                    case 22:
-                    case 23:
-                    case 24:
-                        if (cChar != '+' && cChar != '=')
-                        { flag = false; token.addOne(sToken, operations); }
-                        else
-                        { sToken += cChar; token.addOne(sToken, operations); }
-                        iState = 0;
-                        sToken = "";
-                        break;
-                    case 26:
-                    case 27:
-                    case 28:
-                    case 73:
-                        if (cChar != '-' && cChar != '='&& cChar != '>')
-                        { flag = false; token.addOne(sToken, operations); }
-                        else
-                        { sToken += cChar; token.addOne(sToken, operations); }
-                        iState = 0;
-                        sToken = "";
-                        break;
-                    case 30:
-                    case 31:
-                    case 32:
-                    case 33:
-                    case 35:
-                    case 36:
-                    case 38:
-                    case 39:
-                    case 41:
-                    case 42:
-                    case 53:
-                    case 54:
-                    case 57:
-                    case 58:
-                    case 63:
-                    case 64:
-                    case 65:
-                    case 66:
-                        if (cChar != '=')
-                        { flag = false; token.addOne(sToken, operations); }
-                        else
-                        { sToken += cChar; token.addOne(sToken, operations); }
-                        iState = 0;
-                        sToken = "";
-                        break;
-                    case 17:
-                        while ((cTemp != '\n') && (txt.Length - 1 != txtIndex))
-                        { cTemp = txt[++txtIndex]; }
-                        iState = 0;
-                        sToken = "";
-                        break;
-                    case 45:
-                    case 46:
-                    case 47:
-                        if (cChar != '&' && cChar != '=')
-                        { flag = false; token.addOne(sToken, operations); }
-                        else
-                        { sToken += cChar; token.addOne(sToken, operations); }
-                        iState = 0;
-                        sToken = "";
-                        break;
-                    case 49:
-                    case 50:
-                    case 51:
-                        if (cChar != '|' && cChar != '=')
-                        { flag = false; token.addOne(sToken, operations); }
-                        else
-                        { sToken += cChar; token.addOne(sToken, operations); }
-                        iState = 0;
-                        sToken = "";
-                        break;
-                    case 59:
-                    case 60:
-                        if (cChar != '+' && cChar != '-' && cChar != '/'
-                            && cChar != '>' && cChar != '<' && cChar != '=')
-                        { flag = false; token.addOne(sToken, operations); }
-                        else
-                        { sToken += cChar; token.addOne(sToken, operations); }
-                        iState = 0;
-                        sToken = "";
-                        break;
-                }
-            }
-            String str = "identifiers:\n";
-            //foreach (token i in identifiers)
-            //    str += i.GetLexeme() + " " + i.GetCount().ToString() + "\n";
-            str += "# if identifiers is : " + identifiers.Count.ToString() + "\n";
-            //System.Windows.Forms.MessageBox.Show(str);
-            //str = "";
-            foreach (token i in operations)
-                str += i.getLexeme() + " " + i.getCount().ToString() + "\n";
-            str += "# if operations is : " + operations.Count.ToString() + "\n";
-            //System.Windows.Forms.MessageBox.Show(str);
-            //str = "";
-            foreach (token i in DataTypes)
-                str += i.getLexeme() + " " + i.getCount().ToString() + "\n";
-            str += "# if DataTypes is : " + DataTypes.Count.ToString() + "\n";
+        //public string Result(string txt, string tt = @"matrix.txt")
+        //{
+        //    try
+        //    {
+        //        loadTransitionTable(tt);
+        //    }
+        //    catch (Exception)
+        //    {
+        //        System.Windows.Forms.MessageBox.Show("Unable to open the input file.\nPress any key to exit.\n");
+        //        return "";
+        //    }
+        //    if (txt.Length == 0)
+        //        return "";
+        //    var result = "";
+        //    int txtIndex = 0, iState = 0;
+        //    char cTemp = txt[txtIndex], cChar = ' ';
+        //    string sToken = "";
+        //    bool flag = true;
+        //    txt += " ";
+        //    while (txtIndex != txt.Length)
+        //    {
+        //        //System.Windows.Forms.MessageBox.Show(txt[txtIndex].ToString());
+        //        if (flag)
+        //        {
+        //            cChar = cTemp;
+        //            if (txt.Length - 1 == txtIndex)
+        //            { cTemp = ' '; ++txtIndex; }
+        //            else cTemp = txt[++txtIndex];
+        //        }
+        //        else
+        //            flag = true;
+        //        iState = getNextState(iState, cChar);
+        //        switch (iState)
+        //        {
+        //            case 0:
+        //                result += cChar;
+        //                iState = 0;
+        //                sToken = "";
+        //                break;
+        //            case 1:
+        //            case 3:
+        //            case 4:
+        //            case 5:
+        //            case 6:
+        //            case 9:
+        //            case 10:
+        //            case 12:
+        //            case 13:
+        //            case 14:
+        //            case 16:
+        //            case 18:
+        //            case 19:
+        //            case 21:
+        //            case 25:
+        //            case 29:
+        //            case 34:
+        //            case 37:
+        //            case 40:
+        //            case 44:
+        //            case 48:
+        //            case 52:
+        //            case 55:
+        //            case 56:
+        //            case 61:
+        //            case 62:
+        //            case 69:
+        //            case 70:
+        //            case 72:
+        //                sToken += cChar;
+        //                break;
+        //            case 2:
+        //                if (isKeyword(sToken))
+        //                    token.addOne(sToken, keyWords);
+        //                else if (isDataType(sToken))
+        //                    token.addOne(sToken, DataTypes);
+        //                else
+        //                {
+        //                    token.addOne(sToken, identifiers);
+        //                }
+        //                iState = 0;
+        //                flag = false;
+        //                sToken = "";
+        //                break;
+        //            case 7:
+        //                token.addOne("FLOAT", values);
+        //                iState = 0;
+        //                flag = false;
+        //                sToken = "";
+        //                break;
+        //            case 8:
+        //                token.addOne("INT", values);
+        //                iState = 0;
+        //                flag = false;
+        //                sToken = "";
+        //                break;
+        //            case 11:
+        //                token.addOne(sToken, operations);
+        //                iState = 0;
+        //                sToken = "";
+        //                break;
+        //            case 71:
+        //            case 68:
+        //                token.addOne("CHAR", values);
+        //                iState = 0;
+        //                sToken = "";
+        //                break;
+        //            case 15:
+        //                token.addOne("STR", values);
+        //                iState = 0;
+        //                sToken = "";
+        //                break;
+        //            case 20:
+        //                iState = 0;
+        //                sToken = "";
+        //                break;
+        //            case 43:
+        //                token.addOne(sToken, operations);
+        //                iState = 0;
+        //                sToken = "";
+        //                break;
+        //            case 67:
+        //                flag = false;
+        //                result += "<ERR,\'" + sToken + "\'>";
+        //                iState = 0;
+        //                sToken = "";
+        //                break;
+        //            case 22:
+        //            case 23:
+        //            case 24:
+        //                if (cChar != '+' && cChar != '=')
+        //                { flag = false; token.addOne(sToken, operations); }
+        //                else
+        //                { sToken += cChar; token.addOne(sToken, operations); }
+        //                iState = 0;
+        //                sToken = "";
+        //                break;
+        //            case 26:
+        //            case 27:
+        //            case 28:
+        //            case 73:
+        //                if (cChar != '-' && cChar != '='&& cChar != '>')
+        //                { flag = false; token.addOne(sToken, operations); }
+        //                else
+        //                { sToken += cChar; token.addOne(sToken, operations); }
+        //                iState = 0;
+        //                sToken = "";
+        //                break;
+        //            case 30:
+        //            case 31:
+        //            case 32:
+        //            case 33:
+        //            case 35:
+        //            case 36:
+        //            case 38:
+        //            case 39:
+        //            case 41:
+        //            case 42:
+        //            case 53:
+        //            case 54:
+        //            case 57:
+        //            case 58:
+        //            case 63:
+        //            case 64:
+        //            case 65:
+        //            case 66:
+        //                if (cChar != '=')
+        //                { flag = false; token.addOne(sToken, operations); }
+        //                else
+        //                { sToken += cChar; token.addOne(sToken, operations); }
+        //                iState = 0;
+        //                sToken = "";
+        //                break;
+        //            case 17:
+        //                while ((cTemp != '\n') && (txt.Length - 1 != txtIndex))
+        //                { cTemp = txt[++txtIndex]; }
+        //                iState = 0;
+        //                sToken = "";
+        //                break;
+        //            case 45:
+        //            case 46:
+        //            case 47:
+        //                if (cChar != '&' && cChar != '=')
+        //                { flag = false; token.addOne(sToken, operations); }
+        //                else
+        //                { sToken += cChar; token.addOne(sToken, operations); }
+        //                iState = 0;
+        //                sToken = "";
+        //                break;
+        //            case 49:
+        //            case 50:
+        //            case 51:
+        //                if (cChar != '|' && cChar != '=')
+        //                { flag = false; token.addOne(sToken, operations); }
+        //                else
+        //                { sToken += cChar; token.addOne(sToken, operations); }
+        //                iState = 0;
+        //                sToken = "";
+        //                break;
+        //            case 59:
+        //            case 60:
+        //                if (cChar != '+' && cChar != '-' && cChar != '/'
+        //                    && cChar != '>' && cChar != '<' && cChar != '=')
+        //                { flag = false; token.addOne(sToken, operations); }
+        //                else
+        //                { sToken += cChar; token.addOne(sToken, operations); }
+        //                iState = 0;
+        //                sToken = "";
+        //                break;
+        //        }
+        //    }
+        //    String str = "identifiers:\n";
+        //    //foreach (token i in identifiers)
+        //    //    str += i.GetLexeme() + " " + i.GetCount().ToString() + "\n";
+        //    str += "# if identifiers is : " + identifiers.Count.ToString() + "\n";
+        //    //System.Windows.Forms.MessageBox.Show(str);
+        //    //str = "";
+        //    foreach (token i in operations)
+        //        str += i.getLexeme() + " " + i.getCount().ToString() + "\n";
+        //    str += "# if operations is : " + operations.Count.ToString() + "\n";
+        //    //System.Windows.Forms.MessageBox.Show(str);
+        //    //str = "";
+        //    foreach (token i in DataTypes)
+        //        str += i.getLexeme() + " " + i.getCount().ToString() + "\n";
+        //    str += "# if DataTypes is : " + DataTypes.Count.ToString() + "\n";
 
-            //System.Windows.Forms.MessageBox.Show(str);
-            //str = "";
-            foreach (token i in keyWords)
-                str += i.getLexeme() + " " + i.getCount().ToString() + "\n";
-            str += "# if keyWords is : " + keyWords.Count.ToString() + "\n";
+        //    //System.Windows.Forms.MessageBox.Show(str);
+        //    //str = "";
+        //    foreach (token i in keyWords)
+        //        str += i.getLexeme() + " " + i.getCount().ToString() + "\n";
+        //    str += "# if keyWords is : " + keyWords.Count.ToString() + "\n";
 
-            //System.Windows.Forms.MessageBox.Show(str);
-            //str = "";
-            foreach (token i in values)
-                str += i.getLexeme() + " " + i.getCount().ToString() + "\n";
-            str += "# if values is : " + values.Count.ToString() + "\n";
+        //    //System.Windows.Forms.MessageBox.Show(str);
+        //    //str = "";
+        //    foreach (token i in values)
+        //        str += i.getLexeme() + " " + i.getCount().ToString() + "\n";
+        //    str += "# if values is : " + values.Count.ToString() + "\n";
 
-            return str;
-        }
+        //    return str;
+        //}
         public List<token> Result2(string txt, string tt = @"matrix.txt")
         {
             List<token> resultlist = new List<token>();
@@ -623,7 +623,7 @@ namespace Analyzer {
                         result[i].arrayIndecies = new List<int>(arr);
                         result[i].isArray = true;
                     }
-                    else
+                    else 
                     {
                         int valu = result[j+3].getLexeme().Length - 2;
                         arr.Add(valu);

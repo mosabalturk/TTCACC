@@ -23,11 +23,13 @@ namespace Analyzer
         private List<code> structes = new List<code>();//done
         private List<token> classObjects = new List<token>();
         private List<token> structObjects = new List<token>();
-        private List<token> GlobalScobeGlobalVariablesCounter = new List<token>();
-        private List<token> GlobalScobeKeyWordsCounter = new List<token>();
-        private List<token> GlobalScobeDataTypesCounter = new List<token>();
-        private List<token> GlobalScobeValuesCounter = new List<token>();
-        private List<token> GlobalScobeOperationsCounter = new List<token>();
+        private List<token> variablesCounterGS = new List<token>();
+        private List<token> pointersCounterGS = new List<token>();
+        private List<token> arraysCounterGS = new List<token>();
+        private List<token> KeyWordsCounterGS = new List<token>();
+        private List<token> dataTypesCounterGS = new List<token>();
+        private List<token> valuesCounterGS = new List<token>();
+        private List<token> operationsCounterGS = new List<token>();
         private List<function> functions = new List<function>();//done
         public function main { get; set; }//done?
         public List<function> Allfunctions { get { return functions; } }
@@ -61,11 +63,35 @@ namespace Analyzer
             temp.pointersArraysAnalzer(allCodeTokens, getDefines, globalScobeTokens);
             findMain();
             findFunctionsAndPrototypes();
+            count();
         }
-        public void findValDataTypesKeywsGlblVarOp()
+        public void count()
         {
+            //private List<token> operationsCounterGS = new List<token>();
+            //private List<token> KeyWordsCounterGS = new List<token>();
+            //private List<token> dataTypesCounterGS = new List<token>();
+            //private List<token> valuesCounterGS = new List<token>();
+            //private List<token> variablesCounterGS = new List<token>();
+            //private List<token> pointersCounterGS = new List<token>();
+            //private List<token> arraysCounterGS = new List<token>();
+            foreach (token t in globalScobeTokens)
+            {
+                if (t.isOperation())
+                    token.addOne(t, operationsCounterGS, true);
+                else if (t.isKeyword())
+                    token.addOne(t, KeyWordsCounterGS, true);
+                else if (t.isDatatype())
+                    token.addOne(t, dataTypesCounterGS, true);
+                else if (t.isValue())
+                    token.addOne(t, valuesCounterGS, false);
+                else if (t.isIdentifier())
+                    token.addOne(t, variablesCounterGS, true);
+                else if (t.isPointer)
+                    token.addOne(t, pointersCounterGS, true);
+                else if (t.isArray)
+                    token.addOne(t, arraysCounterGS, true);
+            }
         }
-
         public void findMain()
         {
             int parentheses = 0;
@@ -253,18 +279,6 @@ namespace Analyzer
                         i--;
                     }
                 }
-            //foreach (token tt in defines)
-            //    foreach (token t in allCodeTokens)
-            //    {
-            //        if (t.isIdentifier())
-            //        {
-            //            if (tt.getLexeme() == t.getLexeme())
-            //            {
-            //                t.setType("");
-            //                t.setLexeme(tt.arrayDimensions.ToString());
-            //            }
-            //        }
-            //    }
         }
 
         public void findClassesAndStructs()
