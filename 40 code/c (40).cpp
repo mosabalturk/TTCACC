@@ -123,10 +123,10 @@ int ordersfile() {
 
 	}
 	fclose(di);
-	sýralama(int orderslist.deadline, int orderslist.ordercode, int orderslist.amountofwork, int orderslist.operationcode, int ordcounter);
+	siralama(int orderslist.deadline, int orderslist.ordercode, int orderslist.amountofwork, int orderslist.operationcode, int ordcounter);
 	scheduleolustur(ordcounter);
 }
-int sýralama(int dizi1[],int dizi2[],int dizi3[],int dizi4[],int elemansayisi) {
+int siralama(int dizi1[],int dizi2[],int dizi3[],int dizi4[],int elemansayisi) {
 	
 	int temp1=0,temp2=0,temp3=0,temp4=0;
 	int i, j;

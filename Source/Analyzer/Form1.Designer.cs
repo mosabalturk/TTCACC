@@ -23,9 +23,10 @@
         /// the contents of this method with the code editor.
         /// </summary>
         private void InitializeComponent() {
-            this.button2 = new System.Windows.Forms.Button();
+            this.clearbtn = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.structObjectsGS = new System.Windows.Forms.Button();
             this.button6 = new System.Windows.Forms.Button();
             this.showCodebtn = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
@@ -37,11 +38,10 @@
             this.librariesbtn = new System.Windows.Forms.Button();
             this.structsbtn = new System.Windows.Forms.Button();
             this.classesbtn = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.filesInputbtn = new System.Windows.Forms.Button();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
-            this.structObjectsGS = new System.Windows.Forms.Button();
+            this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -50,16 +50,16 @@
             this.splitContainer2.SuspendLayout();
             this.SuspendLayout();
             // 
-            // button2
+            // clearbtn
             // 
-            this.button2.Location = new System.Drawing.Point(3, 4);
-            this.button2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(87, 28);
-            this.button2.TabIndex = 7;
-            this.button2.Text = "Clear";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            this.clearbtn.Location = new System.Drawing.Point(3, 4);
+            this.clearbtn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.clearbtn.Name = "clearbtn";
+            this.clearbtn.Size = new System.Drawing.Size(87, 28);
+            this.clearbtn.TabIndex = 7;
+            this.clearbtn.Text = "Clear";
+            this.clearbtn.UseVisualStyleBackColor = true;
+            this.clearbtn.Click += new System.EventHandler(this.clearBtn_Click);
             // 
             // button1
             // 
@@ -94,9 +94,9 @@
             this.splitContainer1.Panel1.Controls.Add(this.librariesbtn);
             this.splitContainer1.Panel1.Controls.Add(this.structsbtn);
             this.splitContainer1.Panel1.Controls.Add(this.classesbtn);
-            this.splitContainer1.Panel1.Controls.Add(this.button3);
+            this.splitContainer1.Panel1.Controls.Add(this.filesInputbtn);
             this.splitContainer1.Panel1.Controls.Add(this.button1);
-            this.splitContainer1.Panel1.Controls.Add(this.button2);
+            this.splitContainer1.Panel1.Controls.Add(this.clearbtn);
             this.splitContainer1.Panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.splitContainer1_Panel1_Paint);
             // 
             // splitContainer1.Panel2
@@ -106,6 +106,17 @@
             this.splitContainer1.SplitterDistance = 77;
             this.splitContainer1.SplitterWidth = 5;
             this.splitContainer1.TabIndex = 9;
+            // 
+            // structObjectsGS
+            // 
+            this.structObjectsGS.Location = new System.Drawing.Point(619, 4);
+            this.structObjectsGS.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.structObjectsGS.Name = "structObjectsGS";
+            this.structObjectsGS.Size = new System.Drawing.Size(158, 28);
+            this.structObjectsGS.TabIndex = 20;
+            this.structObjectsGS.Text = "struct objects inGS";
+            this.structObjectsGS.UseVisualStyleBackColor = true;
+            this.structObjectsGS.Click += new System.EventHandler(this.structObjects_Click);
             // 
             // button6
             // 
@@ -228,16 +239,16 @@
             this.classesbtn.UseVisualStyleBackColor = true;
             this.classesbtn.Click += new System.EventHandler(this.classesbtn_Click);
             // 
-            // button3
+            // filesInputbtn
             // 
-            this.button3.Location = new System.Drawing.Point(3, 40);
-            this.button3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(87, 28);
-            this.button3.TabIndex = 8;
-            this.button3.Text = "input all files";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.button3_Click);
+            this.filesInputbtn.Location = new System.Drawing.Point(3, 40);
+            this.filesInputbtn.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.filesInputbtn.Name = "filesInputbtn";
+            this.filesInputbtn.Size = new System.Drawing.Size(87, 28);
+            this.filesInputbtn.TabIndex = 8;
+            this.filesInputbtn.Text = "input all files";
+            this.filesInputbtn.UseVisualStyleBackColor = true;
+            this.filesInputbtn.Click += new System.EventHandler(this.filesInputbtn_Click);
             // 
             // splitContainer2
             // 
@@ -248,7 +259,7 @@
             // 
             // splitContainer2.Panel1
             // 
-            this.splitContainer2.Panel1.Controls.Add(this.richTextBox1);
+            this.splitContainer2.Panel1.Controls.Add(this.webBrowser1);
             // 
             // splitContainer2.Panel2
             // 
@@ -257,18 +268,6 @@
             this.splitContainer2.SplitterDistance = 559;
             this.splitContainer2.SplitterWidth = 5;
             this.splitContainer2.TabIndex = 5;
-            // 
-            // richTextBox1
-            // 
-            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.richTextBox1.ForeColor = System.Drawing.Color.Black;
-            this.richTextBox1.Location = new System.Drawing.Point(0, 0);
-            this.richTextBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.richTextBox1.Size = new System.Drawing.Size(559, 601);
-            this.richTextBox1.TabIndex = 4;
-            this.richTextBox1.Text = "";
             // 
             // richTextBox2
             // 
@@ -283,16 +282,14 @@
             this.richTextBox2.Text = "";
             this.richTextBox2.TextChanged += new System.EventHandler(this.richTextBox2_TextChanged);
             // 
-            // structObjectsGS
+            // webBrowser1
             // 
-            this.structObjectsGS.Location = new System.Drawing.Point(619, 4);
-            this.structObjectsGS.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.structObjectsGS.Name = "structObjectsGS";
-            this.structObjectsGS.Size = new System.Drawing.Size(158, 28);
-            this.structObjectsGS.TabIndex = 20;
-            this.structObjectsGS.Text = "struct objects inGS";
-            this.structObjectsGS.UseVisualStyleBackColor = true;
-            this.structObjectsGS.Click += new System.EventHandler(this.structObjects_Click);
+            this.webBrowser1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.webBrowser1.Location = new System.Drawing.Point(0, 0);
+            this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowser1.Name = "webBrowser1";
+            this.webBrowser1.Size = new System.Drawing.Size(559, 601);
+            this.webBrowser1.TabIndex = 0;
             // 
             // Form1
             // 
@@ -315,13 +312,12 @@
 
         #endregion
 
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button clearbtn;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
-        private System.Windows.Forms.RichTextBox richTextBox1;
         private System.Windows.Forms.RichTextBox richTextBox2;
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button filesInputbtn;
         private System.Windows.Forms.Button classesbtn;
         private System.Windows.Forms.Button librariesbtn;
         private System.Windows.Forms.Button structsbtn;
@@ -334,6 +330,7 @@
         private System.Windows.Forms.Button showCodebtn;
         private System.Windows.Forms.Button button6;
         private System.Windows.Forms.Button structObjectsGS;
+        private System.Windows.Forms.WebBrowser webBrowser1;
     }
 }
 

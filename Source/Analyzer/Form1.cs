@@ -12,25 +12,28 @@ namespace Analyzer
         {
             InitializeComponent();
         }
-        private void button2_Click(object sender, EventArgs e)
+        private void clearBtn_Click(object sender, EventArgs e)
         {
-            richTextBox1.Text = "";
+            webBrowser1.DocumentText = "";
             richTextBox2.Text = "";
             Program.codes.Clear();
+            token.zeroIdCounter();
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-                richTextBox1.Text = "";
+            string tz;
+            tz = "All tokens..  <br/>";
             foreach (code cd in Program.codes)
             {
-                richTextBox1.Text += "file name: " + cd.filename + "\n";
+                tz += "file name: " + cd.filename + "<br/>";
                 foreach (token t in cd.getAllTokens())
                 {
                     //richTextBox1.Text += "< " + t.getType() + " , " + t.getLexeme() + " >";
-                    richTextBox1.Text += t.id.ToString()+" "+ t.getType() + " , " + t.getLexeme() + "\n";
+                    tz += t.id.ToString()+" "+ t.getType() + " ," + t.getLexeme() + ",<br/>";
                 }
             }
+            webBrowser1.DocumentText = tz;
         }
 
             private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
@@ -43,7 +46,7 @@ namespace Analyzer
 
         }
 
-        private void button3_Click(object sender, EventArgs e)
+        private void filesInputbtn_Click(object sender, EventArgs e)
         {
             OpenFileDialog od = new OpenFileDialog();
             od.Filter = "cpp files|*.cpp";
@@ -64,7 +67,7 @@ namespace Analyzer
 
         private void librariesbtn_Click(object sender, EventArgs e)
         {
-            richTextBox2.Text = "";
+            richTextBox2.Text = "Libraries\n";
             foreach (code cd in Program.codes)
             {
                 richTextBox2.Text += cd.filename + "\n";
@@ -75,7 +78,7 @@ namespace Analyzer
 
         private void definesbtn_Click(object sender, EventArgs e)
         {
-            richTextBox2.Text = "";
+            richTextBox2.Text = "defines:\n";
             foreach (code cd in Program.codes)
             {
                 richTextBox2.Text += cd.filename + "\n";
@@ -86,7 +89,7 @@ namespace Analyzer
 
         private void mainbtn_Click(object sender, EventArgs e)
         {
-            richTextBox2.Text = "";
+            richTextBox2.Text = "main function\n";
             foreach (code cd in Program.codes)
             {
                 richTextBox2.Text += cd.filename + "\n";
@@ -97,7 +100,7 @@ namespace Analyzer
 
         private void allFuncsbtn_Click(object sender, EventArgs e)
         {
-            richTextBox2.Text = "";
+            richTextBox2.Text = "All functions:\n";
             foreach (code cd in Program.codes)
             {
                 richTextBox2.Text += cd.filename + "\n-----\n";
@@ -115,7 +118,7 @@ namespace Analyzer
 
         private void classesbtn_Click(object sender, EventArgs e)
         {
-            richTextBox2.Text = "";
+            richTextBox2.Text = "classes:\n";
             foreach (code cd in Program.codes)
             {
                 richTextBox2.Text += cd.filename + "\n-----\n";
@@ -126,12 +129,12 @@ namespace Analyzer
 
         private void structsbtn_Click(object sender, EventArgs e)
         {
-            richTextBox2.Text = "";
+            richTextBox2.Text = "structs:\n";
             foreach (code cd in Program.codes)
             {
                 richTextBox2.Text += cd.filename + "\n-----\n";
                 foreach (code clas in cd.Allstructs)
-                    richTextBox2.Text += "class name:" + clas.filename + "\nbody :\n" + clas.codeAsStr + "\n--------------\n--------------\n";
+                    richTextBox2.Text += "struct name:" + clas.filename + "\ntypedef name:" + clas.typedefName + "\nbody :\n" + clas.codeAsStr + "\n--------------\n--------------\n";
             }
 
         }
@@ -173,7 +176,7 @@ namespace Analyzer
 
         private void showCodebtn_Click(object sender, EventArgs e)
         {
-            richTextBox2.Text = "";
+            richTextBox2.Text = "the code naked :D \n";
             foreach (code cd in Program.codes)
             {
                 richTextBox2.Text += cd.filename + "\n-----\nthe code:\n";
@@ -184,20 +187,20 @@ namespace Analyzer
 
         private void button6_Click(object sender, EventArgs e)
         {
-            richTextBox1.Text = "";
+            richTextBox2.Text = "";
             foreach (code cd in Program.codes)
             {
-                richTextBox1.Text += "file name: " + cd.filename + "\n";
+                richTextBox2.Text += "file name: " + cd.filename + "\n";
                 foreach (token t in cd.getGSTokens())
                 {
-                    richTextBox1.Text += "< "+t.id.ToString() + " " + t.getType() + " , " + t.getLexeme() + " >\n";
+                    richTextBox2.Text += "< "+t.id.ToString() + " " + t.getType() + " , " + t.getLexeme() + " >\n";
                 }
             }
         }
 
         private void structObjects_Click(object sender, EventArgs e)
         {
-            richTextBox2.Text = "";
+            richTextBox2.Text = "struct objectcs\n";
             foreach (code cd in Program.codes)
             {
                 richTextBox2.Text += "file name: " + cd.filename + "\n";

@@ -79,8 +79,8 @@ namespace Analyzer
         }
 
         #endregion
-        public void SetCount(int count) { this.count = count; }
-        public int GetCount() { return count; }
+        public void setCount(int count) { this.count = count; }
+        public int getCount() { return count; }
         public void incCount() { this.count++; }
         /// <summary>
         /// add sToken to the list or increment count if exist 
