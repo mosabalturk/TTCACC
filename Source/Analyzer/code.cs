@@ -39,7 +39,15 @@ namespace Analyzer
         public List<code> Allstructs { get { return structes; } }
         public List<string> getLibraries { get { return libraries; } }
         public List<token> getDefines { get { return defines; } }
-    
+        #region get lists
+        public List<token> getOperationsCounterGS { get { return operationsCounterGS; } }
+        public List<token> getDataTypesCounterGS { get { return dataTypesCounterGS; } }
+        public List<token> getValuesCounterGS { get { return valuesCounterGS; } }
+        public List<token> getKeyWordsCounterGS { get { return KeyWordsCounterGS; } }
+        public List<token> getArraysCounterGS { get { return arraysCounterGS; } }
+        public List<token> getPointersCounterGS { get { return pointersCounterGS; } }
+        public List<token> getVariablesCounterGS { get { return variablesCounterGS; } }
+        #endregion
         public code(string codestr, string filename)
         {
             codestr = Program.RemoveCommentsAndSpaces(codestr);//delete comments

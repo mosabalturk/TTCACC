@@ -85,7 +85,7 @@ namespace Analyzer {
                 "register","reinterpret_cast","return","signed","sizeof","static",
                 "static_cast","struct","switch","template","this","throw","true","try","typedef",
                 "typeid","typename","union","unsigned","using","while"};
-            return sKeywords.Exists(element => (sToken.ToLower()) == element);
+            return sKeywords.Exists(element => sToken == element);
         }
         private bool isDataType(string sToken)
         {
