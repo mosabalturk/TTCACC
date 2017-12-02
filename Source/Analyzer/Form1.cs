@@ -272,7 +272,7 @@ namespace Analyzer
                 }
             }
         }
-
+        //h
         private void button2_Click_1(object sender, EventArgs e)
         {
             richTextBox2.Text = "counters:\noperations counter:\n";
