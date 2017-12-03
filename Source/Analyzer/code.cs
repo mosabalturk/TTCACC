@@ -49,6 +49,7 @@ namespace Analyzer
         public List<token> getArraysCounterGS { get { return arraysCounterGS; } }
         public List<token> getPointersCounterGS { get { return pointersCounterGS; } }
         public List<token> getVariablesCounterGS { get { return variablesCounterGS; } }
+        public List<List<token>> allGlobalVariables = new List<List<token>>();
         #endregion
         public code(string codestr, string filename)
         {
@@ -77,13 +78,6 @@ namespace Analyzer
         }
         public void count()
         {
-            //private List<token> operationsCounterGS = new List<token>();
-            //private List<token> KeyWordsCounterGS = new List<token>();
-            //private List<token> dataTypesCounterGS = new List<token>();
-            //private List<token> valuesCounterGS = new List<token>();
-            //private List<token> variablesCounterGS = new List<token>();
-            //private List<token> pointersCounterGS = new List<token>();
-            //private List<token> arraysCounterGS = new List<token>();
             foreach (token t in globalScobeTokens)
             {
                 if (t.isOperation())
