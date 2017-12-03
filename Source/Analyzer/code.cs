@@ -8,6 +8,8 @@ namespace Analyzer
 
     public class code
     {
+        public static string[] lines = new string[100];
+        public static int linecounter = 0;
         List<token> allCodeTokens;//done
         List<token> globalScobeTokens;//no
         private string cStr;//done
@@ -19,7 +21,7 @@ namespace Analyzer
         // define.type = value of define 
         // defin.lexeme = varName
         private List<function> func_prototypes = new List<function>();//done
-        private List<code> classes = new List<code>();//done
+        public List<code> classes = new List<code>();//done
         private List<code> structes = new List<code>();//done
         private List<token> classObjects = new List<token>();
         private List<token> structObjects = new List<token>();
@@ -218,7 +220,7 @@ namespace Analyzer
                     {//خطأ عندما يكون الباراميتر ستركت أو بوينتر او مصفوفة
                         if ((allCodeTokens[s].isDatatype() && (allCodeTokens[s + 1].getType() == "identifier")))
                         {
-                            parameters.Add(new token( allCodeTokens[s + 1].getLexeme(), 0));
+                            parameters.Add(allCodeTokens[s + 1]);
                         }
                     }
                     
@@ -365,7 +367,16 @@ namespace Analyzer
                 }
             }
         }
-        
+        public static void spitYourClassesLan(code something)
+        {
+            foreach (var dodo in something.structes)
+            {
+                spitYourClassesLan(dodo);
+                code.lines[linecounter++] = dodo.fname;
+            }
+            
+        }
+
     }
 
     // The class Tibi is working on

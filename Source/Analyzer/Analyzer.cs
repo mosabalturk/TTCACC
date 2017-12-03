@@ -567,8 +567,10 @@ namespace Analyzer {
         }
         public void pointersArraysAnalzer(List<token> result,List<token> def, List<token> result2)
         {
+            
             for (int i = 0; i < result.Count-1; i++)
             {
+                List<token> remove = new List<token>();
                 bool structPtr = i > 1 ? ((result[i-1].getLexeme()=="struct")&&(result[i].isIdentifier())&& (result[i + 1].getLexeme() == "*")) : (false);
                 if ((result[i].isDatatype()||(structPtr)) && result[i + 1].getLexeme() == "*")
                 {
@@ -602,11 +604,22 @@ namespace Analyzer {
                 {
                     int j = i + 1;
                     List<int> arr = new List<int>();
-                    bool arrayWithoutBoundaies = (result[j].getLexeme() == "[") && (result[j + 1].getLexeme() == "]");
-                    if (!arrayWithoutBoundaies)
+                    while (result[j].getLexeme() == "[")
                     {
-                        while ((result[j].getLexeme() == "[") && (result[j + 2].getLexeme() == "]"))
+                        bool arrayWithoutBoundaies = (result[j].getLexeme() == "[") && (result[j + 1].getLexeme() == "]");
+                        if (arrayWithoutBoundaies)
                         {
+
+                            int valu = result[j + 3].getLexeme().Length - 2;
+                            remove.Add(result[j]);
+                            remove.Add(result[j + 1]);
+                            result[i].arrayIndexes.Add(valu);
+                            
+                            j += 2;
+                        }
+                        else if ((result[j].getLexeme() == "[") && (result[j + 2].getLexeme() == "]"))
+                        {
+
                             int valu = 0;
                             if (result[j + 1].isValue())
                                 valu = Convert.ToInt32(result[j + 1].getLexeme());
@@ -615,26 +628,57 @@ namespace Analyzer {
                                 foreach (token t in def)
                                     if (t.getLexeme() == result[j + 1].getLexeme())
                                         valu = Convert.ToInt32(t.getType());
-                            arr.Add(valu);
-                            result.Remove(result[j]);
-                            result.Remove(result[j]);
-                            result.Remove(result[j]);
+                            result[i].arrayIndexes.Add(valu);
+                            
+                            remove.Add(result[j]);
+                            remove.Add(result[j + 1]);
+                            remove.Add(result[j + 2]);
+                            j += 3;
                         }
-                        result[i].arrayIndecies = new List<int>(arr);
-                        result[i].isArray = true;
+                        else
+                        {
+                            int k = j+1;
+                            remove.Add(result[j]);
+                            int paran = 0;
+                            while ((result[k].getLexeme() != "]") || (paran != 0))
+                            {
+                                if (result[k].getLexeme() == "[")
+                                {
+                                    paran++;
+                                }
+                                if (result[k].getLexeme() == "]")
+                                {
+                                    paran--;
+                                }
+                                remove.Add(result[k++]);
+                            }
+                            j = k;
+                            remove.Add(result[j]);
+                            result[i].arrayIndexes.Add(0);
+                            j = ++k;
+                        }
+                        
                     }
-                    else 
+                    result[i].isArray = true;
+                    i = j;
+                }
+                foreach (token t in remove)
+                {
+                    result.Remove(t);
+                    if (result2 != null)
                     {
-                        int valu = result[j+3].getLexeme().Length - 2;
-                        arr.Add(valu);
-                        result.Remove(result[j]);
-                        result.Remove(result[j]);
-                        result[i].arrayIndecies = new List<int>(arr);
-                        result[i].isArray = true;
-
+                        result2.Remove(t);
                     }
                 }
             }
+
+            //defect of this function
+            // when deleting [] the code coulde be like this :
+            //	   setup_duration[values[0]][values[1]]=values[2];
+            //     setup_duration[values[1]][values[0]] = values[2];
+            // and the result will be 
+            // setup_duration = values 
+            // setup_duration = values
         }
         public static void structAsDatatype(List<token> result, List<token> result2, List<string> strcts, List<string> typedefNames)
         {

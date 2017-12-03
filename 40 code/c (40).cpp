@@ -13,13 +13,13 @@
 typedef struct operation {
 	int operationcode;
 	int duration;
-	
+	struct lolo{struct fufu{}; struct jojo{};};
 }operation;
 typedef struct setupduration {
 	int operationcode1;
 	int operationcode2;
 	int setupduration;
-
+struct loslo{struct fsufu{struct eeeeeehhhhhh{};}; struct jsojo{};};
 }setup;
 typedef struct orders {
 	int ordercode;

@@ -12,6 +12,10 @@ namespace Analyzer
         public static void zeroIdCounter() { idCounter = 0; }
         protected string lexeme;
         private string type;
+        private int count;
+        public bool isPointer { get; set; }
+        public int pointerLevel { get; set; }
+        public bool isArray { get; set; }
         // type is equla to
         // identifier 
         // op
@@ -22,8 +26,7 @@ namespace Analyzer
         // vchar (char as value)
         // vstring (string as value)
         // library
-        private int count;
-        #region isBlabla
+        #region isBlabla bollean
         public bool isOperation() { if (getType() == "op") return true; else return false; }
         public bool isIdentifier() { if (getType() == "identifier") return true; else return false; }
         public bool isDatatype() { if (getType() == "datatype") return true; else return false; }
@@ -43,53 +46,24 @@ namespace Analyzer
         {
             this.id = idCounter++;
             this.lexeme = lexeme;
-            count = 0;
-        }
-        public token(string lexeme,int count)
-        {
-            this.id = idCounter++;
-            this.lexeme = lexeme;
-            this.count = count;
+            count = 1;
         }
         public token(string lexeme, string type)
         {
             this.id = idCounter++;
             this.lexeme = lexeme;
             this.type = type;
-            this.count = 0;
-        }
-        public token(string lexeme, string type, int count)
-        {
-            this.id = idCounter++;
-            this.lexeme = lexeme;
-            this.type = type;
-            this.count = count;
+            this.count = 1;
         }
         public void setLexeme(string lexeme) { this.lexeme = lexeme; }
         public void setType(string type) { this.type = type; }
         public string getType() { return type; }
         public string getLexeme() { return lexeme; }
-
-        #region identifiers region
-        public bool Pointer = false;
-        public bool array = false;
-        private List<int> arrayIndex;
-        public bool isPointer { get { return Pointer; } set { Pointer = value; } }
-        public int pointerLevel { get; set; }
-        public bool isArray { get { return array; } set { array = value; } }
-        public List<int> arrayIndecies
-        {
-            get { return arrayIndex; }
-            set
-            { value = arrayIndex;}
-        }
-
-        #endregion
+        public List<int> arrayIndexes = new List<int>();
         public static List<string> getLexemesFromList(List<token> tkns)
         {
             return tkns.Select(a => a.lexeme).ToList();
         }
-        public void setCount(int count) { this.count = count; }
         public int getCount() { return count; }
         public void incCount() { this.count++; }
         /// <summary>
@@ -121,7 +95,7 @@ namespace Analyzer
                 }
                 else
                 {
-                    token temp = new token("", TknObj.getType(), 1);
+                    token temp = new token("", TknObj.getType());
                     tkn.Add(temp);
                 }
 
@@ -129,11 +103,10 @@ namespace Analyzer
         }
         public token Copy()
         {
-            var result = new token(this.lexeme);
-            result.id = this.id;
+            var result = new token(this.lexeme,type);
+            result.id = this.id;            
             result.lexeme = this.lexeme;
-            result.Pointer = this.Pointer;
-            result.array = this.array;
+            result.isArray = this.isArray;
             result.count = this.count;
             result.type = this.type;
             return result;

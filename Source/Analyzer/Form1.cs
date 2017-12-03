@@ -239,8 +239,8 @@ namespace Analyzer
                 richTextBox2.Text += "file name: " + cd.filename + "\n";
                 foreach (token t in cd.getArraysCounterGS)
                 {
-                    richTextBox2.Text += t.getLexeme() + " count: " + t.getCount() + " array demintions: " + t.arrayIndecies.ToString() + " array boundaries "; ;
-                    foreach (int i in t.arrayIndecies)
+                    richTextBox2.Text += t.getLexeme() + " count: " + t.getCount() + " array demintions: " + t.arrayIndexes.ToString() + " array boundaries "; ;
+                    foreach (int i in t.arrayIndexes)
                         richTextBox2.Text += "[" + i.ToString() + "] ";
                     richTextBox2.Text += " >\n";
                 }
@@ -312,8 +312,8 @@ namespace Analyzer
                 richTextBox2.Text += "file name: " + cd.filename + "\n";
                 foreach (token t in cd.getArraysCounterGS)
                 {
-                    richTextBox2.Text += t.getLexeme() + " count: " + t.getCount() + " array demintions: " + t.arrayIndecies.ToString() + " array boundaries "; ;
-                    foreach (int i in t.arrayIndecies)
+                    richTextBox2.Text += t.getLexeme() + " count: " + t.getCount() + " array demintions: " + t.arrayIndexes.ToString() + " array boundaries "; ;
+                    foreach (int i in t.arrayIndexes)
                         richTextBox2.Text += "[" + i.ToString() + "] ";
                     richTextBox2.Text += " >\n";
                 }
@@ -334,6 +334,17 @@ namespace Analyzer
                 {
                     richTextBox2.Text += t.getLexeme() + " count: " + t.getCount() + " >\n";
                 }
+            }
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+        {
+            int i = 0;
+            foreach (code cd in Program.codes)
+            {
+                code.spitYourClassesLan(cd);
+                code.linecounter = 0;
+                File.WriteAllLines(@"C:\Users\Mosab AlTurk\Desktop\TTCACC\Source\spitlantest"+i.ToString()+".txt", code.lines);
             }
         }
     }

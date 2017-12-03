@@ -50,6 +50,7 @@
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
+            this.button3 = new System.Windows.Forms.Button();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -91,6 +92,7 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.button3);
             this.splitContainer1.Panel1.Controls.Add(this.groupBox1);
             this.splitContainer1.Panel1.Controls.Add(this.button6);
             this.splitContainer1.Panel1.Controls.Add(this.definesbtn);
@@ -105,7 +107,7 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.splitContainer2);
-            this.splitContainer1.Size = new System.Drawing.Size(1334, 683);
+            this.splitContainer1.Size = new System.Drawing.Size(1477, 683);
             this.splitContainer1.SplitterDistance = 77;
             this.splitContainer1.SplitterWidth = 5;
             this.splitContainer1.TabIndex = 9;
@@ -365,8 +367,8 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.richTextBox2);
-            this.splitContainer2.Size = new System.Drawing.Size(1334, 601);
-            this.splitContainer2.SplitterDistance = 614;
+            this.splitContainer2.Size = new System.Drawing.Size(1477, 601);
+            this.splitContainer2.SplitterDistance = 679;
             this.splitContainer2.SplitterWidth = 5;
             this.splitContainer2.TabIndex = 5;
             // 
@@ -376,7 +378,7 @@
             this.webBrowser1.Location = new System.Drawing.Point(0, 0);
             this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
             this.webBrowser1.Name = "webBrowser1";
-            this.webBrowser1.Size = new System.Drawing.Size(614, 601);
+            this.webBrowser1.Size = new System.Drawing.Size(679, 601);
             this.webBrowser1.TabIndex = 0;
             // 
             // richTextBox2
@@ -387,16 +389,27 @@
             this.richTextBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.richTextBox2.Name = "richTextBox2";
             this.richTextBox2.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.richTextBox2.Size = new System.Drawing.Size(715, 601);
+            this.richTextBox2.Size = new System.Drawing.Size(793, 601);
             this.richTextBox2.TabIndex = 5;
             this.richTextBox2.Text = "";
             this.richTextBox2.TextChanged += new System.EventHandler(this.richTextBox2_TextChanged);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(1328, 44);
+            this.button3.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(120, 28);
+            this.button3.TabIndex = 45;
+            this.button3.Text = "spit";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1334, 683);
+            this.ClientSize = new System.Drawing.Size(1477, 683);
             this.Controls.Add(this.splitContainer1);
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Form1";
@@ -441,6 +454,7 @@
         private System.Windows.Forms.Button button5;
         private System.Windows.Forms.Button allFuncsbtn;
         private System.Windows.Forms.Button mainbtn;
+        private System.Windows.Forms.Button button3;
     }
 }
 
