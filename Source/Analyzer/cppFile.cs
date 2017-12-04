@@ -8,7 +8,6 @@ namespace Analyzer
     public class cppFile
     {
         public code code { set; get; }
-        public List<List<tokenCounter>> KwOpDtTCnts { get { return code.KwOpDtTC(code); } }
         List<token> holeCodeTokens;//done
         private string cStr;//done
         private string fname;//done
@@ -46,6 +45,7 @@ namespace Analyzer
             //findVar();
             code = new code(codestr, filename, holeCodeTokens, ref holeCodeTokens, new List<identifier>(), new List<pointer>(), new List<array>());
             code.spitYourVariablesLn(code);
+            code.setResults();
         }
         
         public void findLibrariesAndDefines()

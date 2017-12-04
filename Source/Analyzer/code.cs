@@ -80,7 +80,7 @@ namespace Analyzer
             globalScobeTokens = new List<token>(this.thisCodeToken); // copy allCodeTokens list
 
             findClassesAndStructs();
-            Analyzer.structAsDatatype(this.thisCodeToken, globalScobeTokens, structes.Select(a => a.filename).ToList(), structes.Select(a => a.typedefName).ToList());
+            Analyzer.structAsDatatype(this.thisCodeToken, this.globalScobeTokens, structes.Select(a => a.filename).ToList(), structes.Select(a => a.typedefName).ToList());
 
             findMain();
             findFunctionsAndPrototypes();
@@ -498,14 +498,51 @@ namespace Analyzer
                 return s + spitYourCountersLan(srct);
             return s;
         }
-        public static List<List<tokenCounter>> res = new List<List<tokenCounter>>();
-        public List<List<tokenCounter>> KwOpDtTC( code st)
+
+        #region counters
+
+        public static List<List<tokenCounter>> res1 = new List<List<tokenCounter>>();
+        public static List<List<tokenCounter>> res2 = new List<List<tokenCounter>>();
+        public static List<List<tokenCounter>> res3 = new List<List<tokenCounter>>();
+
+        public List<List<tokenCounter>> keywordsLL( code st)
         {
             
-            res.Add(KeyWordsCounterGS.Concat(operationsCounterGS).Concat(dataTypesCounterGS).ToList());
+            res1.Add(KeyWordsCounterGS);
             foreach (code cd in st.structes)
-            { res.Concat(cd.KwOpDtTC(cd)).ToList();}
-            return res;
+            { res1.Concat(cd.keywordsLL(cd)).ToList();}
+            return res1;
         }
+        public List<List<tokenCounter>> operatorsLL(code st)
+        {
+
+            res2.Add(operationsCounterGS);
+            foreach (code cd in st.structes)
+            { res2.Concat(cd.operatorsLL(cd)).ToList(); }
+            return res2;
+        }
+        public List<List<tokenCounter>> datatypesLL(code st)
+        {
+
+            res3.Add(dataTypesCounterGS);
+            foreach (code cd in st.structes)
+            { res3.Concat(cd.datatypesLL(cd)).ToList(); }
+            return res3;
+        }
+        public result result { get; set; }
+        public void setResults()
+        {
+            result = new result();
+            result.keyWord = keywordsLL(this);
+            result.operations = operatorsLL(this);
+            result.datatypes = datatypesLL(this);
+        }
+        #endregion
+
+    }
+    public class result {
+        public List<List<tokenCounter>> keyWord = new List<List<tokenCounter>>();
+        public List<List<tokenCounter>> operations = new List<List<tokenCounter>>();
+        public List<List<tokenCounter>> datatypes = new List<List<tokenCounter>>();
     }
 }

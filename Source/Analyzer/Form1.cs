@@ -368,12 +368,15 @@ namespace Analyzer
             richTextBox2.Text = "";
             foreach (cppFile cd in Program.cppFiles)
             {
-                List<List<tokenCounter>> res = cd.KwOpDtTCnts;
-                foreach (List<tokenCounter> l in res)
-                    foreach (tokenCounter t in l)
-                    {
-                        richTextBox2.Text += t.getLexeme() + " count:" + t.getCount() + "\n";
-                    }
+                if (cd.code.result != null)
+                {
+                    List<List<tokenCounter>> res = cd.code.result.datatypes;
+                    foreach (List<tokenCounter> l in res)
+                        foreach (tokenCounter t in l)
+                        {
+                            richTextBox2.Text += t.getLexeme() + " count:" + t.getCount() + "\n";
+                        }
+                }
             }
         }
     }

@@ -576,15 +576,29 @@ namespace Analyzer {
                     string temp = result[i].getLexeme() + " " + result[i + 1].getLexeme();
                     result[i + 1].setType("datatype");
                     result[i + 1].setLexeme(temp);
+                    
+                    for (int ii = 0; ii < result2.Count; ii++)
+                        if (result2[ii].id == result[i].id)
+                        {
+                            result2[ii + 1].setType("datatype");
+                            result2[ii + 1].setLexeme(temp);
+                            result2.Remove(result2[ii]);
+                        }
                     token t = result[i];
                     result.Remove(t);
-                    result2.Remove(t);
+                    
 
                 }
                 if (structInitFromTypedefNames)
                 {
                     result[i].setType("datatype");
                     result[i].setLexeme(result[i].getLexeme());
+                    for (int ii = 0; ii < result2.Count; ii++)
+                        if (result2[ii].id == result[i].id)
+                        {
+                            result2[ii].setType("datatype");
+                            result2[ii].setLexeme(result[ii].getLexeme());
+                        }
                 }
             
             }
