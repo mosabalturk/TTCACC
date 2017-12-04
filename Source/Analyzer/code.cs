@@ -36,9 +36,9 @@ namespace Analyzer
             AlltypdefNames = new List<string>();
             AllstructesClassesNames = new List<string>();
             idno = 0;
-            scopeTokenCounterList1.Clear();
-            scopeTokenCounterList2.Clear();
-            scopeTokenCounterList3.Clear();
+            scopeTokenCounterList1 = new List<scopeTokenCounter>();
+            scopeTokenCounterList2 = new List<scopeTokenCounter>();
+            scopeTokenCounterList3 = new List<scopeTokenCounter>();
         }
 
 
@@ -725,11 +725,6 @@ namespace Analyzer
         }
 
 
-        //public static List<scopeTokenCounter> res11 = new List<scopeTokenCounter>();
-        //public static List<scopeTokenCounter> res12 = new List<scopeTokenCounter>();
-        //public static List<scopeTokenCounter> res13 = new List<scopeTokenCounter>();
-
-
         public List<scopeTokenCounter> keywordsLL1(code st)
         {
             scopeTokenCounter temp = new scopeTokenCounter(st.ScopeId, st.containingScopeId);
@@ -766,38 +761,8 @@ namespace Analyzer
 
             return scopeTokenCounterList3;
         }
-        public result result { get; set; }
-        public void setResults()
-        {
-            result = new result();
-            result.keyWord = keywordsLL1(this);
-            result.operations = operatorsLL1(this);
-            result.datatypes = datatypesLL1(this);
-        }
+
         #endregion
     }
-    public class result {
-        public List<scopeTokenCounter> keyWord = new List<scopeTokenCounter>();
-        public List<scopeTokenCounter> operations = new List<scopeTokenCounter>();
-        public List<scopeTokenCounter> datatypes = new List<scopeTokenCounter>();
-    }
 
-    public class scopeTokenCounter
-    {
-        public int scopeId;
-        public int containId;
-        public List<tokenCounter> counter = new List<tokenCounter>();
-        public scopeTokenCounter(int scopeId,int containId)
-        {
-            this.scopeId = scopeId;
-            this.containId = containId;
-        }
-        public scopeTokenCounter(int scopeId, int containId, List<tokenCounter> counter)
-        {
-            this.scopeId = scopeId;
-            this.containId = containId;
-            this.counter = counter;
-        }
-
-    }
 }

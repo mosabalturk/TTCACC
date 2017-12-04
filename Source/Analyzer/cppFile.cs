@@ -7,10 +7,14 @@ namespace Analyzer
 {
     public class cppFile
     {
+
+
+        public result result { get; set; }
+
         public code code { set; get; }
         List<token> holeCodeTokens;//done
         private string cStr;//done
-        private string fname;//done
+        public string fname;//done
         private List<token> defines = new List<token>();
         //# define varName value
         // define.type = value of define 
@@ -34,20 +38,12 @@ namespace Analyzer
             findLibrariesAndDefines();
 
             pointersArraysAnalzer();
-            //remove *s pointers and make pointer true to the identifier that defined as pointer
-            // remove [ , ] and the value between them from arrays and add them to the propreties of identifier that defined as an array
-            //globalScobeTokens = new List<token>(allCodeTokens); // copy allCodeTokens list
-            //findClassesAndStructs();
-            //Analyzer.structAsDatatype(allCodeTokens, globalScobeTokens, structes.Select(a => a.filename).ToList(), structes.Select(a => a.typedefName).ToList());
-            //findMain();
-            //findFunctionsAndPrototypes();
-            // count();
-            //findVar();
+
             code = new code(codestr, filename, ++code.idno, holeCodeTokens,  ref holeCodeTokens, new List<identifier>(), new List<pointer>(), new List<array>(),"GS");
             
             code.spitYourVariablesLn(code);
             code.countAllSubScopes(code);
-            code.setResults();
+            setResults(code);
         }
         
         public void findLibrariesAndDefines()
@@ -193,6 +189,16 @@ namespace Analyzer
             // and the result will be 
             // setup_duration = values 
             // setup_duration = values
+        }
+
+        
+        public void setResults( code t)
+        {
+            result = new result();
+            result.keyWord = t.keywordsLL1(t);
+            result.operations = t.operatorsLL1(t);
+            result.datatypes = t.datatypesLL1(t);
+            code.zeroStatics();
         }
 
     }

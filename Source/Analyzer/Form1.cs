@@ -375,9 +375,10 @@ namespace Analyzer
             richTextBox2.Text = "";
             foreach (cppFile cd in Program.cppFiles)
             {
-                if (cd.code.result != null)
+                richTextBox2.Text+= cd.fname+"\n";
+                if (cd.result != null)
                 {
-                    List<scopeTokenCounter> res = cd.code.result.operations;
+                    List<scopeTokenCounter> res = cd.result.operations;
                     foreach (scopeTokenCounter l in res)
                     {
                         richTextBox2.Text += " containId " + l.containId.ToString() + " scopeId " + l.scopeId.ToString() + "\n";
