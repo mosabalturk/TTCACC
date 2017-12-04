@@ -26,6 +26,7 @@
             this.clearbtn = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.button8 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.structObjectsGS = new System.Windows.Forms.Button();
             this.button5 = new System.Windows.Forms.Button();
@@ -39,7 +40,7 @@
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
-            this.button8 = new System.Windows.Forms.Button();
+            this.button7 = new System.Windows.Forms.Button();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -80,6 +81,7 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.button7);
             this.splitContainer1.Panel1.Controls.Add(this.button8);
             this.splitContainer1.Panel1.Controls.Add(this.button2);
             this.splitContainer1.Panel1.Controls.Add(this.structObjectsGS);
@@ -103,9 +105,20 @@
             this.splitContainer1.SplitterWidth = 5;
             this.splitContainer1.TabIndex = 9;
             // 
+            // button8
+            // 
+            this.button8.Location = new System.Drawing.Point(580, 42);
+            this.button8.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button8.Name = "button8";
+            this.button8.Size = new System.Drawing.Size(120, 28);
+            this.button8.TabIndex = 53;
+            this.button8.Text = "counters";
+            this.button8.UseVisualStyleBackColor = true;
+            this.button8.Click += new System.EventHandler(this.button8_Click);
+            // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(580, 42);
+            this.button2.Location = new System.Drawing.Point(580, 6);
             this.button2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(120, 28);
@@ -157,12 +170,12 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(580, 6);
+            this.button4.Location = new System.Drawing.Point(788, 6);
             this.button4.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(120, 28);
+            this.button4.Size = new System.Drawing.Size(255, 28);
             this.button4.TabIndex = 46;
-            this.button4.Text = "spit all gs";
+            this.button4.Text = "scopes and ids";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
@@ -251,16 +264,16 @@
             this.richTextBox2.Text = "";
             this.richTextBox2.TextChanged += new System.EventHandler(this.richTextBox2_TextChanged);
             // 
-            // button8
+            // button7
             // 
-            this.button8.Location = new System.Drawing.Point(719, 23);
-            this.button8.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(120, 28);
-            this.button8.TabIndex = 53;
-            this.button8.Text = "counters";
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
+            this.button7.Location = new System.Drawing.Point(788, 37);
+            this.button7.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(255, 28);
+            this.button7.TabIndex = 54;
+            this.button7.Text = "new counters";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
             // Form1
             // 
@@ -300,6 +313,7 @@
         private System.Windows.Forms.Button mainbtn;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button8;
+        private System.Windows.Forms.Button button7;
     }
 }
 

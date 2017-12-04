@@ -43,8 +43,10 @@ namespace Analyzer
             //findFunctionsAndPrototypes();
             // count();
             //findVar();
-            code = new code(codestr, filename, holeCodeTokens, ref holeCodeTokens, new List<identifier>(), new List<pointer>(), new List<array>());
+            code = new code(codestr, filename, ++code.idno, holeCodeTokens,  ref holeCodeTokens, new List<identifier>(), new List<pointer>(), new List<array>(),"GS");
+            
             code.spitYourVariablesLn(code);
+            code.countAllSubScopes(code);
             code.setResults();
         }
         

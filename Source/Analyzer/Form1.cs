@@ -18,6 +18,7 @@ namespace Analyzer
             richTextBox2.Text = "";
             Program.cppFiles.Clear();
             token.zeroIdCounter();
+            code.idno = 0;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -348,7 +349,7 @@ namespace Analyzer
         private void button4_Click(object sender, EventArgs e)
         {
             foreach (cppFile cd in Program.cppFiles)
-                code.spitAllGS(cd.code);
+                code.spitAllSnames(cd.code);
 
         }
 
@@ -365,17 +366,25 @@ namespace Analyzer
 
         private void button8_Click(object sender, EventArgs e)
         {
+
+        }
+
+        private void button7_Click(object sender, EventArgs e)
+        {
             richTextBox2.Text = "";
             foreach (cppFile cd in Program.cppFiles)
             {
                 if (cd.code.result != null)
                 {
-                    List<List<tokenCounter>> res = cd.code.result.datatypes;
-                    foreach (List<tokenCounter> l in res)
-                        foreach (tokenCounter t in l)
+                    List<scopeTokenCounter> res = cd.code.result.datatypes;
+                    foreach (scopeTokenCounter l in res)
+                    {
+                        richTextBox2.Text += " containId " + l.containId.ToString() + " scopeId " + l.scopeId.ToString() + "\n";
+                        foreach (tokenCounter t in l.counter)
                         {
                             richTextBox2.Text += t.getLexeme() + " count:" + t.getCount() + "\n";
                         }
+                    }
                 }
             }
         }

@@ -33,13 +33,18 @@ namespace Analyzer
         private List<identifier> parameters = new List<identifier>();
         public string funcAsStr { get { return funcBody; } set { funcBody = value; } }
         public List<identifier> funcParameters { get { return parameters; } }
-        public function(string code, ref List<token> tokens, List<identifier> parameters, string datatype, string funcName, ref List<token> holeCodeTokens, List<identifier> upperLevelVar, List<pointer> upperLevelPointers, List<array> upperLevelArray)
+
+        public int ScopeId;
+        public int containingScopeId;
+        public function(string codee,int containingScopeId, ref List<token> tokens, List<identifier> parameters, string datatype, string funcName, ref List<token> holeCodeTokens, List<identifier> upperLevelVar, List<pointer> upperLevelPointers, List<array> upperLevelArray)
         {
+            this.ScopeId = code.idno++;
+            this.containingScopeId = containingScopeId;
             this.holeCodeTokens = holeCodeTokens;
             this.upperLevelVar = upperLevelVar;
             this.upperLevelPointers = upperLevelPointers;
             this.upperLevelArray = upperLevelArray;
-            this.funcBody = code;
+            this.funcBody = codee;
             this.tokens = tokens;
             this.parameters = parameters;
             this.funcDataType = datatype;
@@ -50,8 +55,10 @@ namespace Analyzer
             //findVar();
             count();
         }
-        public function(List<identifier> parameters, string datatype, string funcName, bool protoType = true)
+        public function(List<identifier> parameters, int containingScopeId, string datatype, string funcName, bool protoType = true)
         {
+           this.ScopeId = code.idno++;
+            this.containingScopeId = containingScopeId;
             this.protoType = protoType;
             this.parameters = parameters;
             this.funcDataType = datatype;
