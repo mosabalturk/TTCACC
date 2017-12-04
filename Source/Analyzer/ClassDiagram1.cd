@@ -10,28 +10,28 @@
   <Class Name="Analyzer.code" Collapsed="true">
     <Position X="9.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BAEwIATiIEGiCCAFBgIAAhAcigIgLJGwtAQCCAAAIEQ=</HashCode>
+      <HashCode>BAEwIADiIEGiCCgFBgIAAhAcigIgLJGwtAQCCAAAIEQ=</HashCode>
       <FileName>code.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Analyzer.cppFile" Collapsed="true">
     <Position X="11" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BAAQAAAAAAAAAACAAACAAAAEIgAAAAAAACAABAQAAAA=</HashCode>
+      <HashCode>BAAQAAAAAAAAAACAAACAAAAEIgAQAAAAACAABAQAAAA=</HashCode>
       <FileName>cppFile.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Analyzer.Form1" Collapsed="true">
     <Position X="7.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>YAAAAAAAAHAgMAEABACAABACAMQ7AxgAwFAaAAAAAAA=</HashCode>
+      <HashCode>YAAAAAAAAHAgMAEABACAABACAMQ5AxgAwFAaAAAAAAA=</HashCode>
       <FileName>Form1.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Analyzer.function" Collapsed="true">
     <Position X="9.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAEQIACQAAACAAAEIAAAgAAAigBBAACACBAQAACAAAA=</HashCode>
+      <HashCode>AAEQIACQAEACCAAEJAABpAAAigBhAACgCBAQAACAAAA=</HashCode>
       <FileName>function.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -101,6 +101,13 @@
     <Position X="9.25" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAIAAAAAABAAAAAAAAAAAAAAA=</HashCode>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Analyzer.variableCounter" Collapsed="true">
+    <Position X="0.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>token.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />
