@@ -198,6 +198,7 @@ namespace Analyzer
             result.keyWord = t.keywordsLL1(t);
             result.operations = t.operatorsLL1(t);
             result.datatypes = t.datatypesLL1(t);
+            result.values = t.ValuesLL1(t);
             code.zeroStatics();
         }
 

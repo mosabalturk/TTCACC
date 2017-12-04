@@ -26,6 +26,7 @@
             this.clearbtn = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.button7 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.structObjectsGS = new System.Windows.Forms.Button();
@@ -40,7 +41,9 @@
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
-            this.button7 = new System.Windows.Forms.Button();
+            this.button9 = new System.Windows.Forms.Button();
+            this.button10 = new System.Windows.Forms.Button();
+            this.button11 = new System.Windows.Forms.Button();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -81,6 +84,9 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.button10);
+            this.splitContainer1.Panel1.Controls.Add(this.button11);
+            this.splitContainer1.Panel1.Controls.Add(this.button9);
             this.splitContainer1.Panel1.Controls.Add(this.button7);
             this.splitContainer1.Panel1.Controls.Add(this.button8);
             this.splitContainer1.Panel1.Controls.Add(this.button2);
@@ -104,6 +110,17 @@
             this.splitContainer1.SplitterDistance = 77;
             this.splitContainer1.SplitterWidth = 5;
             this.splitContainer1.TabIndex = 9;
+            // 
+            // button7
+            // 
+            this.button7.Location = new System.Drawing.Point(1305, 4);
+            this.button7.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button7.Name = "button7";
+            this.button7.Size = new System.Drawing.Size(160, 28);
+            this.button7.TabIndex = 54;
+            this.button7.Text = "operation Cntr";
+            this.button7.UseVisualStyleBackColor = true;
+            this.button7.Click += new System.EventHandler(this.button7_Click);
             // 
             // button8
             // 
@@ -170,10 +187,10 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(788, 6);
+            this.button4.Location = new System.Drawing.Point(706, 6);
             this.button4.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(255, 28);
+            this.button4.Size = new System.Drawing.Size(122, 28);
             this.button4.TabIndex = 46;
             this.button4.Text = "scopes and ids";
             this.button4.UseVisualStyleBackColor = true;
@@ -264,16 +281,38 @@
             this.richTextBox2.Text = "";
             this.richTextBox2.TextChanged += new System.EventHandler(this.richTextBox2_TextChanged);
             // 
-            // button7
+            // button9
             // 
-            this.button7.Location = new System.Drawing.Point(788, 37);
-            this.button7.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(255, 28);
-            this.button7.TabIndex = 54;
-            this.button7.Text = "new counters";
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
+            this.button9.Location = new System.Drawing.Point(1305, 40);
+            this.button9.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button9.Name = "button9";
+            this.button9.Size = new System.Drawing.Size(160, 28);
+            this.button9.TabIndex = 55;
+            this.button9.Text = "values Cntr";
+            this.button9.UseVisualStyleBackColor = true;
+            this.button9.Click += new System.EventHandler(this.button9_Click);
+            // 
+            // button10
+            // 
+            this.button10.Location = new System.Drawing.Point(1139, 41);
+            this.button10.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(160, 28);
+            this.button10.TabIndex = 57;
+            this.button10.Text = "data type Cntr";
+            this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.button10_Click);
+            // 
+            // button11
+            // 
+            this.button11.Location = new System.Drawing.Point(1139, 5);
+            this.button11.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(160, 28);
+            this.button11.TabIndex = 56;
+            this.button11.Text = "keylwords  Cntr";
+            this.button11.UseVisualStyleBackColor = true;
+            this.button11.Click += new System.EventHandler(this.button11_Click);
             // 
             // Form1
             // 
@@ -314,6 +353,9 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button8;
         private System.Windows.Forms.Button button7;
+        private System.Windows.Forms.Button button9;
+        private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.Button button11;
     }
 }
 

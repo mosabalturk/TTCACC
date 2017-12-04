@@ -30,7 +30,7 @@ namespace Analyzer
         public static List<scopeTokenCounter> scopeTokenCounterList1 = new List<scopeTokenCounter>();
         public static List<scopeTokenCounter> scopeTokenCounterList2 = new List<scopeTokenCounter>();
         public static List<scopeTokenCounter> scopeTokenCounterList3 = new List<scopeTokenCounter>();
-
+        public static List<scopeTokenCounter> scopeTokenCounterList4 = new List<scopeTokenCounter>();
 
         public static void zeroStatics() {
             AlltypdefNames = new List<string>();
@@ -39,6 +39,7 @@ namespace Analyzer
             scopeTokenCounterList1 = new List<scopeTokenCounter>();
             scopeTokenCounterList2 = new List<scopeTokenCounter>();
             scopeTokenCounterList3 = new List<scopeTokenCounter>();
+            scopeTokenCounterList4 = new List<scopeTokenCounter>();
         }
 
 
@@ -727,9 +728,7 @@ namespace Analyzer
 
         public List<scopeTokenCounter> keywordsLL1(code st)
         {
-            scopeTokenCounter temp = new scopeTokenCounter(st.ScopeId, st.containingScopeId);
-            scopeTokenCounterList1.Add(temp);
-            temp.counter = KeyWordsCounterGS;
+            scopeTokenCounterList1.Add(new scopeTokenCounter(st.ScopeId, st.containingScopeId, KeyWordsCounterGS));
             foreach (function f in st.Allfunctions)
                 scopeTokenCounterList1.Add(new scopeTokenCounter(f.ScopeId, f.containingScopeId, f.KeyWordsCounter));
             foreach (code cd in st.structes)
@@ -739,9 +738,7 @@ namespace Analyzer
         }
         public List<scopeTokenCounter> operatorsLL1(code st)
         {
-            scopeTokenCounter temp = new scopeTokenCounter(st.ScopeId, st.containingScopeId);
-            scopeTokenCounterList2.Add(temp);
-            temp.counter = operationsCounterGS;
+            scopeTokenCounterList2.Add(new scopeTokenCounter(st.ScopeId, st.containingScopeId, operationsCounterGS));
             foreach (function f in st.Allfunctions)
                 scopeTokenCounterList2.Add(new scopeTokenCounter(f.ScopeId,f.containingScopeId,f.operationsCounter));
             foreach (code cd in st.structes)
@@ -751,9 +748,8 @@ namespace Analyzer
         }
         public List<scopeTokenCounter> datatypesLL1(code st)
         {
-            scopeTokenCounter temp = new scopeTokenCounter(st.ScopeId, st.containingScopeId);
-            scopeTokenCounterList3.Add(temp);
-            temp.counter = dataTypesCounterGS;
+
+            scopeTokenCounterList3.Add(new scopeTokenCounter(st.ScopeId, st.containingScopeId, dataTypesCounterGS));
             foreach (function f in st.Allfunctions)
                 scopeTokenCounterList3.Add(new scopeTokenCounter(f.ScopeId, f.containingScopeId, f.dataTypesCounter));
             foreach (code cd in st.structes)
@@ -761,7 +757,17 @@ namespace Analyzer
 
             return scopeTokenCounterList3;
         }
+        public List<scopeTokenCounter> ValuesLL1(code st)
+        {
 
+            scopeTokenCounterList4.Add(new scopeTokenCounter(st.ScopeId, st.containingScopeId, valuesCounterGS));
+            foreach (function f in st.Allfunctions)
+                scopeTokenCounterList4.Add(new scopeTokenCounter(f.ScopeId, f.containingScopeId, f.valuesCounter));
+            foreach (code cd in st.structes)
+            { scopeTokenCounterList4.Concat(cd.ValuesLL1(cd)).ToList(); }
+
+            return scopeTokenCounterList4;
+        }
         #endregion
     }
 

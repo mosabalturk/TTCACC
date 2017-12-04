@@ -390,6 +390,69 @@ namespace Analyzer
                 }
             }
         }
+
+        private void button9_Click(object sender, EventArgs e)
+        {
+            richTextBox2.Text = "";
+            foreach (cppFile cd in Program.cppFiles)
+            {
+                richTextBox2.Text += cd.fname + "\n";
+                if (cd.result != null)
+                {
+                    List<scopeTokenCounter> res = cd.result.values;
+                    foreach (scopeTokenCounter l in res)
+                    {
+                        richTextBox2.Text += " containId " + l.containId.ToString() + " scopeId " + l.scopeId.ToString() + "\n";
+                        foreach (tokenCounter t in l.counter)
+                        {
+                            richTextBox2.Text += t.getType() + " count:" + t.getCount() + "\n";
+                        }
+                    }
+                }
+            }
+        }
+
+        private void button10_Click(object sender, EventArgs e)
+        {
+            richTextBox2.Text = "";
+            foreach (cppFile cd in Program.cppFiles)
+            {
+                richTextBox2.Text += cd.fname + "\n";
+                if (cd.result != null)
+                {
+                    List<scopeTokenCounter> res = cd.result.datatypes;
+                    foreach (scopeTokenCounter l in res)
+                    {
+                        richTextBox2.Text += " containId " + l.containId.ToString() + " scopeId " + l.scopeId.ToString() + "\n";
+                        foreach (tokenCounter t in l.counter)
+                        {
+                            richTextBox2.Text += t.GetType() + " count:" + t.getCount() + "\n";
+                        }
+                    }
+                }
+            }
+        }
+
+        private void button11_Click(object sender, EventArgs e)
+        {
+            richTextBox2.Text = "";
+            foreach (cppFile cd in Program.cppFiles)
+            {
+                richTextBox2.Text += cd.fname + "\n";
+                if (cd.result != null)
+                {
+                    List<scopeTokenCounter> res = cd.result.keyWord;
+                    foreach (scopeTokenCounter l in res)
+                    {
+                        richTextBox2.Text += " containId " + l.containId.ToString() + " scopeId " + l.scopeId.ToString() + "\n";
+                        foreach (tokenCounter t in l.counter)
+                        {
+                            richTextBox2.Text += t.GetType() + " count:" + t.getCount() + "\n";
+                        }
+                    }
+                }
+            }
+        }
     }
 
 }
