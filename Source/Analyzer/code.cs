@@ -25,7 +25,21 @@ namespace Analyzer
         List<array> thisScopeArray = new List<array>();
         static List<string> AllstructesClassesNames = new List<string>();
         static List<string> AlltypdefNames = new List<string>();
-        public void zeroStatics() { AlltypdefNames = new List<string>(); AllstructesClassesNames = new List<string>(); }
+
+
+        public static List<scopeTokenCounter> scopeTokenCounterList1 = new List<scopeTokenCounter>();
+        public static List<scopeTokenCounter> scopeTokenCounterList2 = new List<scopeTokenCounter>();
+        public static List<scopeTokenCounter> scopeTokenCounterList3 = new List<scopeTokenCounter>();
+
+
+        public static void zeroStatics() {
+            AlltypdefNames = new List<string>();
+            AllstructesClassesNames = new List<string>();
+            idno = 0;
+            scopeTokenCounterList1.Clear();
+            scopeTokenCounterList2.Clear();
+            scopeTokenCounterList3.Clear();
+        }
 
 
         List<token> thisCodeToken;//done
@@ -68,9 +82,15 @@ namespace Analyzer
 
         #endregion
 
+
+
+
         public static int idno = 0;
         public int ScopeId;
         public int containingScopeId;
+
+
+        
         public code(string codestr, string filename,int containingScopeId, List<token> thisCodeToken, ref List<token> holeCodeTokens, List<identifier> upperLevelVar, List<pointer> upperLevelPointers, List<array> upperLevelArray,string type)
         {
             this.ScopeId = idno++;
@@ -241,41 +261,165 @@ namespace Analyzer
             }
             
         }
+        //public void findFunctionsAndPrototypes()
+        //{
+        //    for (int i = 0; i < thisCodeToken.Count - 2; i++)
+        //    {
+        //        int parentheses = 0;
+        //        int j = 0;
+        //        if (thisCodeToken[i].getLexeme() == "main")
+        //        {
+        //            while (thisCodeToken[i].getLexeme() != "{")
+        //            {
+        //                i++;
+        //            }
+        //            i++;
+        //            while ((thisCodeToken[i].getLexeme() != "}") || (parentheses != 0))
+        //            {
+        //                if (thisCodeToken[i].getLexeme() == "{")
+        //                    parentheses++;
+        //                if (thisCodeToken[i].getLexeme() == "}")
+        //                    parentheses--;
+        //                i++;
+        //            }
+        //            continue;
+        //        }
+        //        List<identifier> parameters = new List<identifier>();
+        //        bool id = thisCodeToken[i + 1].isPointer || thisCodeToken[i + 1].isArray || thisCodeToken[i + 1].isIdentifierTokenObject() || thisCodeToken[i + 1].isIdentifierTokenObject();
+        //        bool func = ((thisCodeToken[i].isDatatype()) && id && (thisCodeToken[i + 2].getLexeme() == "("));
+        //        bool funcWithoutDATATYPE = (id) && (thisCodeToken[i + 1].getLexeme() == "(");// like balabla(int bla)
+        //        //bool funcprotoType = ((tokens[i].getType() == "datatype") && (tokens[i + 1].getType() == "identifier") && (tokens[j = i + 2].getLexeme() == "("));
+        //        // bool funcAsterisk = ((tokens[i].getType() == "datatype") && (tokens[i+1].getLexeme() == "*") && (tokens[i + 2].getType() == "identifier") && (tokens[j = i + 3].getLexeme() == "("));
+        //        if (funcWithoutDATATYPE)
+        //        {
+        //            int y = i + 2;
+        //            while (thisCodeToken[y].getLexeme() != ")")
+        //                y++;
+        //            if (thisCodeToken[y + 1].getLexeme() == ";")
+        //                funcWithoutDATATYPE = false;
+        //        }
+        //        if (func || funcWithoutDATATYPE)
+        //        {
+        //            string datatype;
+        //            string funcName;
+        //            if (func)
+        //            { datatype = thisCodeToken[i].getLexeme(); funcName = thisCodeToken[i + 1].getLexeme(); }
+        //            else
+        //            {
+        //                datatype = "void"; funcName = thisCodeToken[i].getLexeme();
+        //            }
+
+        //            globalScobeTokens.Remove(thisCodeToken[i]);
+        //            globalScobeTokens.Remove(thisCodeToken[i + 1]);
+        //            if (func)
+        //            { j = i + 3; globalScobeTokens.Remove(thisCodeToken[i + 2]); }
+        //            else
+        //                j = i + 2;
+        //            bool prototype = false;
+        //            int k = j;
+        //            while (thisCodeToken[k].getLexeme() != ")")
+        //            {
+        //                globalScobeTokens.Remove(thisCodeToken[k]);
+        //                k++;
+        //            }
+        //            globalScobeTokens.Remove(thisCodeToken[k]);// deleting )
+        //            if ((k + 1 < thisCodeToken.Count))
+        //                if (thisCodeToken[k + 1].getLexeme() == ";")// void func (int blabla);
+        //                {
+        //                    prototype = true;
+        //                    globalScobeTokens.Remove(thisCodeToken[k + 1]);
+        //                }
+        //            //parameters are frome j to k
+        //            for (int s = j; s < k; s++)
+        //            {//خطأ عندما يكون الباراميتر ستركت أو بوينتر او مصفوفة
+        //                if ((thisCodeToken[s].isDatatype() && (thisCodeToken[s + 1].getType() == "identifier")))
+        //                {
+        //                    identifier p1 = new identifier(thisCodeToken[s + 1]);
+        //                    if (thisCodeToken[s].isDatatype())
+        //                        p1.dataType = thisCodeToken[s];
+        //                    parameters.Add(p1);
+        //                }
+        //            }
+
+        //            if (!prototype)//function
+        //            {
+        //                string funcBody = "";
+        //                List<token> funcTokens = new List<token>();
+        //                while (thisCodeToken[j].getLexeme() != "{")
+        //                    j++;
+        //                globalScobeTokens.Remove(thisCodeToken[j]);
+        //                j++;
+        //                while ((thisCodeToken[j].getLexeme() != "}") || (parentheses != 0))
+        //                {
+
+        //                    funcBody += thisCodeToken[j].getLexeme() + " ";
+        //                    funcTokens.Add(thisCodeToken[j]);
+        //                    globalScobeTokens.Remove(thisCodeToken[j]);
+        //                    if (thisCodeToken[j].getLexeme() == "{")
+        //                        parentheses++;
+        //                    if (thisCodeToken[j].getLexeme() == "}")
+        //                        parentheses--;
+        //                    j++;
+        //                }
+        //                globalScobeTokens.Remove(thisCodeToken[j]);
+        //                i = j - 1;
+        //                List<identifier> temp1 = new List<identifier>(thisScopeVars);
+        //                foreach (identifier t in upperLevelVar)
+        //                    temp1.Add(t);
+        //                List<pointer> temp2 = new List<pointer>(thisScopePointers);
+        //                foreach (pointer t in upperLevelPointers)
+        //                    temp2.Add(t);
+        //                List<array> temp3 = new List<array>(thisScopeArray);
+        //                foreach (array t in upperLevelArray)
+        //                    temp3.Add(t);
+        //                functions.Add(new function(funcBody, this.ScopeId, ref funcTokens, parameters, datatype, funcName, ref thisCodeToken, thisScopeVars, temp2, temp3));
+
+        //            }
+        //            else
+        //            {
+        //                func_prototypes.Add(new function(parameters, this.ScopeId, datatype, funcName, true));
+        //            }
+        //        }
+        //    }
+        //}
+
         public void findFunctionsAndPrototypes()
         {
-            for (int i = 0; i < thisCodeToken.Count - 2; i++)
+            List<token> remove = new List<token>();
+            for (int i = 0; i < globalScobeTokens.Count - 2; i++)
             {
                 int parentheses = 0;
                 int j = 0;
-                if (thisCodeToken[i].getLexeme() == "main")
+                if (globalScobeTokens[i].getLexeme() == "main")
                 {
-                    while (thisCodeToken[i].getLexeme() != "{")
+                    while (globalScobeTokens[i].getLexeme() != "{")
                     {
                         i++;
                     }
                     i++;
-                    while ((thisCodeToken[i].getLexeme() != "}") || (parentheses != 0))
+                    while ((globalScobeTokens[i].getLexeme() != "}") || (parentheses != 0))
                     {
-                        if (thisCodeToken[i].getLexeme() == "{")
+                        if (globalScobeTokens[i].getLexeme() == "{")
                             parentheses++;
-                        if (thisCodeToken[i].getLexeme() == "}")
+                        if (globalScobeTokens[i].getLexeme() == "}")
                             parentheses--;
                         i++;
                     }
                     continue;
                 }
                 List<identifier> parameters = new List<identifier>();
-                bool id = thisCodeToken[i + 1].isPointer || thisCodeToken[i + 1].isArray || thisCodeToken[i + 1].isIdentifierTokenObject() || thisCodeToken[i + 1].isIdentifierTokenObject();
-                bool func = ((thisCodeToken[i].isDatatype()) && id && (thisCodeToken[i + 2].getLexeme() == "("));
-                bool funcWithoutDATATYPE = (id) && (thisCodeToken[i + 1].getLexeme() == "(");// like balabla(int bla)
+                bool id = globalScobeTokens[i + 1].isPointer || globalScobeTokens[i + 1].isArray || globalScobeTokens[i + 1].isIdentifierTokenObject() || globalScobeTokens[i + 1].isIdentifierTokenObject();
+                bool id2 = globalScobeTokens[i].isPointer || globalScobeTokens[i].isArray || globalScobeTokens[i ].isIdentifierTokenObject() || globalScobeTokens[i].isIdentifierTokenObject();
+                bool func = ((globalScobeTokens[i].isDatatype()) && id && (globalScobeTokens[i + 2].getLexeme() == "("));
+                bool funcWithoutDATATYPE = (id2) && (globalScobeTokens[i + 1].getLexeme() == "(");// like balabla(int bla)
                 //bool funcprotoType = ((tokens[i].getType() == "datatype") && (tokens[i + 1].getType() == "identifier") && (tokens[j = i + 2].getLexeme() == "("));
                 // bool funcAsterisk = ((tokens[i].getType() == "datatype") && (tokens[i+1].getLexeme() == "*") && (tokens[i + 2].getType() == "identifier") && (tokens[j = i + 3].getLexeme() == "("));
                 if (funcWithoutDATATYPE)
                 {
                     int y = i + 2;
-                    while (thisCodeToken[y].getLexeme() != ")")
+                    while (globalScobeTokens[y].getLexeme() != ")")
                         y++;
-                    if (thisCodeToken[y + 1].getLexeme() == ";")
+                    if (globalScobeTokens[y + 1].getLexeme() == ";")
                         funcWithoutDATATYPE = false;
                 }
                 if (func || funcWithoutDATATYPE)
@@ -283,40 +427,44 @@ namespace Analyzer
                     string datatype;
                     string funcName;
                     if (func)
-                    { datatype = thisCodeToken[i].getLexeme(); funcName = thisCodeToken[i + 1].getLexeme(); }
+                    { datatype = globalScobeTokens[i].getLexeme(); funcName = globalScobeTokens[i + 1].getLexeme(); }
                     else
                     {
-                        datatype = "void"; funcName = thisCodeToken[i].getLexeme();
+                        datatype = "void"; funcName = globalScobeTokens[i].getLexeme();
                     }
-
-                    globalScobeTokens.Remove(thisCodeToken[i]);
-                    globalScobeTokens.Remove(thisCodeToken[i + 1]);
+                    remove.Add(globalScobeTokens[i]);
+                    remove.Add(globalScobeTokens[i+1]);
                     if (func)
-                    { j = i + 3; globalScobeTokens.Remove(thisCodeToken[i + 2]); }
+                    {
+                        j = i + 3;;
+                        remove.Add(globalScobeTokens[i + 2]);
+
+                    }
                     else
                         j = i + 2;
                     bool prototype = false;
                     int k = j;
-                    while (thisCodeToken[k].getLexeme() != ")")
+                    while ((k< globalScobeTokens.Count) &&(globalScobeTokens[k].getLexeme() != ")"))
                     {
-                        globalScobeTokens.Remove(thisCodeToken[k]);
+                        remove.Add(globalScobeTokens[k]);
                         k++;
                     }
-                    globalScobeTokens.Remove(thisCodeToken[k]);// deleting )
-                    if ((k + 1 < thisCodeToken.Count))
-                        if (thisCodeToken[k + 1].getLexeme() == ";")// void func (int blabla);
+                    remove.Add(globalScobeTokens[k]);
+                    // deleting )
+                    if ((k + 1 < globalScobeTokens.Count))
+                        if (globalScobeTokens[k + 1].getLexeme() == ";")// void func (int blabla);
                         {
                             prototype = true;
-                            globalScobeTokens.Remove(thisCodeToken[k + 1]);
+                            remove.Add(globalScobeTokens[k+1]);
                         }
                     //parameters are frome j to k
-                    for (int s = j; s < k; s++)
+                    for (int s = j; (s < k)&&((k + 1 < globalScobeTokens.Count)); s++)
                     {//خطأ عندما يكون الباراميتر ستركت أو بوينتر او مصفوفة
-                        if ((thisCodeToken[s].isDatatype() && (thisCodeToken[s + 1].getType() == "identifier")))
+                        if ((globalScobeTokens[s].isDatatype() && (globalScobeTokens[s + 1].getType() == "identifier")))
                         {
-                            identifier p1 = new identifier(thisCodeToken[s + 1]);
-                            if (thisCodeToken[s].isDatatype())
-                                p1.dataType = thisCodeToken[s];
+                            identifier p1 = new identifier(globalScobeTokens[s + 1]);
+                            if (globalScobeTokens[s].isDatatype())
+                                p1.dataType = globalScobeTokens[s];
                             parameters.Add(p1);
                         }
                     }
@@ -325,23 +473,23 @@ namespace Analyzer
                     {
                         string funcBody = "";
                         List<token> funcTokens = new List<token>();
-                        while (thisCodeToken[j].getLexeme() != "{")
+                        while (globalScobeTokens[j].getLexeme() != "{")
                             j++;
-                        globalScobeTokens.Remove(thisCodeToken[j]);
+                        remove.Add(globalScobeTokens[j]);
                         j++;
-                        while ((thisCodeToken[j].getLexeme() != "}") || (parentheses != 0))
+                        while ((globalScobeTokens[j].getLexeme() != "}") || (parentheses != 0))
                         {
 
-                            funcBody += thisCodeToken[j].getLexeme() + " ";
-                            funcTokens.Add(thisCodeToken[j]);
-                            globalScobeTokens.Remove(thisCodeToken[j]);
-                            if (thisCodeToken[j].getLexeme() == "{")
+                            funcBody += globalScobeTokens[j].getLexeme() + " ";
+                            funcTokens.Add(globalScobeTokens[j]);
+                            remove.Add(globalScobeTokens[j]);
+                            if (globalScobeTokens[j].getLexeme() == "{")
                                 parentheses++;
-                            if (thisCodeToken[j].getLexeme() == "}")
+                            if (globalScobeTokens[j].getLexeme() == "}")
                                 parentheses--;
                             j++;
                         }
-                        globalScobeTokens.Remove(thisCodeToken[j]);
+                        remove.Add(globalScobeTokens[j]);
                         i = j - 1;
                         List<identifier> temp1 = new List<identifier>(thisScopeVars);
                         foreach (identifier t in upperLevelVar)
@@ -577,44 +725,44 @@ namespace Analyzer
         }
 
 
-        public static List<scopeTokenCounter> res11 = new List<scopeTokenCounter>();
-        public static List<scopeTokenCounter> res12 = new List<scopeTokenCounter>();
-        public static List<scopeTokenCounter> res13 = new List<scopeTokenCounter>();
+        //public static List<scopeTokenCounter> res11 = new List<scopeTokenCounter>();
+        //public static List<scopeTokenCounter> res12 = new List<scopeTokenCounter>();
+        //public static List<scopeTokenCounter> res13 = new List<scopeTokenCounter>();
 
 
         public List<scopeTokenCounter> keywordsLL1(code st)
         {
             scopeTokenCounter temp = new scopeTokenCounter(st.ScopeId, st.containingScopeId);
-            res11.Add(temp);
+            scopeTokenCounterList1.Add(temp);
             temp.counter = KeyWordsCounterGS;
 
             foreach (code cd in st.structes)
-            { res11.Concat(cd.keywordsLL1(cd)).ToList(); }
+            { scopeTokenCounterList1.Concat(cd.keywordsLL1(cd)).ToList(); }
 
-            return res11;
+            return scopeTokenCounterList1;
         }
 
         public List<scopeTokenCounter> operatorsLL1(code st)
         {
             scopeTokenCounter temp = new scopeTokenCounter(st.ScopeId, st.containingScopeId);
-            res12.Add(temp);
+            scopeTokenCounterList2.Add(temp);
             temp.counter = operationsCounterGS;
 
             foreach (code cd in st.structes)
-            { res12.Concat(cd.operatorsLL1(cd)).ToList(); }
+            { scopeTokenCounterList2.Concat(cd.operatorsLL1(cd)).ToList(); }
 
-            return res12;
+            return scopeTokenCounterList2;
         }
         public List<scopeTokenCounter> datatypesLL1(code st)
         {
             scopeTokenCounter temp = new scopeTokenCounter(st.ScopeId, st.containingScopeId);
-            res13.Add(temp);
+            scopeTokenCounterList3.Add(temp);
             temp.counter = dataTypesCounterGS;
 
             foreach (code cd in st.structes)
-            { res13.Concat(cd.datatypesLL1(cd)).ToList(); }
+            { scopeTokenCounterList3.Concat(cd.datatypesLL1(cd)).ToList(); }
 
-            return res13;
+            return scopeTokenCounterList3;
         }
         public result result { get; set; }
         public void setResults()

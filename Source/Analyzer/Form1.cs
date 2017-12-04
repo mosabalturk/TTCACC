@@ -18,7 +18,8 @@ namespace Analyzer
             richTextBox2.Text = "";
             Program.cppFiles.Clear();
             token.zeroIdCounter();
-            code.idno = 0;
+            code.zeroStatics();
+
         }
 
         private void button1_Click(object sender, EventArgs e)
