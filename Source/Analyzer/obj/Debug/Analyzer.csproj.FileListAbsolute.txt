@@ -51,3 +51,12 @@ C:\Users\Mosab AlTurk\Desktop\TTCACC\Source\Analyzer\obj\Debug\Analyzer.csproj.G
 C:\Users\Mosab AlTurk\Desktop\TTCACC\Source\Analyzer\obj\Debug\Analyzer.csproj.CoreCompileInputs.cache
 C:\Users\Mosab AlTurk\Desktop\TTCACC\Source\Analyzer\obj\Debug\Analyzer.exe
 C:\Users\Mosab AlTurk\Desktop\TTCACC\Source\Analyzer\obj\Debug\Analyzer.pdb
+C:\Users\Mosab AlTurk\Desktop\3-12\TTCACC\Source\Analyzer\bin\Debug\Analyzer.exe
+C:\Users\Mosab AlTurk\Desktop\3-12\TTCACC\Source\Analyzer\bin\Debug\Analyzer.pdb
+C:\Users\Mosab AlTurk\Desktop\3-12\TTCACC\Source\Analyzer\obj\Debug\Analyzer.Form1.resources
+C:\Users\Mosab AlTurk\Desktop\3-12\TTCACC\Source\Analyzer\obj\Debug\Analyzer.Properties.Resources.resources
+C:\Users\Mosab AlTurk\Desktop\3-12\TTCACC\Source\Analyzer\obj\Debug\Analyzer.csproj.GenerateResource.Cache
+C:\Users\Mosab AlTurk\Desktop\3-12\TTCACC\Source\Analyzer\obj\Debug\Analyzer.csproj.CoreCompileInputs.cache
+C:\Users\Mosab AlTurk\Desktop\3-12\TTCACC\Source\Analyzer\obj\Debug\Analyzer.exe
+C:\Users\Mosab AlTurk\Desktop\3-12\TTCACC\Source\Analyzer\obj\Debug\Analyzer.pdb
+C:\Users\Mosab AlTurk\Desktop\3-12\TTCACC\Source\Analyzer\obj\Debug\Analyzer.csprojResolveAssemblyReference.cache

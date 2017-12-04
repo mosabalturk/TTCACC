@@ -7,15 +7,12 @@ namespace Analyzer
 {
     public class token
     {
+
         public int id { get; set; }
-        public static int idCounter=0;
+        public static int idCounter = 0;
         public static void zeroIdCounter() { idCounter = 0; }
         protected string lexeme;
-        private string type;
-        private int count;
-        public bool isPointer { get; set; }
-        public int pointerLevel { get; set; }
-        public bool isArray { get; set; }
+        protected string type;
         // type is equla to
         // identifier 
         // op
@@ -26,9 +23,50 @@ namespace Analyzer
         // vchar (char as value)
         // vstring (string as value)
         // library
+
+        public token(string lexeme)
+        {
+            this.id = idCounter++;
+            this.lexeme = lexeme;
+        }
+        public token(string lexeme, string type)
+        {
+            this.id = idCounter++;
+            this.lexeme = lexeme;
+            this.type = type;
+        }
+        public token(token t)
+        {
+            this.id = t.id;
+            this.lexeme = t.getLexeme();
+            this.type = t.getType();
+        }
+        public void setLexeme(string lexeme) { this.lexeme = lexeme; }
+        public void setType(string type) { this.type = type; }
+        public string getType() { return type; }
+        public string getLexeme() { return lexeme; }
+        public static List<string> getLexemesFromList(List<token> tkns)
+        {
+            return tkns.Select(a => a.lexeme).ToList();
+        }
+
+        /// <summary>
+        /// add sToken to the list or increment count if exist 
+        /// </summary>
+        /// <param name="sToken"></param>
+        /// <param name="tkn"></param>
+
+        #region virtual region
+        public virtual bool isPointer { get { return false; } }
+        public virtual int pointerLevel { get { return 0; } set { value = 0; } }
+        public virtual bool isArray { get { return false; } }
+        public virtual List<int> arrayIndices { get { return null; } set { } }
+        public virtual bool isVariable { get { return false; } }
+        #endregion
         #region isBlabla bollean
         public bool isOperation() { if (getType() == "op") return true; else return false; }
-        public bool isIdentifier() { if (getType() == "identifier") return true; else return false; }
+        public bool isIdentifierTokenObject() { if (getType() == "identifier") return true; else return false; }
+        public virtual bool isIdentifierObject() { return false; }
         public bool isDatatype() { if (getType() == "datatype") return true; else return false; }
         public bool isKeyword() { if (getType() == "keyword") return true; else return false; }
         public bool isValue() { if ((getType() == "vint") || (getType() == "vchar") || (getType() == "vstring") || (getType() == "vfloat")) return true; else return false; }
@@ -42,75 +80,130 @@ namespace Analyzer
         public bool isVstring() { if (getType() == "vstring") return true; else return false; }
         public bool isLibrary() { if (getType() == "library") return true; else return false; }
         #endregion
-        public token(string lexeme)
+    }
+
+    public class identifier : token
+    {
+        
+        public override bool isIdentifierObject() { return true; }
+        public token dataType;
+        public override bool isVariable { get { return true; } }
+        public identifier(token t, token dataType) : base(t)
         {
-            this.id = idCounter++;
-            this.lexeme = lexeme;
+            this.dataType = dataType;
+            type = "variable";
+        }
+        public identifier(token t) : base(t)
+        {
+            type = "variable";
+        }
+    }
+    public class array : identifier
+    {
+        List<int> _arrayIndices = new List<int>();
+        public override bool isArray { get { return true; } }
+        public override bool isVariable { get { return false; } }
+        public override List<int> arrayIndices { get { return _arrayIndices; } set { _arrayIndices = new List<int>(value); } }
+        public array(token t, token dataType) : base(t, dataType)
+        {
+            this.type = "array";
+        }
+        public array(token t) : base(t)
+        {
+            this.type = "array";
+
+        }
+        public array(array a) : base(a, a.dataType)
+        {
+            this.type = "array";
+
+
+        }
+    }
+    public class pointer : identifier
+    {
+        public override bool isVariable { get { return false; } }
+        public override bool isPointer { get { return true; } }
+        public override int pointerLevel { get; set; }
+        public pointer(token t, token dataType, int pointerLevel) : base(t, dataType)
+        {
+            this.pointerLevel = pointerLevel;
+            this.type = "pointer";
+
+        }
+        public pointer(token t, int pointerLevel) : base(t)
+        {
+            this.type = "pointer";
+
+        }
+        public pointer(pointer p) : base(p, p.dataType)
+        {
+            p.pointerLevel = this.pointerLevel;
+            this.type = "pointer";
+
+        }
+    }
+    public class variableCounter : identifier
+    {
+        int count;
+        public variableCounter(token t, token dataType) : base(t, dataType)
+        {
+            this.type = "array";
             count = 1;
         }
-        public token(string lexeme, string type)
+
+    }
+    public class arrayCounter : array
+    {
+        int count;
+        public arrayCounter(array t) : base(t)
         {
-            this.id = idCounter++;
-            this.lexeme = lexeme;
-            this.type = type;
-            this.count = 1;
+            count = 1;
         }
-        public void setLexeme(string lexeme) { this.lexeme = lexeme; }
-        public void setType(string type) { this.type = type; }
-        public string getType() { return type; }
-        public string getLexeme() { return lexeme; }
-        public List<int> arrayIndexes = new List<int>();
-        public static List<string> getLexemesFromList(List<token> tkns)
+    }
+    public class pointerCounter : pointer
+    {
+        int count;
+        public pointerCounter(pointer t) : base(t)
         {
-            return tkns.Select(a => a.lexeme).ToList();
+            count = 1;
+        }
+
+    }
+    public class tokenCounter : token
+    {
+        int count;
+        public tokenCounter(token t) : base(t.getLexeme(), t.getType())
+        {
+            this.count = 1;
         }
         public int getCount() { return count; }
         public void incCount() { this.count++; }
-        /// <summary>
-        /// add sToken to the list or increment count if exist 
-        /// </summary>
-        /// <param name="sToken"></param>
-        /// <param name="tkn"></param>
-        public static void addOne(token TknObj, List<token> tkn, bool byLexeme)
+        public static void AddOneByLexeme(token TknObj, List<tokenCounter> tkn)
         {
-            if (byLexeme)
+            string sToken = TknObj.getLexeme();
+            if (tkn.Exists(x => x.getLexeme() == sToken))
             {
-                string sToken = TknObj.getLexeme();
-                if (tkn.Exists(x => x.getLexeme() == sToken))
-                {
-                    tkn.Find(x => x.getLexeme() == sToken).incCount();
-                }
-                else
-                {
-                    TknObj.count = 1;
-                    tkn.Add(TknObj);
-                }
+                tkn.Find(x => x.getLexeme() == sToken).incCount();
             }
             else
             {
-                string dt = TknObj.getType();
-                if (tkn.Exists(x => x.getType() == dt))
-                {
-                    tkn.Find(x => x.getType() == dt).incCount();
-                }
-                else
-                {
-                    token temp = new token("", TknObj.getType());
-                    tkn.Add(temp);
-                }
-
+                tkn.Add(new tokenCounter(TknObj));
             }
         }
-        public token Copy()
+        public static void AddOneValueByDataType(token TknObj, List<tokenCounter> tkn)
         {
-            var result = new token(this.lexeme,type);
-            result.id = this.id;            
-            result.lexeme = this.lexeme;
-            result.isArray = this.isArray;
-            result.count = this.count;
-            result.type = this.type;
-            return result;
-        }
-    }
 
+            string dt = TknObj.getType();
+            if (tkn.Exists(x => x.getType() == dt))
+            {
+                tkn.Find(x => x.getType() == dt).incCount();
+            }
+            else
+            {
+                tkn.Add(new tokenCounter(TknObj));
+            }
+        }
+
+    }
 }

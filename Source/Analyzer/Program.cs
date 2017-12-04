@@ -5,7 +5,7 @@ using System.Windows.Forms;
 
 namespace Analyzer {
       public static class  Program {
-        public static List<code> codes = new List<code>();
+        public static List<cppFile> cppFiles = new List<cppFile>();
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -16,9 +16,9 @@ namespace Analyzer {
             Application.Run(new Form1());
             
         }
-        public static void addCodeToList(string code, string filename)
+        public static void addCppFileToList(string code, string filename)
         {
-            codes.Add(new code(code, filename));
+            cppFiles.Add(new cppFile(code, filename));
         }
         public static string RemoveCommentsAndSpaces(this string value)
         {
