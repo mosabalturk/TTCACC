@@ -8,13 +8,13 @@ namespace Analyzer
     public class function
     {
 
-        private List<variableCounter> variablesCounter = new List<variableCounter>();
-        private List<pointerCounter> pointersCounter = new List<pointerCounter>();
-        private List<arrayCounter> arraysCounter = new List<arrayCounter>();
-        private List<tokenCounter> KeyWordsCounter = new List<tokenCounter>();
-        private List<tokenCounter> dataTypesCounter = new List<tokenCounter>();
-        private List<tokenCounter> valuesCounter = new List<tokenCounter>();
-        private List<tokenCounter> operationsCounter = new List<tokenCounter>();
+        public List<variableCounter> variablesCounter = new List<variableCounter>();
+        public List<pointerCounter> pointersCounter = new List<pointerCounter>();
+        public List<arrayCounter> arraysCounter = new List<arrayCounter>();
+        public List<tokenCounter> KeyWordsCounter = new List<tokenCounter>();
+        public List<tokenCounter> dataTypesCounter = new List<tokenCounter>();
+        public List<tokenCounter> valuesCounter = new List<tokenCounter>();
+        public List<tokenCounter> operationsCounter = new List<tokenCounter>();
 
         bool protoType = false;
         public bool recursive { get; set; }

@@ -377,7 +377,7 @@ namespace Analyzer
             {
                 if (cd.code.result != null)
                 {
-                    List<scopeTokenCounter> res = cd.code.result.datatypes;
+                    List<scopeTokenCounter> res = cd.code.result.operations;
                     foreach (scopeTokenCounter l in res)
                     {
                         richTextBox2.Text += " containId " + l.containId.ToString() + " scopeId " + l.scopeId.ToString() + "\n";

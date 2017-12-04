@@ -735,19 +735,20 @@ namespace Analyzer
             scopeTokenCounter temp = new scopeTokenCounter(st.ScopeId, st.containingScopeId);
             scopeTokenCounterList1.Add(temp);
             temp.counter = KeyWordsCounterGS;
-
+            foreach (function f in st.Allfunctions)
+                scopeTokenCounterList1.Add(new scopeTokenCounter(f.ScopeId, f.containingScopeId, f.KeyWordsCounter));
             foreach (code cd in st.structes)
             { scopeTokenCounterList1.Concat(cd.keywordsLL1(cd)).ToList(); }
 
             return scopeTokenCounterList1;
         }
-
         public List<scopeTokenCounter> operatorsLL1(code st)
         {
             scopeTokenCounter temp = new scopeTokenCounter(st.ScopeId, st.containingScopeId);
             scopeTokenCounterList2.Add(temp);
             temp.counter = operationsCounterGS;
-
+            foreach (function f in st.Allfunctions)
+                scopeTokenCounterList2.Add(new scopeTokenCounter(f.ScopeId,f.containingScopeId,f.operationsCounter));
             foreach (code cd in st.structes)
             { scopeTokenCounterList2.Concat(cd.operatorsLL1(cd)).ToList(); }
 
@@ -758,7 +759,8 @@ namespace Analyzer
             scopeTokenCounter temp = new scopeTokenCounter(st.ScopeId, st.containingScopeId);
             scopeTokenCounterList3.Add(temp);
             temp.counter = dataTypesCounterGS;
-
+            foreach (function f in st.Allfunctions)
+                scopeTokenCounterList3.Add(new scopeTokenCounter(f.ScopeId, f.containingScopeId, f.dataTypesCounter));
             foreach (code cd in st.structes)
             { scopeTokenCounterList3.Concat(cd.datatypesLL1(cd)).ToList(); }
 
@@ -773,7 +775,6 @@ namespace Analyzer
             result.datatypes = datatypesLL1(this);
         }
         #endregion
-
     }
     public class result {
         public List<scopeTokenCounter> keyWord = new List<scopeTokenCounter>();
@@ -790,6 +791,12 @@ namespace Analyzer
         {
             this.scopeId = scopeId;
             this.containId = containId;
+        }
+        public scopeTokenCounter(int scopeId, int containId, List<tokenCounter> counter)
+        {
+            this.scopeId = scopeId;
+            this.containId = containId;
+            this.counter = counter;
         }
 
     }
