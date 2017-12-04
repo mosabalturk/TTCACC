@@ -368,7 +368,7 @@ namespace Analyzer
             richTextBox2.Text = "";
             foreach (cppFile cd in Program.cppFiles)
             {
-                List<List<tokenCounter>> res = cd.code.allTC(cd.code);
+                List<List<tokenCounter>> res = cd.KwOpDtTCnts;
                 foreach (List<tokenCounter> l in res)
                     foreach (tokenCounter t in l)
                     {

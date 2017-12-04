@@ -39,7 +39,6 @@
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
-            this.button7 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -82,7 +81,6 @@
             // splitContainer1.Panel1
             // 
             this.splitContainer1.Panel1.Controls.Add(this.button8);
-            this.splitContainer1.Panel1.Controls.Add(this.button7);
             this.splitContainer1.Panel1.Controls.Add(this.button2);
             this.splitContainer1.Panel1.Controls.Add(this.structObjectsGS);
             this.splitContainer1.Panel1.Controls.Add(this.button5);
@@ -253,20 +251,9 @@
             this.richTextBox2.Text = "";
             this.richTextBox2.TextChanged += new System.EventHandler(this.richTextBox2_TextChanged);
             // 
-            // button7
-            // 
-            this.button7.Location = new System.Drawing.Point(716, 42);
-            this.button7.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(120, 28);
-            this.button7.TabIndex = 52;
-            this.button7.Text = "counters";
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.counters);
-            // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(1033, 35);
+            this.button8.Location = new System.Drawing.Point(719, 23);
             this.button8.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(120, 28);
@@ -312,7 +299,6 @@
         private System.Windows.Forms.Button allFuncsbtn;
         private System.Windows.Forms.Button mainbtn;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button7;
         private System.Windows.Forms.Button button8;
     }
 }

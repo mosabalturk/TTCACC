@@ -58,6 +58,7 @@ namespace Analyzer
         public List<pointerCounter> getPointersCounterGS { get { return pointersCounterGS; } }
         public List<variableCounter> getVariablesCounterGS { get { return variablesCounterGS; } }
         public List<List<token>> allGlobalVariables = new List<List<token>>();
+
         #endregion
 
 
@@ -115,7 +116,6 @@ namespace Analyzer
 
                     if ((i>0)&&globalScobeTokens[i].isIdentifierTokenObject()&&(globalScobeTokens[i-1].isDatatype()))
                     {
-                        System.Windows.Forms.MessageBox.Show(globalScobeTokens[i].getLexeme());
 
                         id = new identifier(globalScobeTokens[i]);
                         if ((i > 0) && (globalScobeTokens[i - 1].isDatatype()))
@@ -498,17 +498,14 @@ namespace Analyzer
                 return s + spitYourCountersLan(srct);
             return s;
         }
-        static List<List<tokenCounter>> res = new List<List<tokenCounter>>();
-        public List<List<tokenCounter>> allTC( code st)
+        public static List<List<tokenCounter>> res = new List<List<tokenCounter>>();
+        public List<List<tokenCounter>> KwOpDtTC( code st)
         {
             
             res.Add(KeyWordsCounterGS.Concat(operationsCounterGS).Concat(dataTypesCounterGS).ToList());
             foreach (code cd in st.structes)
-            { res.Concat(cd.allTC(cd)).ToList(); System.Windows.Forms.MessageBox.Show(cd.filename);}
+            { res.Concat(cd.KwOpDtTC(cd)).ToList();}
             return res;
         }
     }
-
-    // The class Tibi is working on
-
 }
