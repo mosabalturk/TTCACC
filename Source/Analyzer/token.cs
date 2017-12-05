@@ -84,7 +84,7 @@ namespace Analyzer
 
     public class identifier : token
     {
-        
+
         public override bool isIdentifierObject() { return true; }
         public token dataType;
         public override bool isVariable { get { return true; } }
@@ -100,9 +100,11 @@ namespace Analyzer
     }
     public class array : identifier
     {
+        public override bool isIdentifierObject() { return false; }
         List<int> _arrayIndices = new List<int>();
         public override bool isArray { get { return true; } }
         public override bool isVariable { get { return false; } }
+        public override bool isPointer { get { return false; } }
         public override List<int> arrayIndices { get { return _arrayIndices; } set { _arrayIndices = new List<int>(value); } }
         public array(token t, token dataType) : base(t, dataType)
         {
@@ -122,7 +124,9 @@ namespace Analyzer
     }
     public class pointer : identifier
     {
+        public override bool isIdentifierObject() { return false; }
         public override bool isVariable { get { return false; } }
+        public override bool isArray { get { return false; } }
         public override bool isPointer { get { return true; } }
         public override int pointerLevel { get; set; }
         public pointer(token t, token dataType, int pointerLevel) : base(t, dataType)
@@ -148,14 +152,45 @@ namespace Analyzer
         int count;
         public variableCounter(token t, token dataType) : base(t, dataType)
         {
-            this.type = "array";
+            this.type = "variable";
             count = 1;
         }
-
+        public variableCounter(token t) : base(t)
+        {
+            this.type = "variable";
+            count = 1;
+        }
+        public int getCount() { return count; }
+        public void incCount() { this.count++; }
+        public static void AddOneByToken(identifier TknObj, List<variableCounter> tkn)
+        {
+            var t = tkn.FirstOrDefault(x => x.id == TknObj.id);
+            if (t != null)
+            {
+                t.incCount();
+            }
+            else
+            {
+                tkn.Add(new variableCounter(TknObj));
+            }
+        }
     }
     public class arrayCounter : array
     {
-        int count;
+        int count; public void incCount() { this.count++; }
+        public int getCount() { return count; }
+        public static void AddOneByToken(array TknObj, List<arrayCounter> tkn)
+        {
+            var t = tkn.FirstOrDefault(x => x.id == TknObj.id);
+            if (t != null)
+            {
+                t.incCount();
+            }
+            else
+            {
+                tkn.Add(new arrayCounter(TknObj));
+            }
+        }
         public arrayCounter(array t) : base(t)
         {
             count = 1;
@@ -163,12 +198,24 @@ namespace Analyzer
     }
     public class pointerCounter : pointer
     {
-        int count;
+        int count; public void incCount() { this.count++; }
+        public int getCount() { return count; }
         public pointerCounter(pointer t) : base(t)
         {
             count = 1;
         }
-
+        public static void AddOneByToken(pointer TknObj, List<pointerCounter> tkn)
+        {
+            var t = tkn.FirstOrDefault(x => x.id == TknObj.id);
+            if (t != null)
+            {
+                t.incCount();
+            }
+            else
+            {
+                tkn.Add(new pointerCounter(TknObj));
+            }
+        }
     }
     public class tokenCounter : token
     {
@@ -191,6 +238,7 @@ namespace Analyzer
                 tkn.Add(new tokenCounter(TknObj));
             }
         }
+
         public static void AddOneValueByDataType(token TknObj, List<tokenCounter> tkn)
         {
 

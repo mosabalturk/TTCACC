@@ -7,7 +7,7 @@ namespace Analyzer
 {
     public class function
     {
-
+        public List<tokenCounter> specialChar = new List<tokenCounter>();
         public List<variableCounter> variablesCounter = new List<variableCounter>();
         public List<pointerCounter> pointersCounter = new List<pointerCounter>();
         public List<arrayCounter> arraysCounter = new List<arrayCounter>();
@@ -18,7 +18,7 @@ namespace Analyzer
 
         bool protoType = false;
         public bool recursive { get; set; }
-        private string fname;
+        public string fname;
         private string funcBody;
         public string funcDataType { get; set; }
         List<token> tokens;
@@ -77,23 +77,28 @@ namespace Analyzer
                     tokenCounter.AddOneByLexeme(t, dataTypesCounter);
                 else if (t.isValue())
                     tokenCounter.AddOneValueByDataType(t, valuesCounter);
-                //else if (t.isIdentifier())
-                //    token.addOne(t, variablesCounterGS, true);
-                //else if (t.isPointer)
-                //    token.addOne(t, pointersCounterGS, true);
-                //else if (t.isArray)
-                //    token.addOne(t, arraysCounterGS, true);
+                else if (t.isIdentifierObject())
+                    variableCounter.AddOneByToken((identifier)t, variablesCounter);
+                else if (t.isPointer)
+                    pointerCounter.AddOneByToken((pointer)t, pointersCounter);
+                else if (t.isArray)
+                    arrayCounter.AddOneByToken((array)t, arraysCounter);
+                else
+                    tokenCounter.AddOneByLexeme(t, specialChar);
             }
         }
 
         public void findVar()
         {
+            code.structAsDatatype(this.tokens);
             for (int i = 0; i < tokens.Count; i++)
             {
                 identifier id;
                 if ((tokens[i].getType() == "identifier") && !tokens[i].isPointer && !tokens[i].isArray)
                 {
-                    if ((i > 0) && tokens[i].isIdentifierTokenObject() && (tokens[i - 1].isDatatype()))
+                    if ((tokens[i].getType() == "identifier") && (tokens[i + 1].getLexeme() == "("))
+                        continue;
+                        if ((i > 0) && tokens[i].isIdentifierTokenObject() && (tokens[i - 1].isDatatype()))
                     {
                         id = new identifier(tokens[i]);
                         if ((i > 0) && (tokens[i - 1].isDatatype()))

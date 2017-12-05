@@ -44,6 +44,9 @@
             this.button9 = new System.Windows.Forms.Button();
             this.button10 = new System.Windows.Forms.Button();
             this.button11 = new System.Windows.Forms.Button();
+            this.button12 = new System.Windows.Forms.Button();
+            this.button13 = new System.Windows.Forms.Button();
+            this.button14 = new System.Windows.Forms.Button();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -84,6 +87,9 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.button14);
+            this.splitContainer1.Panel1.Controls.Add(this.button13);
+            this.splitContainer1.Panel1.Controls.Add(this.button12);
             this.splitContainer1.Panel1.Controls.Add(this.button10);
             this.splitContainer1.Panel1.Controls.Add(this.button11);
             this.splitContainer1.Panel1.Controls.Add(this.button9);
@@ -314,6 +320,39 @@
             this.button11.UseVisualStyleBackColor = true;
             this.button11.Click += new System.EventHandler(this.button11_Click);
             // 
+            // button12
+            // 
+            this.button12.Location = new System.Drawing.Point(1008, 4);
+            this.button12.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button12.Name = "button12";
+            this.button12.Size = new System.Drawing.Size(125, 28);
+            this.button12.TabIndex = 58;
+            this.button12.Text = "variables  Cntr";
+            this.button12.UseVisualStyleBackColor = true;
+            this.button12.Click += new System.EventHandler(this.button12_Click);
+            // 
+            // button13
+            // 
+            this.button13.Location = new System.Drawing.Point(1008, 41);
+            this.button13.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button13.Name = "button13";
+            this.button13.Size = new System.Drawing.Size(125, 28);
+            this.button13.TabIndex = 59;
+            this.button13.Text = "arrays  Cntr";
+            this.button13.UseVisualStyleBackColor = true;
+            this.button13.Click += new System.EventHandler(this.button13_Click);
+            // 
+            // button14
+            // 
+            this.button14.Location = new System.Drawing.Point(877, 41);
+            this.button14.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button14.Name = "button14";
+            this.button14.Size = new System.Drawing.Size(125, 28);
+            this.button14.TabIndex = 60;
+            this.button14.Text = "pointers  Cntr";
+            this.button14.UseVisualStyleBackColor = true;
+            this.button14.Click += new System.EventHandler(this.button14_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
@@ -356,6 +395,9 @@
         private System.Windows.Forms.Button button9;
         private System.Windows.Forms.Button button10;
         private System.Windows.Forms.Button button11;
+        private System.Windows.Forms.Button button12;
+        private System.Windows.Forms.Button button14;
+        private System.Windows.Forms.Button button13;
     }
 }
 

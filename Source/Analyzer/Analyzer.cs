@@ -603,30 +603,6 @@ namespace Analyzer {
             
             }
         }
-        public static void structAsDatatype(List<token> result, List<string> strcts, List<string> typedefNames)
-        {
-            for (int i = 0; i < result.Count - 1; i++)
-            {
-                bool structPtr = (result[i].getLexeme() == "struct") && (strcts.Contains(result[i + 1].getLexeme()));
-                bool structInitFromTypedefNames = typedefNames.Contains(result[i].getLexeme());
-                if (structPtr)
-                {
-                    string temp = result[i].getLexeme() + " " + result[i + 1].getLexeme();
-                    result[i + 1].setType("datatype");
-                    result[i + 1].setLexeme(temp);
-                    token t = result[i];
-                    result.Remove(t);
-
-
-                }
-                if (structInitFromTypedefNames)
-                {
-                    result[i].setType("datatype");
-                    result[i].setLexeme(result[i].getLexeme());
-                }
-
-            }
-        }
 
     }
 }

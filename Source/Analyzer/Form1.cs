@@ -381,7 +381,7 @@ namespace Analyzer
                     List<scopeTokenCounter> res = cd.result.operations;
                     foreach (scopeTokenCounter l in res)
                     {
-                        richTextBox2.Text += " containId " + l.containId.ToString() + " scopeId " + l.scopeId.ToString() + "\n";
+                        richTextBox2.Text += " containId " + l.containId.ToString() + " scopeId " + l.scopeId.ToString() + "  " + l.scopeName + "\n";
                         foreach (tokenCounter t in l.counter)
                         {
                             richTextBox2.Text += t.getLexeme() + " count:" + t.getCount() + "\n";
@@ -402,7 +402,7 @@ namespace Analyzer
                     List<scopeTokenCounter> res = cd.result.values;
                     foreach (scopeTokenCounter l in res)
                     {
-                        richTextBox2.Text += " containId " + l.containId.ToString() + " scopeId " + l.scopeId.ToString() + "\n";
+                        richTextBox2.Text += " containId " + l.containId.ToString() + " scopeId " + l.scopeId.ToString() + "  " + l.scopeName + "\n";
                         foreach (tokenCounter t in l.counter)
                         {
                             richTextBox2.Text += t.getType() + " count:" + t.getCount() + "\n";
@@ -423,10 +423,10 @@ namespace Analyzer
                     List<scopeTokenCounter> res = cd.result.datatypes;
                     foreach (scopeTokenCounter l in res)
                     {
-                        richTextBox2.Text += " containId " + l.containId.ToString() + " scopeId " + l.scopeId.ToString() + "\n";
+                        richTextBox2.Text += " containId " + l.containId.ToString() + " scopeId " + l.scopeId.ToString() + "  " + l.scopeName + "\n";
                         foreach (tokenCounter t in l.counter)
                         {
-                            richTextBox2.Text += t.GetType() + " count:" + t.getCount() + "\n";
+                            richTextBox2.Text += t.getLexeme() + " count:" + t.getCount() + "\n";
                         }
                     }
                 }
@@ -444,10 +444,74 @@ namespace Analyzer
                     List<scopeTokenCounter> res = cd.result.keyWord;
                     foreach (scopeTokenCounter l in res)
                     {
-                        richTextBox2.Text += " containId " + l.containId.ToString() + " scopeId " + l.scopeId.ToString() + "\n";
+                        richTextBox2.Text += " containId " + l.containId.ToString() + " scopeId " + l.scopeId.ToString() + "  " + l.scopeName + "\n";
                         foreach (tokenCounter t in l.counter)
                         {
-                            richTextBox2.Text += t.GetType() + " count:" + t.getCount() + "\n";
+                            richTextBox2.Text += t.getLexeme() + " count:" + t.getCount() + "\n";
+                        }
+                    }
+                }
+            }
+        }
+
+        private void button12_Click(object sender, EventArgs e)
+        {
+            richTextBox2.Text = "";
+            foreach (cppFile cd in Program.cppFiles)
+            {
+                richTextBox2.Text += cd.fname + "\n";
+                if (cd.result != null)
+                {
+                    List<scopeVarCounter> res = cd.result.vars;
+                    foreach (scopeVarCounter l in res)
+                    {
+                        richTextBox2.Text += " containId " + l.containId.ToString() + " scopeId " + l.scopeId.ToString() + "  " + l.scopeName + "\n";
+                        foreach (variableCounter t in l.vars)
+                        {
+                            richTextBox2.Text += t.getLexeme() + " count:" + t.getCount() + "\n";
+                        }
+                    }
+                }
+            }
+        }
+
+        private void button13_Click(object sender, EventArgs e)
+        {
+            richTextBox2.Text = "";
+            foreach (cppFile cd in Program.cppFiles)
+            {
+                richTextBox2.Text += cd.fname + "\n";
+                if (cd.result != null)
+                {
+                    List<scopeArrayCounter> res = cd.result.arrays;
+                    foreach (scopeArrayCounter l in res)
+                    {
+                        richTextBox2.Text += " containId " + l.containId.ToString() + " scopeId " + l.scopeId.ToString() +"  " + l.scopeName + "\n";
+                        foreach (arrayCounter t in l.arrayCounter)
+                        {
+                            richTextBox2.Text += t.getLexeme() + " count:" + t.getCount() + "\n";
+                        }
+                    }
+                }
+            }
+
+        }
+
+        private void button14_Click(object sender, EventArgs e)
+        {
+            richTextBox2.Text = "";
+            foreach (cppFile cd in Program.cppFiles)
+            {
+                richTextBox2.Text += cd.fname + "\n";
+                if (cd.result != null)
+                {
+                    List<scopePointersCounter> res = cd.result.pointrs;
+                    foreach (scopePointersCounter l in res)
+                    {
+                        richTextBox2.Text += " containId " + l.containId.ToString() + " scopeId " + l.scopeId.ToString() +"  "+l.scopeName+ "\n";
+                        foreach (pointerCounter t in l.pointerCounter)
+                        {
+                            richTextBox2.Text +="id: "+t.id.ToString()+" lexeme: "+ t.getLexeme() + " type:" + t.getType() + " pointer level :" + t.pointerLevel+ " count:" + t.getCount() + "\n";
                         }
                     }
                 }

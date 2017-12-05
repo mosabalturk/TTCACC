@@ -199,6 +199,11 @@ namespace Analyzer
             result.operations = t.operatorsLL1(t);
             result.datatypes = t.datatypesLL1(t);
             result.values = t.ValuesLL1(t);
+            result.vars = t.VarsLL1(t);
+            result.pointrs = t.pointersLL1(t);
+            result.arrays = t.ArraysLL1(t);
+            result.libraries = libraries;
+            result.specialChar = t.specialCharList(t);
             code.zeroStatics();
         }
 
