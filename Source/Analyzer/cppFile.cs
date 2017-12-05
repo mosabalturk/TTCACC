@@ -44,6 +44,8 @@ namespace Analyzer
             code.spitYourVariablesLn(code);
             code.countAllSubScopes(code);
             setResults(code);
+            token.zeroIdCounter();
+            code.zeroStatics();
         }
         
         public void findLibrariesAndDefines()
@@ -204,6 +206,8 @@ namespace Analyzer
             result.arrays = t.ArraysLL1(t);
             result.libraries = libraries;
             result.specialChar = t.specialCharList(t);
+            result.functionCalls = t.funcCalls(t);
+
             code.zeroStatics();
         }
 

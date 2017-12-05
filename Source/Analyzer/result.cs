@@ -15,6 +15,7 @@ namespace Analyzer
         public List<scopeVarCounter> vars = new List<scopeVarCounter>();
         public List<scopePointersCounter> pointrs = new List<scopePointersCounter>();
         public List<scopeArrayCounter> arrays = new List<scopeArrayCounter>();
+        public List<scopefunctionCallCounter> functionCalls = new List<scopefunctionCallCounter>();
         public List<string> libraries = new List<string>();
 
     }
@@ -79,4 +80,20 @@ namespace Analyzer
         }
 
     }
+    public class scopefunctionCallCounter
+    {
+        public string scopeName;
+        public int scopeId;
+        public int containId;
+        public List<functionCall> functionCalls;
+        public scopefunctionCallCounter(int scopeId, int containId, string scopeName, List<functionCall> functionCalls)
+        {
+            this.scopeName = scopeName;
+            this.scopeId = scopeId;
+            this.containId = containId;
+            this.functionCalls = functionCalls;
+        }
+
+    }
+
 }

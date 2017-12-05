@@ -17,8 +17,6 @@ namespace Analyzer
             webBrowser1.DocumentText = "";
             richTextBox2.Text = "";
             Program.cppFiles.Clear();
-            token.zeroIdCounter();
-            code.zeroStatics();
 
         }
 
@@ -516,6 +514,67 @@ namespace Analyzer
                     }
                 }
             }
+        }
+
+        public void getCounters()
+        {
+        }
+        private void button15_Click(object sender, EventArgs e)
+        {
+            richTextBox2.Text = "";
+            foreach (cppFile cd in Program.cppFiles)
+            {
+                richTextBox2.Text += cd.fname + "\n";
+                if (cd.result != null)
+                {
+                    List<scopefunctionCallCounter> res = cd.result.functionCalls;
+                    foreach (scopefunctionCallCounter l in res)
+                    {
+                        richTextBox2.Text += " containId " + l.containId.ToString() + " scopeId " + l.scopeId.ToString() + "  " + l.scopeName + "\n";
+                        foreach (functionCall t in l.functionCalls)
+                        {
+                            richTextBox2.Text += t.getLexeme() + " count:" + t.getCount() + "\n";
+                        }
+                    }
+                }
+            }
+        }
+
+        private void button16_Click(object sender, EventArgs e)
+        {
+            richTextBox2.Text = "";
+            foreach (cppFile cd in Program.cppFiles)
+            {
+                richTextBox2.Text += cd.fname + "\n";
+                if (cd.result != null)
+                {
+                    List<scopeTokenCounter> res = cd.result.specialChar;
+                    foreach (scopeTokenCounter l in res)
+                    {
+                        richTextBox2.Text += " containId " + l.containId.ToString() + " scopeId " + l.scopeId.ToString() + "  " + l.scopeName + "\n";
+                        foreach (tokenCounter t in l.counter)
+                        {
+                            richTextBox2.Text += "id: " + t.id.ToString() + " lexeme: " + t.getLexeme() + " type:" + t.getType() +  " count:" + t.getCount() + "\n";
+                        }
+                    }
+                }
+            }
+        }
+
+        private void button17_Click(object sender, EventArgs e)
+        {
+            string tz;
+            tz = "main tokens..  <br/>";
+            foreach (cppFile cd in Program.cppFiles)
+            {
+                tz += "file name: " + cd.code.filename + "<br/>";
+                foreach (token t in cd.code.main.getTokens)
+                {
+                    //richTextBox1.Text += "< " + t.getType() + " , " + t.getLexeme() + " >";
+                    tz += t.id.ToString() + " " + t.getType() + " ," + t.getLexeme() + ",<br/>";
+                }
+            }
+            webBrowser1.DocumentText = tz;
         }
     }
 

@@ -15,7 +15,7 @@ namespace Analyzer
         public List<tokenCounter> dataTypesCounter = new List<tokenCounter>();
         public List<tokenCounter> valuesCounter = new List<tokenCounter>();
         public List<tokenCounter> operationsCounter = new List<tokenCounter>();
-
+        public List<functionCall> functionCalls = new List<functionCall>();
 
 
         bool protoType = false;
@@ -24,6 +24,7 @@ namespace Analyzer
         private string funcBody;
         public string funcDataType { get; set; }
         List<token> tokens;
+        public List<token> getTokens {get{return tokens;} }
         List<identifier> thisScopeVars = new List<identifier>();
         public List<identifier> upperLevelVar = new List<identifier>();
         public List<pointer> upperLevelPointers = new List<pointer>();
@@ -35,7 +36,6 @@ namespace Analyzer
         private List<identifier> parameters = new List<identifier>();
         public string funcAsStr { get { return funcBody; } set { funcBody = value; } }
         public List<identifier> funcParameters { get { return parameters; } }
-        cppFile cppfile;
         public int ScopeId;
         public int containingScopeId;
         public function(string codee,int containingScopeId, ref List<token> tokens, List<identifier> parameters, string datatype, string funcName, cppFile cppfile)
@@ -51,8 +51,6 @@ namespace Analyzer
             for (int j = 0; j < tokens.Count(); j++)
                 if ((tokens[j].getLexeme() == "return") && (tokens[j + 1].getLexeme() == funcName))
                     this.recursive = true;
-            //findVar();
-            count();
         }
         public function(List<identifier> parameters, int containingScopeId, string datatype, string funcName, bool protoType = true)
         {
@@ -82,27 +80,57 @@ namespace Analyzer
                     pointerCounter.AddOneByToken((pointer)t, pointersCounter);
                 else if (t.isArray)
                     arrayCounter.AddOneByToken((array)t, arraysCounter);
+                else if (t.isFunctionCall)
+                     functionCall.AddOneByLexeme(t, functionCalls); 
                 else
+                {
                     tokenCounter.AddOneByLexeme(t, specialChar);
+                }
             }
         }
 
-        public void findVar()
+        public void findIdentifiers()
         {
             code.structAsDatatype(this.tokens);
+            for (int i = 0; i < tokens.Count-1; i++)
+            {
+                if ((tokens[i].isIdentifierTokenObject()) && (tokens[i + 1].getLexeme() == "("))
+                {
+
+                    functionCall fc = new functionCall(tokens[i]);
+                    tokens[i] = fc;
+                    for (int q = 0; q < holeCodeTokens.Count; q++)
+                        if (holeCodeTokens[q].id == tokens[i].id)
+                            holeCodeTokens[q] = fc;
+                }
+
+            }
+
             for (int i = 0; i < tokens.Count; i++)
             {
-                identifier id;
-                if ((tokens[i].getType() == "identifier") && !tokens[i].isPointer && !tokens[i].isArray)
+                
+                bool pointer = upperLevelPointers.Concat(thisScopePointers).ToList().Select(a => a.getLexeme()).ToList().Contains(tokens[i].getLexeme());
+                bool array = upperLevelArray.Concat(thisScopeArray).ToList().Select(a => a.getLexeme()).ToList().Contains(tokens[i].getLexeme());
+                if ((tokens[i].isIdentifierTokenObject()) && !tokens[i].isPointer && !tokens[i].isArray&&!pointer && !array)
                 {
-                    if ((tokens[i].getType() == "identifier") && (tokens[i + 1].getLexeme() == "("))
+                    identifier id;
+                    if ((tokens[i].isIdentifierTokenObject()) && (tokens[i + 1].getLexeme() == "("))
                         continue;
-                        if ((i > 0) && tokens[i].isIdentifierTokenObject() && (tokens[i - 1].isDatatype()))
+                    if ((i > 0) && tokens[i].isIdentifierTokenObject() && (tokens[i - 1].isDatatype()))
                     {
                         id = new identifier(tokens[i]);
                         if ((i > 0) && (tokens[i - 1].isDatatype()))
                             id.dataType = tokens[i - 1];
                         thisScopeVars.Add(id);
+                        for (int q = 0; q < holeCodeTokens.Count; q++)
+                            if (holeCodeTokens[q].id == tokens[i].id)
+                                holeCodeTokens[q] = id;
+                        tokens[i] = id;
+                    }
+                    else if (parameters.Select(a => a.getLexeme()).ToList().Contains(tokens[i].getLexeme()))
+                    {
+                        id = parameters.Find(a => a.getLexeme() == tokens[i].getLexeme());
+
                         for (int q = 0; q < holeCodeTokens.Count; q++)
                             if (holeCodeTokens[q].id == tokens[i].id)
                                 holeCodeTokens[q] = id;
@@ -139,9 +167,68 @@ namespace Analyzer
                         tokens[i] = id;
 
                     }
+                    continue;
                 }
+                if ((i > 0) && ((tokens[i].isPointer) || pointer))
+                {
+                    if ((i > 0) && tokens[i].isPointer && (tokens[i - 1].isDatatype()))
+                    {
+                        thisScopePointers.Add((pointer)tokens[i]);
+                    }
+                    else if (thisScopePointers.Select(a => a.getLexeme()).ToList().Contains(tokens[i].getLexeme()))
+                    {
+                        pointer id;
+                        id = thisScopePointers.Find(a => a.getLexeme() == tokens[i].getLexeme());
 
+                        for (int q = 0; (holeCodeTokens != null) && (q < holeCodeTokens.Count); q++)
+                            if (holeCodeTokens[q].id == tokens[i].id)
+                                holeCodeTokens[q] = id;
+                        tokens[i] = id;
+                    }
+                    else if (upperLevelPointers.Select(a => a.getLexeme()).ToList().Contains(tokens[i].getLexeme()))
+                    {
+                        pointer id;
+                        id = upperLevelPointers.Find(a => a.getLexeme() == tokens[i].getLexeme());
+
+                        for (int q = 0; (holeCodeTokens != null) && (q < holeCodeTokens.Count); q++)
+                            if (holeCodeTokens[q].id == tokens[i].id)
+                                holeCodeTokens[q] = id;
+                        tokens[i] = id;
+
+                    }
+                    continue;
+                }
+                if ((i > 0) && ((tokens[i].isArray) || array))
+                {
+                    if ((i > 0) && tokens[i].isPointer && (tokens[i - 1].isDatatype()))
+                    {
+                        thisScopeArray.Add((array)tokens[i]);
+                    }
+                    else if (thisScopeArray.Select(a => a.getLexeme()).ToList().Contains(tokens[i].getLexeme()))
+                    {
+                        array id;
+                        id = thisScopeArray.Find(a => a.getLexeme() == tokens[i].getLexeme());
+
+                        for (int q = 0; (holeCodeTokens != null) && (q < holeCodeTokens.Count); q++)
+                            if (holeCodeTokens[q].id == tokens[i].id)
+                                holeCodeTokens[q] = id;
+                        tokens[i] = id;
+                    }
+                    else if (upperLevelArray.Select(a => a.getLexeme()).ToList().Contains(tokens[i].getLexeme()))
+                    {
+                        array id;
+                        id = upperLevelArray.Find(a => a.getLexeme() == tokens[i].getLexeme());
+
+                        for (int q = 0; (holeCodeTokens != null) && (q < holeCodeTokens.Count); q++)
+                            if (holeCodeTokens[q].id == tokens[i].id)
+                                holeCodeTokens[q] = id;
+                        tokens[i] = id;
+
+                    }
+                    continue;
+                }
             }
+            
         }
     }
 }
