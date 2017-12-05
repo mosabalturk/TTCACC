@@ -12,7 +12,7 @@ namespace Analyzer
         public result result { get; set; }
 
         public code code { set; get; }
-        List<token> holeCodeTokens;//done
+        public List<token> holeCodeTokens;//done
         private string cStr;//done
         public string fname;//done
         private List<token> defines = new List<token>();
@@ -39,7 +39,7 @@ namespace Analyzer
 
             pointersArraysAnalzer();
 
-            code = new code(codestr, filename, ++code.idno, holeCodeTokens,  ref holeCodeTokens, new List<identifier>(), new List<pointer>(), new List<array>(),"GS");
+            code = new code(codestr, filename, ++code.idno, holeCodeTokens,  this,"GS");
             
             code.spitYourVariablesLn(code);
             code.countAllSubScopes(code);

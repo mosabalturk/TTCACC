@@ -16,6 +16,8 @@ namespace Analyzer
         public List<tokenCounter> valuesCounter = new List<tokenCounter>();
         public List<tokenCounter> operationsCounter = new List<tokenCounter>();
 
+
+
         bool protoType = false;
         public bool recursive { get; set; }
         public string fname;
@@ -23,27 +25,24 @@ namespace Analyzer
         public string funcDataType { get; set; }
         List<token> tokens;
         List<identifier> thisScopeVars = new List<identifier>();
-        List<identifier> upperLevelVar = new List<identifier>();
-        List<pointer> upperLevelPointers = new List<pointer>();
+        public List<identifier> upperLevelVar = new List<identifier>();
+        public List<pointer> upperLevelPointers = new List<pointer>();
         List<pointer> thisScopePointers = new List<pointer>();
-        List<array> upperLevelArray = new List<array>();
+        public List<array> upperLevelArray = new List<array>();
         List<array> thisScopeArray = new List<array>();
         List<token> holeCodeTokens;
         public void setTokens(List<token> funcTokens) { tokens = funcTokens; }
         private List<identifier> parameters = new List<identifier>();
         public string funcAsStr { get { return funcBody; } set { funcBody = value; } }
         public List<identifier> funcParameters { get { return parameters; } }
-
+        cppFile cppfile;
         public int ScopeId;
         public int containingScopeId;
-        public function(string codee,int containingScopeId, ref List<token> tokens, List<identifier> parameters, string datatype, string funcName, ref List<token> holeCodeTokens, List<identifier> upperLevelVar, List<pointer> upperLevelPointers, List<array> upperLevelArray)
+        public function(string codee,int containingScopeId, ref List<token> tokens, List<identifier> parameters, string datatype, string funcName, cppFile cppfile)
         {
             this.ScopeId = code.idno++;
             this.containingScopeId = containingScopeId;
-            this.holeCodeTokens = holeCodeTokens;
-            this.upperLevelVar = upperLevelVar;
-            this.upperLevelPointers = upperLevelPointers;
-            this.upperLevelArray = upperLevelArray;
+            this.holeCodeTokens = cppfile.holeCodeTokens;
             this.funcBody = codee;
             this.tokens = tokens;
             this.parameters = parameters;
@@ -116,7 +115,6 @@ namespace Analyzer
                         for (int q = 0; q < holeCodeTokens.Count; q++)
                             if (holeCodeTokens[q].id == tokens[i].id)
                                 holeCodeTokens[q] = id;
-
                         tokens[i] = id;
                     }
                     else if (upperLevelVar.Select(a => a.getLexeme()).ToList().Contains(tokens[i].getLexeme()))

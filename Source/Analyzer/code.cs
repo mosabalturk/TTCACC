@@ -9,13 +9,36 @@ namespace Analyzer
 
     public class code
     {
+
+        #region class code main proprites
+        cppFile cppfile;
+        private string cStr;//done
+        private string name;//done
+        public static int idno = 0;
+        public int ScopeId;
+        public int containingScopeId;
+        public List<code> classes = new List<code>();//done
+        private List<function> functions = new List<function>();//done
+        public function main { get; set; }//done?
+        public List<function> Allfunctions { get { return functions; } }
+        public List<function> Allfunc_prototypes { get { return func_prototypes; } }
+        public List<code> Allclasses { get { return classes; } }
+        public static List<token> holeCodeTokens;
+        List<token> globalScobeTokens;//no
+        List<token> thisCodeToken;//done
+        private List<function> func_prototypes = new List<function>();//done
+        private List<code> structes = new List<code>();//done
+
+        #endregion
+
         public static string[] lines = new string[100];
         public static int linecounter = 0;
 
-        public string type { get; set; }
-        public bool isStruct { get { if (this.type == "struct") return true; else return false; } }
-        public bool isGS { get { if (this.type == "GS") return true; else return false; } }
-        public bool isclass { get { if (this.type == "class") return true; else return false; } }
+
+        public List<token> structObjectsGS { get { return structObjects; } }
+        private List<token> classObjects = new List<token>();
+        private List<token> structObjects = new List<token>();
+
 
         List<identifier> thisScopeVars = new List<identifier>();
         List<identifier> upperLevelVar = new List<identifier>();
@@ -23,19 +46,11 @@ namespace Analyzer
         List<pointer> thisScopePointers = new List<pointer>();
         List<array> upperLevelArray = new List<array>();
         List<array> thisScopeArray = new List<array>();
+
         static List<string> AllstructesClassesNames = new List<string>();
         static List<string> AlltypdefNames = new List<string>();
-
-
-        public static List<scopeTokenCounter> scopeTokenCounterList1 = new List<scopeTokenCounter>();
-        public static List<scopeTokenCounter> scopeTokenCounterList2 = new List<scopeTokenCounter>();
-        public static List<scopeTokenCounter> scopeTokenCounterList3 = new List<scopeTokenCounter>();
-        public static List<scopeTokenCounter> scopeTokenCounterList4 = new List<scopeTokenCounter>();
-        public static List<scopeVarCounter> scopeTokenCounterList5 = new List<scopeVarCounter>();
-        public static List<scopeArrayCounter> scopeTokenCounterList6 = new List<scopeArrayCounter>();
-        public static List<scopePointersCounter> scopeTokenCounterList7 = new List<scopePointersCounter>();
-        public static List<scopeTokenCounter> scopeTokenCounterList8 = new List<scopeTokenCounter>();
-        public static void zeroStatics() {
+        public static void zeroStatics()
+        {
             AlltypdefNames = new List<string>();
             AllstructesClassesNames = new List<string>();
             idno = 0;
@@ -48,22 +63,34 @@ namespace Analyzer
             scopeTokenCounterList7 = new List<scopePointersCounter>();
             scopeTokenCounterList8 = new List<scopeTokenCounter>();
         }
-
-
-        List<token> thisCodeToken;//done
-        public static List<token> holeCodeTokens;
-        List<token> globalScobeTokens;//no
-        private string cStr;//done
-        private string fname;//done
         public string typedefName { get; set; }
 
-        private List<function> func_prototypes = new List<function>();//done
-        public List<code> classes = new List<code>();//done
-        private List<code> structes = new List<code>();//done
-        private List<token> classObjects = new List<token>();
-        private List<token> structObjects = new List<token>();
+        public List<token> getAllTokens() { return thisCodeToken; }
+        public List<token> getGSTokens() { return globalScobeTokens; }
+        public string codeAsStr { get { return cStr; } set { cStr = value; } }
+        public string filename { get { return name; } set { name = value; } }
 
+        #region static lists for recursive functions using
+        public static List<scopeTokenCounter> scopeTokenCounterList1 = new List<scopeTokenCounter>();
+        public static List<scopeTokenCounter> scopeTokenCounterList2 = new List<scopeTokenCounter>();
+        public static List<scopeTokenCounter> scopeTokenCounterList3 = new List<scopeTokenCounter>();
+        public static List<scopeTokenCounter> scopeTokenCounterList4 = new List<scopeTokenCounter>();
+        public static List<scopeVarCounter> scopeTokenCounterList5 = new List<scopeVarCounter>();
+        public static List<scopeArrayCounter> scopeTokenCounterList6 = new List<scopeArrayCounter>();
+        public static List<scopePointersCounter> scopeTokenCounterList7 = new List<scopePointersCounter>();
+        public static List<scopeTokenCounter> scopeTokenCounterList8 = new List<scopeTokenCounter>();
 
+        #endregion
+
+        #region type of code
+        public string type { get; set; }
+        public bool isStruct { get { if (this.type == "struct") return true; else return false; } }
+        public bool isGS { get { if (this.type == "GS") return true; else return false; } }
+        public bool isclass { get { if (this.type == "class") return true; else return false; } }
+
+        #endregion
+
+        #region COUNTER LISTS
         public List<tokenCounter> specialCharGS = new List<tokenCounter>();
         private List<variableCounter> variablesCounterGS = new List<variableCounter>();
         private List<pointerCounter> pointersCounterGS = new List<pointerCounter>();
@@ -72,13 +99,8 @@ namespace Analyzer
         private List<tokenCounter> dataTypesCounterGS = new List<tokenCounter>();
         private List<tokenCounter> valuesCounterGS = new List<tokenCounter>();
         private List<tokenCounter> operationsCounterGS = new List<tokenCounter>();
-        private List<function> functions = new List<function>();//done
-        public function main { get; set; }//done?
-        public List<function> Allfunctions { get { return functions; } }
-        public List<function> Allfunc_prototypes { get { return func_prototypes; } }
-        public List<code> Allclasses { get { return classes; } }
-        public List<token> structObjectsGS { get { return structObjects; } }
-        public List<code> Allstructs { get { return structes; } }
+
+        #endregion
 
         #region get lists
         public List<tokenCounter> getOperationsCounterGS { get { return operationsCounterGS; } }
@@ -88,37 +110,47 @@ namespace Analyzer
         public List<arrayCounter> getArraysCounterGS { get { return arraysCounterGS; } }
         public List<pointerCounter> getPointersCounterGS { get { return pointersCounterGS; } }
         public List<variableCounter> getVariablesCounterGS { get { return variablesCounterGS; } }
-        public List<List<token>> allGlobalVariables = new List<List<token>>();
+        public List<code> Allstructs { get { return structes; } }
 
         #endregion
-
-
-
-
-        public static int idno = 0;
-        public int ScopeId;
-        public int containingScopeId;
-
-
-        
-        public code(string codestr, string filename,int containingScopeId, List<token> thisCodeToken, ref List<token> holeCodeToken, List<identifier> upperLevelVar, List<pointer> upperLevelPointers, List<array> upperLevelArray,string type)
+        public void setDownLevel()
         {
+            foreach (code c in this.structes)
+            {
+            c.upperLevelVar = this.thisScopeVars.Concat(upperLevelVar).ToList();
+            c.upperLevelPointers = this.thisScopePointers.Concat(upperLevelPointers).ToList();
+            c.upperLevelArray = this.thisScopeArray.Concat(thisScopeArray).ToList(); 
+            }
+            foreach (code c in this.classes)
+            {
+                c.upperLevelVar = this.thisScopeVars.Concat(upperLevelVar).ToList();
+                c.upperLevelPointers = this.thisScopePointers.Concat(thisScopePointers).ToList(); 
+                c.upperLevelArray = this.thisScopeArray.Concat(thisScopeArray).ToList(); 
+            }
+            foreach (function c in this.Allfunctions)
+            {
+                c.upperLevelVar = this.thisScopeVars.Concat(upperLevelVar).ToList();
+                c.upperLevelPointers = this.thisScopePointers.Concat(thisScopePointers).ToList(); 
+                c.upperLevelArray = this.thisScopeArray.Concat(thisScopeArray).ToList(); 
+            }
+        }
+        public code(string codestr, string filename,int containingScopeId, List<token> thisCodeToken, cppFile cppfile,string type)
+        {
+            this.cppfile = cppfile;
             this.ScopeId = idno++;
             this.containingScopeId = containingScopeId;
 
             this.type = type;
 
             this.thisCodeToken = thisCodeToken;
-            holeCodeTokens = holeCodeToken;
-            this.upperLevelVar = upperLevelVar;
-            this.upperLevelPointers = upperLevelPointers;
-            this.upperLevelArray = upperLevelArray;
+            holeCodeTokens = cppfile.holeCodeTokens;
+
 
             codestr = Program.RemoveCommentsAndSpaces(codestr);//delete comments
 
             this.cStr = codestr;//add hole code to cStr string
 
-            this.fname = filename;//filename or class or struct name
+            this.name = filename;//filename or class or struct name
 
             Analyzer temp = new Analyzer(); // anlyzer class is the class that analyze code to tokens and lexemes
             globalScobeTokens = new List<token>(this.thisCodeToken); // copy allCodeTokens list
@@ -130,7 +162,7 @@ namespace Analyzer
             findFunctionsAndPrototypes();
             //Analyzer.structAsDatatype(globalScobeTokens, AllstructesClassesNames, AlltypdefNames);
         }
-        public void count()
+        public void count()//this functions fills counter lists  that exist in counter lists region
         {
             foreach (token t in globalScobeTokens)
             {
@@ -151,8 +183,8 @@ namespace Analyzer
                 else
                     tokenCounter.AddOneByLexeme(t, specialCharGS);
             }
-        }
-        public static void  structAsDatatype(List<token> result)
+        } 
+        public static void  structAsDatatype(List<token> result) // in case like "struct struct_name object_name" the function merge struct struct_name into one token and set type of this token as datatype
         {
             List<token> remove = new List<token>();
             for (int i = 0; i < result.Count - 1; i++)
@@ -181,8 +213,7 @@ namespace Analyzer
                 result.Remove(t);
             }
         }
-
-        public void findVar()
+        public void findVar() // 1- recognize varibles and  change their tokens to variable and set data type if exists then if this variable repeated set the token object into same one that first time defined
         {
             structAsDatatype( this.globalScobeTokens);
             for (int i = 0; i < globalScobeTokens.Count; i++)
@@ -233,7 +264,6 @@ namespace Analyzer
                         globalScobeTokens[i] = id;
 
                     }
-
                     else 
                     {
                         id = new identifier(globalScobeTokens[i]);
@@ -251,8 +281,11 @@ namespace Analyzer
                     }
                 }
             }
+            setDownLevel();
         }
-        List<identifier> getHoleVars { get { return upperLevelVar.Concat(thisScopeVars).ToList(); } }
+
+
+        #region find functions , main , classes and structes functions
         public void findMain()
         {
             int parentheses = 0;
@@ -293,135 +326,15 @@ namespace Analyzer
                         i++;
                     }
 
-                    main = new function(funcBody,this.ScopeId, ref funcTokens, new List<identifier>(), datatype, "main",ref thisCodeToken, thisScopeVars, thisScopePointers.Concat(upperLevelPointers).ToList(), thisScopeArray.Concat(upperLevelArray).ToList());
+                    main = new function(funcBody, this.ScopeId, ref funcTokens, new List<identifier>(), datatype, "main", cppfile);
                     main.funcDataType = datatype;
                     functions.Add(main);
                     break;
                 }
             }
-            
+
         }
-        //public void findFunctionsAndPrototypes()
-        //{
-        //    for (int i = 0; i < thisCodeToken.Count - 2; i++)
-        //    {
-        //        int parentheses = 0;
-        //        int j = 0;
-        //        if (thisCodeToken[i].getLexeme() == "main")
-        //        {
-        //            while (thisCodeToken[i].getLexeme() != "{")
-        //            {
-        //                i++;
-        //            }
-        //            i++;
-        //            while ((thisCodeToken[i].getLexeme() != "}") || (parentheses != 0))
-        //            {
-        //                if (thisCodeToken[i].getLexeme() == "{")
-        //                    parentheses++;
-        //                if (thisCodeToken[i].getLexeme() == "}")
-        //                    parentheses--;
-        //                i++;
-        //            }
-        //            continue;
-        //        }
-        //        List<identifier> parameters = new List<identifier>();
-        //        bool id = thisCodeToken[i + 1].isPointer || thisCodeToken[i + 1].isArray || thisCodeToken[i + 1].isIdentifierTokenObject() || thisCodeToken[i + 1].isIdentifierTokenObject();
-        //        bool func = ((thisCodeToken[i].isDatatype()) && id && (thisCodeToken[i + 2].getLexeme() == "("));
-        //        bool funcWithoutDATATYPE = (id) && (thisCodeToken[i + 1].getLexeme() == "(");// like balabla(int bla)
-        //        //bool funcprotoType = ((tokens[i].getType() == "datatype") && (tokens[i + 1].getType() == "identifier") && (tokens[j = i + 2].getLexeme() == "("));
-        //        // bool funcAsterisk = ((tokens[i].getType() == "datatype") && (tokens[i+1].getLexeme() == "*") && (tokens[i + 2].getType() == "identifier") && (tokens[j = i + 3].getLexeme() == "("));
-        //        if (funcWithoutDATATYPE)
-        //        {
-        //            int y = i + 2;
-        //            while (thisCodeToken[y].getLexeme() != ")")
-        //                y++;
-        //            if (thisCodeToken[y + 1].getLexeme() == ";")
-        //                funcWithoutDATATYPE = false;
-        //        }
-        //        if (func || funcWithoutDATATYPE)
-        //        {
-        //            string datatype;
-        //            string funcName;
-        //            if (func)
-        //            { datatype = thisCodeToken[i].getLexeme(); funcName = thisCodeToken[i + 1].getLexeme(); }
-        //            else
-        //            {
-        //                datatype = "void"; funcName = thisCodeToken[i].getLexeme();
-        //            }
 
-        //            globalScobeTokens.Remove(thisCodeToken[i]);
-        //            globalScobeTokens.Remove(thisCodeToken[i + 1]);
-        //            if (func)
-        //            { j = i + 3; globalScobeTokens.Remove(thisCodeToken[i + 2]); }
-        //            else
-        //                j = i + 2;
-        //            bool prototype = false;
-        //            int k = j;
-        //            while (thisCodeToken[k].getLexeme() != ")")
-        //            {
-        //                globalScobeTokens.Remove(thisCodeToken[k]);
-        //                k++;
-        //            }
-        //            globalScobeTokens.Remove(thisCodeToken[k]);// deleting )
-        //            if ((k + 1 < thisCodeToken.Count))
-        //                if (thisCodeToken[k + 1].getLexeme() == ";")// void func (int blabla);
-        //                {
-        //                    prototype = true;
-        //                    globalScobeTokens.Remove(thisCodeToken[k + 1]);
-        //                }
-        //            //parameters are frome j to k
-        //            for (int s = j; s < k; s++)
-        //            {//خطأ عندما يكون الباراميتر ستركت أو بوينتر او مصفوفة
-        //                if ((thisCodeToken[s].isDatatype() && (thisCodeToken[s + 1].getType() == "identifier")))
-        //                {
-        //                    identifier p1 = new identifier(thisCodeToken[s + 1]);
-        //                    if (thisCodeToken[s].isDatatype())
-        //                        p1.dataType = thisCodeToken[s];
-        //                    parameters.Add(p1);
-        //                }
-        //            }
-
-        //            if (!prototype)//function
-        //            {
-        //                string funcBody = "";
-        //                List<token> funcTokens = new List<token>();
-        //                while (thisCodeToken[j].getLexeme() != "{")
-        //                    j++;
-        //                globalScobeTokens.Remove(thisCodeToken[j]);
-        //                j++;
-        //                while ((thisCodeToken[j].getLexeme() != "}") || (parentheses != 0))
-        //                {
-
-        //                    funcBody += thisCodeToken[j].getLexeme() + " ";
-        //                    funcTokens.Add(thisCodeToken[j]);
-        //                    globalScobeTokens.Remove(thisCodeToken[j]);
-        //                    if (thisCodeToken[j].getLexeme() == "{")
-        //                        parentheses++;
-        //                    if (thisCodeToken[j].getLexeme() == "}")
-        //                        parentheses--;
-        //                    j++;
-        //                }
-        //                globalScobeTokens.Remove(thisCodeToken[j]);
-        //                i = j - 1;
-        //                List<identifier> temp1 = new List<identifier>(thisScopeVars);
-        //                foreach (identifier t in upperLevelVar)
-        //                    temp1.Add(t);
-        //                List<pointer> temp2 = new List<pointer>(thisScopePointers);
-        //                foreach (pointer t in upperLevelPointers)
-        //                    temp2.Add(t);
-        //                List<array> temp3 = new List<array>(thisScopeArray);
-        //                foreach (array t in upperLevelArray)
-        //                    temp3.Add(t);
-        //                functions.Add(new function(funcBody, this.ScopeId, ref funcTokens, parameters, datatype, funcName, ref thisCodeToken, thisScopeVars, temp2, temp3));
-
-        //            }
-        //            else
-        //            {
-        //                func_prototypes.Add(new function(parameters, this.ScopeId, datatype, funcName, true));
-        //            }
-        //        }
-        //    }
-        //}
 
         public void findFunctionsAndPrototypes()
         {
@@ -449,7 +362,7 @@ namespace Analyzer
                 }
                 List<identifier> parameters = new List<identifier>();
                 bool id = globalScobeTokens[i + 1].isPointer || globalScobeTokens[i + 1].isArray || globalScobeTokens[i + 1].isIdentifierTokenObject() || globalScobeTokens[i + 1].isIdentifierTokenObject();
-                bool id2 = globalScobeTokens[i].isPointer || globalScobeTokens[i].isArray || globalScobeTokens[i ].isIdentifierTokenObject() || globalScobeTokens[i].isIdentifierTokenObject();
+                bool id2 = globalScobeTokens[i].isPointer || globalScobeTokens[i].isArray || globalScobeTokens[i].isIdentifierTokenObject() || globalScobeTokens[i].isIdentifierTokenObject();
                 bool func = ((globalScobeTokens[i].isDatatype()) && id && (globalScobeTokens[i + 2].getLexeme() == "("));
                 bool funcWithoutDATATYPE = (id2) && (globalScobeTokens[i + 1].getLexeme() == "(");// like balabla(int bla)
                 //bool funcprotoType = ((tokens[i].getType() == "datatype") && (tokens[i + 1].getType() == "identifier") && (tokens[j = i + 2].getLexeme() == "("));
@@ -473,10 +386,10 @@ namespace Analyzer
                         datatype = "void"; funcName = globalScobeTokens[i].getLexeme();
                     }
                     remove.Add(globalScobeTokens[i]);
-                    remove.Add(globalScobeTokens[i+1]);
+                    remove.Add(globalScobeTokens[i + 1]);
                     if (func)
                     {
-                        j = i + 3;;
+                        j = i + 3; ;
                         remove.Add(globalScobeTokens[i + 2]);
 
                     }
@@ -484,7 +397,7 @@ namespace Analyzer
                         j = i + 2;
                     bool prototype = false;
                     int k = j;
-                    while ((k< globalScobeTokens.Count) &&(globalScobeTokens[k].getLexeme() != ")"))
+                    while ((k < globalScobeTokens.Count) && (globalScobeTokens[k].getLexeme() != ")"))
                     {
                         remove.Add(globalScobeTokens[k]);
                         k++;
@@ -495,10 +408,10 @@ namespace Analyzer
                         if (globalScobeTokens[k + 1].getLexeme() == ";")// void func (int blabla);
                         {
                             prototype = true;
-                            remove.Add(globalScobeTokens[k+1]);
+                            remove.Add(globalScobeTokens[k + 1]);
                         }
                     //parameters are frome j to k
-                    for (int s = j; (s < k)&&((k + 1 < globalScobeTokens.Count)); s++)
+                    for (int s = j; (s < k) && ((k + 1 < globalScobeTokens.Count)); s++)
                     {//خطأ عندما يكون الباراميتر ستركت أو بوينتر او مصفوفة
                         if ((globalScobeTokens[s].isDatatype() && (globalScobeTokens[s + 1].getType() == "identifier")))
                         {
@@ -531,16 +444,7 @@ namespace Analyzer
                         }
                         remove.Add(globalScobeTokens[j]);
                         i = j - 1;
-                        List<identifier> temp1 = new List<identifier>(thisScopeVars);
-                        foreach (identifier t in upperLevelVar)
-                            temp1.Add(t);
-                        List<pointer> temp2 = new List<pointer>(thisScopePointers);
-                        foreach (pointer t in upperLevelPointers)
-                            temp2.Add(t);
-                        List<array> temp3 = new List<array>(thisScopeArray);
-                        foreach (array t in upperLevelArray)
-                            temp3.Add(t);
-                        functions.Add(new function(funcBody, this.ScopeId, ref funcTokens, parameters, datatype, funcName,ref thisCodeToken, thisScopeVars, temp2,temp3));
+                        functions.Add(new function(funcBody, this.ScopeId, ref funcTokens, parameters, datatype, funcName, cppfile));
 
                     }
                     else
@@ -551,12 +455,8 @@ namespace Analyzer
             }
             foreach (token t in remove)
                 globalScobeTokens.Remove(t);
-            
+
         }
-        public List<token> getAllTokens() { return thisCodeToken; }
-        public List<token> getGSTokens() { return globalScobeTokens; }
-        public string codeAsStr { get { return cStr; } set { cStr = value; } }
-        public string filename { get { return fname; } set { fname = value; } }
 
         public void findClassesAndStructs()
         {
@@ -597,7 +497,8 @@ namespace Analyzer
                     globalScobeTokens.Remove(thisCodeToken[i]);
                     if (Isclass)
                     {
-                        classes.Add(new code(Body, Name, this.ScopeId, Tokens,ref holeCodeTokens ,thisScopeVars, thisScopePointers, thisScopeArray,"class"));
+
+                        classes.Add(new code(Body, Name, this.ScopeId, Tokens, cppfile, "class"));
                         AllstructesClassesNames.Add(Name);
                         globalScobeTokens.Remove(thisCodeToken[++i]);
                     }
@@ -609,7 +510,7 @@ namespace Analyzer
                         }
                         globalScobeTokens.Remove(thisCodeToken[i]);
                         globalScobeTokens.Remove(thisCodeToken[++i]);
-                        code temp = new code(Body, Name, this.ScopeId, Tokens,ref holeCodeTokens, thisScopeVars, thisScopePointers, thisScopeArray,"struct");
+                        code temp = new code(Body, Name, this.ScopeId, Tokens, cppfile, "struct");
                         AllstructesClassesNames.Add(Name);
 
                         temp.typedefName = Name;
@@ -617,7 +518,7 @@ namespace Analyzer
                     }
                     else if (Isstruct)
                     {
-                        code temp = new code(Body, Name, this.ScopeId, Tokens,ref holeCodeTokens, thisScopeVars, thisScopePointers, thisScopeArray,"struct");
+                        code temp = new code(Body, Name, this.ScopeId, Tokens, cppfile, "struct");
                         AllstructesClassesNames.Add(Name);
                         structes.Add(temp);
                         if (!typedefStructName)
@@ -641,12 +542,17 @@ namespace Analyzer
                 }
             }
         }
+
+        #endregion
+
+
+
         public static void spitYourClassesLan(code something)
         {
             foreach (var dodo in something.structes)
             {
                 spitYourClassesLan(dodo);
-                code.lines[linecounter++] = dodo.fname;
+                code.lines[linecounter++] = dodo.name;
             }
 
         }
@@ -733,44 +639,11 @@ namespace Analyzer
             return s;
         }
 
-        #region counters
-
-        public static List<List<tokenCounter>> res1 = new List<List<tokenCounter>>();
-        public static List<List<tokenCounter>> res2 = new List<List<tokenCounter>>();
-        public static List<List<tokenCounter>> res3 = new List<List<tokenCounter>>();
-
-        public List<List<tokenCounter>> keywordsLL( code st)
-        {
-            
-            res1.Add(KeyWordsCounterGS);
-            foreach (code cd in st.structes)
-            { res1.Concat(cd.keywordsLL(cd)).ToList();}
-            return res1;
-        }
-
-
-
-        public List<List<tokenCounter>> operatorsLL(code st)
-        {
-
-            res2.Add(operationsCounterGS);
-            foreach (code cd in st.structes)
-            { res2.Concat(cd.operatorsLL(cd)).ToList(); }
-            return res2;
-        }
-        public List<List<tokenCounter>> datatypesLL(code st)
-        {
-
-            res3.Add(dataTypesCounterGS);
-            foreach (code cd in st.structes)
-            { res3.Concat(cd.datatypesLL(cd)).ToList(); }
-            return res3;
-        }
-
+        #region results recursive functions
 
         public List<scopeTokenCounter> keywordsLL1(code st)
         {
-            scopeTokenCounterList1.Add(new scopeTokenCounter(st.ScopeId, st.containingScopeId, st.fname, KeyWordsCounterGS));
+            scopeTokenCounterList1.Add(new scopeTokenCounter(st.ScopeId, st.containingScopeId, st.name, KeyWordsCounterGS));
             foreach (function f in st.Allfunctions)
                 scopeTokenCounterList1.Add(new scopeTokenCounter(f.ScopeId, f.containingScopeId,f.fname, f.KeyWordsCounter));
             foreach (code cd in st.structes)
@@ -780,7 +653,7 @@ namespace Analyzer
         }
         public List<scopeTokenCounter> operatorsLL1(code st)
         {
-            scopeTokenCounterList2.Add(new scopeTokenCounter(st.ScopeId, st.containingScopeId, st.fname, operationsCounterGS));
+            scopeTokenCounterList2.Add(new scopeTokenCounter(st.ScopeId, st.containingScopeId, st.name, operationsCounterGS));
             foreach (function f in st.Allfunctions)
                 scopeTokenCounterList2.Add(new scopeTokenCounter(f.ScopeId,f.containingScopeId, f.fname, f.operationsCounter));
             foreach (code cd in st.structes)
@@ -791,7 +664,7 @@ namespace Analyzer
         public List<scopeTokenCounter> datatypesLL1(code st)
         {
 
-            scopeTokenCounterList3.Add(new scopeTokenCounter(st.ScopeId, st.containingScopeId, st.fname, dataTypesCounterGS));
+            scopeTokenCounterList3.Add(new scopeTokenCounter(st.ScopeId, st.containingScopeId, st.name, dataTypesCounterGS));
             foreach (function f in st.Allfunctions)
                 scopeTokenCounterList3.Add(new scopeTokenCounter(f.ScopeId, f.containingScopeId, f.fname, f.dataTypesCounter));
             foreach (code cd in st.structes)
@@ -802,7 +675,7 @@ namespace Analyzer
         public List<scopeTokenCounter> ValuesLL1(code st)
         {
 
-            scopeTokenCounterList4.Add(new scopeTokenCounter(st.ScopeId, st.containingScopeId, st.fname, valuesCounterGS));
+            scopeTokenCounterList4.Add(new scopeTokenCounter(st.ScopeId, st.containingScopeId, st.name, valuesCounterGS));
             foreach (function f in st.Allfunctions)
                 scopeTokenCounterList4.Add(new scopeTokenCounter(f.ScopeId, f.containingScopeId, f.fname, f.valuesCounter));
             foreach (code cd in st.structes)
@@ -812,7 +685,7 @@ namespace Analyzer
         }
         public List<scopeTokenCounter> specialCharList(code st)
         {
-            scopeTokenCounterList8.Add(new scopeTokenCounter(st.ScopeId, st.containingScopeId, st.fname, specialCharGS));
+            scopeTokenCounterList8.Add(new scopeTokenCounter(st.ScopeId, st.containingScopeId, st.name, specialCharGS));
             foreach (function f in st.Allfunctions)
                 scopeTokenCounterList8.Add(new scopeTokenCounter(f.ScopeId, f.containingScopeId, f.fname, f.specialChar));
             foreach (code cd in st.structes)
@@ -823,7 +696,7 @@ namespace Analyzer
         public List<scopeVarCounter> VarsLL1(code st)
         {
 
-            scopeTokenCounterList5.Add(new scopeVarCounter(st.ScopeId, st.containingScopeId, st.fname, variablesCounterGS));
+            scopeTokenCounterList5.Add(new scopeVarCounter(st.ScopeId, st.containingScopeId, st.name, variablesCounterGS));
             foreach (function f in st.Allfunctions)
                 scopeTokenCounterList5.Add(new scopeVarCounter(f.ScopeId, f.containingScopeId, f.fname, f.variablesCounter));
             foreach (code cd in st.structes)
@@ -834,7 +707,7 @@ namespace Analyzer
         public List<scopeArrayCounter> ArraysLL1(code st)
         {
 
-            scopeTokenCounterList6.Add(new scopeArrayCounter(st.ScopeId, st.containingScopeId,st.fname, arraysCounterGS));
+            scopeTokenCounterList6.Add(new scopeArrayCounter(st.ScopeId, st.containingScopeId,st.name, arraysCounterGS));
             foreach (function f in st.Allfunctions)
                 scopeTokenCounterList6.Add(new scopeArrayCounter(f.ScopeId, f.containingScopeId, f.fname, f.arraysCounter));
             foreach (code cd in st.structes)
@@ -845,7 +718,7 @@ namespace Analyzer
         public List<scopePointersCounter> pointersLL1(code st)
         {
 
-            scopeTokenCounterList7.Add(new scopePointersCounter(st.ScopeId, st.containingScopeId, st.fname,pointersCounterGS));
+            scopeTokenCounterList7.Add(new scopePointersCounter(st.ScopeId, st.containingScopeId, st.name,pointersCounterGS));
             foreach (function f in st.Allfunctions)
                 scopeTokenCounterList7.Add(new scopePointersCounter(f.ScopeId, f.containingScopeId, f.fname, f.pointersCounter));
             foreach (code cd in st.structes)

@@ -468,7 +468,7 @@ namespace Analyzer
                         richTextBox2.Text += " containId " + l.containId.ToString() + " scopeId " + l.scopeId.ToString() + "  " + l.scopeName + "\n";
                         foreach (variableCounter t in l.vars)
                         {
-                            richTextBox2.Text += t.getLexeme() + " count:" + t.getCount() + "\n";
+                            richTextBox2.Text +="id: "+ t.id+"   "+ t.getLexeme() + "   count:" + t.getCount() + "\n";
                         }
                     }
                 }
