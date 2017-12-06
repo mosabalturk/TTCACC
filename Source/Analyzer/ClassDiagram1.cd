@@ -10,77 +10,77 @@
   <Class Name="Analyzer.code" Collapsed="true">
     <Position X="9.25" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BAEwIADiIEGiCCgFBgIAAhAcigIgLJGwtAQCCAAAIEQ=</HashCode>
+      <HashCode>BHEgJgDHIkOiCSAFBgAKon8cSkIlDJWw9AQACIACIEU=</HashCode>
       <FileName>code.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Analyzer.cppFile" Collapsed="true">
     <Position X="11" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>BAAQAAAAAAAAAACAAACAAAAEIgAQAAAAACAABAQAAAA=</HashCode>
+      <HashCode>BAAAIAAAAAAAgACABACAAAAEYgAEAAAAAKAABAQAAAA=</HashCode>
       <FileName>cppFile.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Analyzer.Form1" Collapsed="true">
     <Position X="7.5" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>YAAAAAAAAHAgMAEABACAABACAMQ5AxgAwFAaAAAAAAA=</HashCode>
+      <HashCode>aCAAAAAACHAgIAEBBICAAJACAM07g1ggwFAbQAAQQAA=</HashCode>
       <FileName>Form1.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Analyzer.function" Collapsed="true">
     <Position X="9.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAEQIACQAEACCAAEJAABpAAAigBhAACgCBAQAACAAAA=</HashCode>
+      <HashCode>AAEAKACUAEECCAAEJAADpAAACgDlAACgCBAQAACCAAA=</HashCode>
       <FileName>function.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Analyzer.Program" Collapsed="true">
     <Position X="11" Y="1.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAABIAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAABAAAIAA=</HashCode>
+      <HashCode>AAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAIAA=</HashCode>
       <FileName>Program.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Analyzer.token" Collapsed="true">
     <Position X="2.75" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>CAAEAAAADACAJiAAACAECAIQgxCpABAAACICAAAAAkA=</HashCode>
+      <HashCode>CAAEAAAADACAJiAAACAECCIQgxCpABAAACICAAAAAkA=</HashCode>
       <FileName>token.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Analyzer.identifier" Collapsed="true">
     <Position X="4" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAgAAAAAAACAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAgAABAAAACAAAAAACAAAAACgAAAAAAAAAAAAAAA=</HashCode>
       <FileName>token.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Analyzer.array" Collapsed="true">
     <Position X="4" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAIAAAAACAACAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAIACAAACAACAAAAACAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>token.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Analyzer.pointer" Collapsed="true">
     <Position X="5.75" Y="3.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAABAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAABAAAACAAAAAACAAAAACAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>token.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Analyzer.arrayCounter" Collapsed="true">
     <Position X="4" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAABAAAAAAAAAAAAAACAAAAAAAEAgA=</HashCode>
       <FileName>token.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Analyzer.pointerCounter" Collapsed="true">
     <Position X="5.75" Y="4.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAABAAAAAAAAAAAAAACAAAAAAAEAgA=</HashCode>
       <FileName>token.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -95,7 +95,7 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAABAAAAAAAAAAAAAQBAAAAAAAEAgA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAABAAAAAAAAAAAAAYBAAAAAAAEAgA=</HashCode>
       <FileName>token.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -122,7 +122,7 @@
       </Path>
     </InheritanceLine>
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAABCAAAAAAAAAAAAACAAAAAAAEAgA=</HashCode>
       <FileName>token.cs</FileName>
     </TypeIdentifier>
   </Class>

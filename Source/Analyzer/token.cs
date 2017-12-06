@@ -162,6 +162,12 @@ namespace Analyzer
     public class variableCounter : identifier
     {
         int count;
+        public variableCounter copy()
+        {
+            variableCounter vc = new variableCounter(this);
+            vc.count = this.count;
+            return vc;
+        }
         public variableCounter(token t, token dataType) : base(t, dataType)
         {
             this.type = "variable";
@@ -174,7 +180,8 @@ namespace Analyzer
         }
         public int getCount() { return count; }
         public void incCount() { this.count++; }
-        public static void AddOneByToken(identifier TknObj, List<variableCounter> tkn)
+        public void decCount() { this.count--; }
+        public static void AddOneByToken(token TknObj, List<variableCounter> tkn)
         {
             var t = tkn.FirstOrDefault(x => x.id == TknObj.id);
             if (t != null)
@@ -189,6 +196,13 @@ namespace Analyzer
     }
     public class arrayCounter : array
     {
+
+        public arrayCounter copy()
+        {
+            arrayCounter ac = new arrayCounter(this);
+            ac.count = this.count;
+            return ac;
+        }
         int count; public void incCount() { this.count++; }
         public int getCount() { return count; }
         public static void AddOneByToken(array TknObj, List<arrayCounter> tkn)
@@ -210,6 +224,13 @@ namespace Analyzer
     }
     public class pointerCounter : pointer
     {
+        public pointerCounter copy()
+        {
+            pointerCounter pt = new pointerCounter(this);
+            pt.count = this.count;
+            return pt;
+        }
+
         int count; public void incCount() { this.count++; }
         public int getCount() { return count; }
         public pointerCounter(pointer t) : base(t)
@@ -265,15 +286,17 @@ namespace Analyzer
                 tkn.Add(new tokenCounter(TknObj));
             }
         }
+
+
         public tokenCounter copy()
         {
-            tokenCounter t = new tokenCounter(new token(this.id, this.lexeme, this.type));
+            tokenCounter t = new tokenCounter(this);
             t.count = this.count;
             return t;
         }
 
     }
-    public class functionCall : identifier
+    public class functionCallCounter : identifier
     {
         int count;
         public override bool isVariable { get { return false; } }
@@ -281,16 +304,22 @@ namespace Analyzer
         public override bool isPointer { get { return false; } }
         public override bool isIdentifierObject() { return false; }
 
+        public functionCallCounter copy()
+        {
+            functionCallCounter fcc = new functionCallCounter(this);
+            fcc.count = this.count;
+            return fcc;
+        }
         public override bool isFunctionCall { get { return true; } }
 
-        public functionCall(token t) : base(t)
+        public functionCallCounter(token t) : base(t)
         {
             this.count = 1;
             type = "functionCall";
         }
         public int getCount() { return count; }
         public void incCount() { this.count++; }
-        public static void AddOneByLexeme(token TknObj, List<functionCall> tkn)
+        public static void AddOneByLexeme(token TknObj, List<functionCallCounter> tkn)
         {
             string sToken = TknObj.getLexeme();
             if (tkn.Exists(x => x.getLexeme() == sToken))
@@ -299,7 +328,7 @@ namespace Analyzer
             }
             else
             {
-                tkn.Add(new functionCall(TknObj));
+                tkn.Add(new functionCallCounter(TknObj));
             }
         }
         public static void AddOneValueByDataType(token TknObj, List<tokenCounter> tkn)

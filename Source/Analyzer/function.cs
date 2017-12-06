@@ -7,6 +7,7 @@ namespace Analyzer
 {
     public class function
     {
+        #region counterLists
         public List<tokenCounter> specialChar = new List<tokenCounter>();
         public List<variableCounter> variablesCounter = new List<variableCounter>();
         public List<pointerCounter> pointersCounter = new List<pointerCounter>();
@@ -15,29 +16,33 @@ namespace Analyzer
         public List<tokenCounter> dataTypesCounter = new List<tokenCounter>();
         public List<tokenCounter> valuesCounter = new List<tokenCounter>();
         public List<tokenCounter> operationsCounter = new List<tokenCounter>();
-        public List<functionCall> functionCalls = new List<functionCall>();
+        public List<functionCallCounter> functionCalls = new List<functionCallCounter>();
 
+        #endregion
 
+        public int ScopeId;
+        public int containingScopeId;
+        public string name;
+        private string funcBody;
+        List<token> tokens;
+        List<token> holeCodeTokens;
         bool protoType = false;
         public bool recursive { get; set; }
-        public string fname;
-        private string funcBody;
         public string funcDataType { get; set; }
-        List<token> tokens;
+        
         public List<token> getTokens {get{return tokens;} }
-        List<identifier> thisScopeVars = new List<identifier>();
+        public List<identifier> thisScopeVars = new List<identifier>();
         public List<identifier> upperLevelVar = new List<identifier>();
         public List<pointer> upperLevelPointers = new List<pointer>();
         List<pointer> thisScopePointers = new List<pointer>();
         public List<array> upperLevelArray = new List<array>();
         List<array> thisScopeArray = new List<array>();
-        List<token> holeCodeTokens;
+        
         public void setTokens(List<token> funcTokens) { tokens = funcTokens; }
         private List<identifier> parameters = new List<identifier>();
         public string funcAsStr { get { return funcBody; } set { funcBody = value; } }
         public List<identifier> funcParameters { get { return parameters; } }
-        public int ScopeId;
-        public int containingScopeId;
+
         public function(string codee,int containingScopeId, ref List<token> tokens, List<identifier> parameters, string datatype, string funcName, cppFile cppfile)
         {
             this.ScopeId = code.idno++;
@@ -47,7 +52,7 @@ namespace Analyzer
             this.tokens = tokens;
             this.parameters = parameters;
             this.funcDataType = datatype;
-            this.fname = funcName;
+            this.name = funcName;
             for (int j = 0; j < tokens.Count(); j++)
                 if ((tokens[j].getLexeme() == "return") && (tokens[j + 1].getLexeme() == funcName))
                     this.recursive = true;
@@ -59,9 +64,9 @@ namespace Analyzer
             this.protoType = protoType;
             this.parameters = parameters;
             this.funcDataType = datatype;
-            this.fname = funcName;
+            this.name = funcName;
         }
-        public string funcname { get { return fname; } set { fname = value; } }
+        public string funcname { get { return name; } set { name = value; } }
         public void count()
         {
             foreach (token t in tokens)
@@ -81,7 +86,7 @@ namespace Analyzer
                 else if (t.isArray)
                     arrayCounter.AddOneByToken((array)t, arraysCounter);
                 else if (t.isFunctionCall)
-                     functionCall.AddOneByLexeme(t, functionCalls); 
+                     functionCallCounter.AddOneByLexeme(t, functionCalls); 
                 else
                 {
                     tokenCounter.AddOneByLexeme(t, specialChar);
@@ -97,7 +102,7 @@ namespace Analyzer
                 if ((tokens[i].isIdentifierTokenObject()) && (tokens[i + 1].getLexeme() == "("))
                 {
 
-                    functionCall fc = new functionCall(tokens[i]);
+                    functionCallCounter fc = new functionCallCounter(tokens[i]);
                     tokens[i] = fc;
                     for (int q = 0; q < holeCodeTokens.Count; q++)
                         if (holeCodeTokens[q].id == tokens[i].id)

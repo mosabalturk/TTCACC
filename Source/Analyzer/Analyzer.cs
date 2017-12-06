@@ -354,7 +354,6 @@ namespace Analyzer {
             string sToken = "";
             bool flag = true;
             txt += " ";
-            int idCounter = 0;
             while (txtIndex != txt.Length)
             {
                 //System.Windows.Forms.MessageBox.Show(txt[txtIndex].ToString());

@@ -7,7 +7,6 @@ namespace Analyzer
 {
     public partial class Form1 : Form
     {
-        int gg = 1;
         public Form1()
         {
             InitializeComponent();
@@ -27,7 +26,7 @@ namespace Analyzer
             foreach (cppFile cd in Program.cppFiles)
             {
                 tz += "file name: " + cd.code.filename + "<br/>";
-                foreach (token t in cd.code.getAllTokens())
+                foreach (token t in cd.holeCodeTokens)
                 {
                     //richTextBox1.Text += "< " + t.getType() + " , " + t.getLexeme() + " >";
                     tz += t.id.ToString() + " " + t.getType() + " ," + t.getLexeme() + ",<br/>";
@@ -129,13 +128,15 @@ namespace Analyzer
 
         private void structsbtn_Click(object sender, EventArgs e)
         {
-            //richTextBox2.Text = "structs:\n";
-            //foreach (code cd in Program.codes)
-            //{
-            //    richTextBox2.Text += cd.filename + "\n-----\n";
-            //    foreach (code clas in cd.Allstructs)
-            //        richTextBox2.Text += "struct name:" + clas.filename + "\ntypedef name:" + clas.typedefName + "\nbody :\n" + clas.codeAsStr + "\n--------------\n--------------\n";
-            //}
+            richTextBox2.Text = "";
+            foreach (cppFile cd in Program.cppFiles)
+            {
+                if (cd.result.ERROR)
+                {
+                    richTextBox2.Text += cd.result.errormsg + "\n";
+                }
+            }
+
 
         }
 
@@ -341,7 +342,7 @@ namespace Analyzer
             {
                 code.spitYourClassesLan(cd.code);
                 code.linecounter = 0;
-                File.WriteAllLines(@"C:\Users\Mosab AlTurk\Desktop\TTCACC\Source\spitlantest"+i.ToString()+".txt", code.lines);
+                File.WriteAllLines(@"C:\Users\Mosab AlTurk\Desktop\TTCACC\Source\spitlantest" + i.ToString() + ".txt", code.lines);
             }
         }
 
@@ -360,7 +361,7 @@ namespace Analyzer
         private void button2_Click_2(object sender, EventArgs e)
         {
             foreach (cppFile cd in Program.cppFiles)
-                cd.code.spitYourVariablesLn(cd.code);
+                cd.code.recognizeIdentifiers(cd.code);
         }
 
         private void button8_Click(object sender, EventArgs e)
@@ -373,7 +374,8 @@ namespace Analyzer
             richTextBox2.Text = "";
             foreach (cppFile cd in Program.cppFiles)
             {
-                richTextBox2.Text+= cd.fname+"\n";
+                richTextBox2.Text += cd.name + "\n";
+                richTextBox2.Text += "==================================================================\n";
                 if (cd.result != null)
                 {
                     List<scopeTokenCounter> res = cd.result.operations;
@@ -384,6 +386,7 @@ namespace Analyzer
                         {
                             richTextBox2.Text += t.getLexeme() + " count:" + t.getCount() + "\n";
                         }
+                        richTextBox2.Text += "==================================================================\n";
                     }
                 }
             }
@@ -394,7 +397,9 @@ namespace Analyzer
             richTextBox2.Text = "";
             foreach (cppFile cd in Program.cppFiles)
             {
-                richTextBox2.Text += cd.fname + "\n";
+                richTextBox2.Text += cd.name + "\n";
+                richTextBox2.Text += "==================================================================\n";
+
                 if (cd.result != null)
                 {
                     List<scopeTokenCounter> res = cd.result.values;
@@ -405,6 +410,8 @@ namespace Analyzer
                         {
                             richTextBox2.Text += t.getType() + " count:" + t.getCount() + "\n";
                         }
+                        richTextBox2.Text += "==================================================================\n";
+
                     }
                 }
             }
@@ -415,7 +422,9 @@ namespace Analyzer
             richTextBox2.Text = "";
             foreach (cppFile cd in Program.cppFiles)
             {
-                richTextBox2.Text += cd.fname + "\n";
+                richTextBox2.Text += cd.name + "\n";
+                richTextBox2.Text += "==================================================================\n";
+
                 if (cd.result != null)
                 {
                     List<scopeTokenCounter> res = cd.result.datatypes;
@@ -426,6 +435,8 @@ namespace Analyzer
                         {
                             richTextBox2.Text += t.getLexeme() + " count:" + t.getCount() + "\n";
                         }
+                        richTextBox2.Text += "==================================================================\n";
+
                     }
                 }
             }
@@ -436,7 +447,9 @@ namespace Analyzer
             richTextBox2.Text = "";
             foreach (cppFile cd in Program.cppFiles)
             {
-                richTextBox2.Text += cd.fname + "\n";
+                richTextBox2.Text += cd.name + "\n";
+                richTextBox2.Text += "==================================================================\n";
+
                 if (cd.result != null)
                 {
                     List<scopeTokenCounter> res = cd.result.keyWord;
@@ -447,6 +460,8 @@ namespace Analyzer
                         {
                             richTextBox2.Text += t.getLexeme() + " count:" + t.getCount() + "\n";
                         }
+                        richTextBox2.Text += "==================================================================\n";
+
                     }
                 }
             }
@@ -457,7 +472,9 @@ namespace Analyzer
             richTextBox2.Text = "";
             foreach (cppFile cd in Program.cppFiles)
             {
-                richTextBox2.Text += cd.fname + "\n";
+                richTextBox2.Text += cd.name + "\n";
+                richTextBox2.Text += "==================================================================\n";
+
                 if (cd.result != null)
                 {
                     List<scopeVarCounter> res = cd.result.vars;
@@ -466,8 +483,10 @@ namespace Analyzer
                         richTextBox2.Text += " containId " + l.containId.ToString() + " scopeId " + l.scopeId.ToString() + "  " + l.scopeName + "\n";
                         foreach (variableCounter t in l.vars)
                         {
-                            richTextBox2.Text +="id: "+ t.id+"   "+ t.getLexeme() + "   count:" + t.getCount() + "\n";
+                            richTextBox2.Text += "id: " + t.id + "   " + t.getLexeme() + "   count:" + t.getCount() + "\n";
                         }
+                        richTextBox2.Text += "==================================================================\n";
+
                     }
                 }
             }
@@ -478,17 +497,21 @@ namespace Analyzer
             richTextBox2.Text = "";
             foreach (cppFile cd in Program.cppFiles)
             {
-                richTextBox2.Text += cd.fname + "\n";
+                richTextBox2.Text += cd.name + "\n";
+                richTextBox2.Text += "==================================================================\n";
+
                 if (cd.result != null)
                 {
                     List<scopeArrayCounter> res = cd.result.arrays;
                     foreach (scopeArrayCounter l in res)
                     {
-                        richTextBox2.Text += " containId " + l.containId.ToString() + " scopeId " + l.scopeId.ToString() +"  " + l.scopeName + "\n";
+                        richTextBox2.Text += " containId " + l.containId.ToString() + " scopeId " + l.scopeId.ToString() + "  " + l.scopeName + "\n";
                         foreach (arrayCounter t in l.arrayCounter)
                         {
                             richTextBox2.Text += t.getLexeme() + " count:" + t.getCount() + "\n";
                         }
+                        richTextBox2.Text += "==================================================================\n";
+
                     }
                 }
             }
@@ -500,17 +523,21 @@ namespace Analyzer
             richTextBox2.Text = "";
             foreach (cppFile cd in Program.cppFiles)
             {
-                richTextBox2.Text += cd.fname + "\n";
+                richTextBox2.Text += cd.name + "\n";
+                richTextBox2.Text += "==================================================================\n";
+
                 if (cd.result != null)
                 {
                     List<scopePointersCounter> res = cd.result.pointrs;
                     foreach (scopePointersCounter l in res)
                     {
-                        richTextBox2.Text += " containId " + l.containId.ToString() + " scopeId " + l.scopeId.ToString() +"  "+l.scopeName+ "\n";
+                        richTextBox2.Text += " containId " + l.containId.ToString() + " scopeId " + l.scopeId.ToString() + "  " + l.scopeName + "\n";
                         foreach (pointerCounter t in l.pointerCounter)
                         {
-                            richTextBox2.Text +="id: "+t.id.ToString()+" lexeme: "+ t.getLexeme() + " type:" + t.getType() + " pointer level :" + t.pointerLevel+ " count:" + t.getCount() + "\n";
+                            richTextBox2.Text += "id: " + t.id.ToString() + " lexeme: " + t.getLexeme() + " type:" + t.getType() + " pointer level :" + t.pointerLevel + " count:" + t.getCount() + "\n";
                         }
+                        richTextBox2.Text += "==================================================================\n";
+
                     }
                 }
             }
@@ -524,18 +551,23 @@ namespace Analyzer
             richTextBox2.Text = "";
             foreach (cppFile cd in Program.cppFiles)
             {
-                richTextBox2.Text += cd.fname + "\n";
+                richTextBox2.Text += cd.name + "\n";
+                richTextBox2.Text += "==================================================================\n";
+
                 if (cd.result != null)
                 {
                     List<scopefunctionCallCounter> res = cd.result.functionCalls;
                     foreach (scopefunctionCallCounter l in res)
                     {
                         richTextBox2.Text += " containId " + l.containId.ToString() + " scopeId " + l.scopeId.ToString() + "  " + l.scopeName + "\n";
-                        foreach (functionCall t in l.functionCalls)
+                        foreach (functionCallCounter t in l.functionCalls)
                         {
                             richTextBox2.Text += t.getLexeme() + " count:" + t.getCount() + "\n";
                         }
+                        richTextBox2.Text += "==================================================================\n";
+
                     }
+
                 }
             }
         }
@@ -545,7 +577,7 @@ namespace Analyzer
             richTextBox2.Text = "";
             foreach (cppFile cd in Program.cppFiles)
             {
-                richTextBox2.Text += cd.fname + "\n";
+                richTextBox2.Text += cd.name + "\n";
                 if (cd.result != null)
                 {
                     List<scopeTokenCounter> res = cd.result.specialChar;
@@ -554,7 +586,7 @@ namespace Analyzer
                         richTextBox2.Text += " containId " + l.containId.ToString() + " scopeId " + l.scopeId.ToString() + "  " + l.scopeName + "\n";
                         foreach (tokenCounter t in l.counter)
                         {
-                            richTextBox2.Text += "id: " + t.id.ToString() + " lexeme: " + t.getLexeme() + " type:" + t.getType() +  " count:" + t.getCount() + "\n";
+                            richTextBox2.Text += "id: " + t.id.ToString() + " lexeme: " + t.getLexeme() + " type:" + t.getType() + " count:" + t.getCount() + "\n";
                         }
                     }
                 }
@@ -575,7 +607,51 @@ namespace Analyzer
                 }
             }
             webBrowser1.DocumentText = tz;
-        }
-    }
 
+
+        }
+
+        private void magicSauceIt_Click(object sender, EventArgs e)
+        {
+            richTextBox2.Text = "";
+            Comparison.CompareCppFiles(Program.cppFiles);
+            //richTextBox2.Text += Comparison.StaticComparisonTable.Count.ToString();
+            //richTextBox2.Text = Comparison.StaticComparisonTable.Count.ToString() + "\n";
+            //foreach (ComparisonTable CTRow in Comparison.StaticComparisonTable)
+            //{
+            //    richTextBox2.Text += CTRow.GetFirstFileName() + "\nScope ID: " + CTRow.GetFirstScopeId() + "\n" + CTRow.GetSecondFileName() + "\nScope ID: " + CTRow.GetSecondScopeId() + "\n" + CTRow.GetCongruentTokenCounter().getType() + ": " + CTRow.GetCongruentTokenCounter().getLexeme() + "(" + CTRow.GetCongruentTokenCounter().getCount() + " times)\n============================\n";
+            //}
+            //foreach (ComparisonTable CTRow in Comparison.StaticComparisonTable)
+            //{
+            //    if (CTRow.GetCongruentTokenCounter() != null)
+            //    {
+            //        richTextBox2.Text += "Scope ID: " + CTRow.GetFirstScopeId() + "\nScope ID: " + CTRow.GetSecondScopeId() + "\n" + CTRow.GetCongruentTokenCounter().getType() + ": " + CTRow.GetCongruentTokenCounter().getLexeme() + "(" + CTRow.GetCongruentTokenCounter().getCount() + " times)\n============================\n";
+            //    }
+            //    else if (CTRow.GetCongruentPointerCounter() != null)
+            //    {
+            //        richTextBox2.Text += "Scope ID: " + CTRow.GetFirstScopeId() + "\nScope ID: " + CTRow.GetSecondScopeId() + "\n" + CTRow.GetCongruentPointerCounter().getType() + ": " + CTRow.GetCongruentPointerCounter().getLexeme() + "(" + CTRow.GetCongruentPointerCounter().getCount() + " times)\n============================\n";
+            //    }
+            //    else if (CTRow.GetCongruentArrayCounter() != null)
+            //    {
+            //        richTextBox2.Text += "Scope ID: " + CTRow.GetFirstScopeId() + "\nScope ID: " + CTRow.GetSecondScopeId() + "\n" + CTRow.GetCongruentArrayCounter().getType() + ": " + CTRow.GetCongruentArrayCounter().getLexeme() + "(" + CTRow.GetCongruentArrayCounter().getCount() + " times)\n============================\n";
+            //    }
+            //    //else if (CTRow.GetCongruentVariableCounter() != null)
+            //    //{
+            //    //    richTextBox2.Text += "Scope ID: " + CTRow.GetFirstScopeId() + "\nScope ID: " + CTRow.GetSecondScopeId() + "\n" + CTRow.GetCongruentVariableCounter().getType() + ": " + CTRow.GetCongruentVariableCounter().getLexeme() + "(" + CTRow.GetCongruentVariableCounter().getCount() + " times)\n============================\n";
+            //    //}
+            //    else
+            //    {
+            //        richTextBox2.Text += "Scope ID: " + CTRow.GetFirstScopeId() + "\nScope ID: " + CTRow.GetSecondScopeId() + "\n" + CTRow.GetCongruentFunctionCallCounterCounter().getType() + ": " + CTRow.GetCongruentFunctionCallCounterCounter().getLexeme() + "(" + CTRow.GetCongruentFunctionCallCounterCounter().getCount() + " times)\n============================\n";
+            //    }
+            //}
+            ////////////////////////////////////////////////////////////////////////////////
+            Comparison.StaticTemp.Sort((x, y) => x.comparisonResult.CompareTo(y.comparisonResult));
+            foreach (Temp t in Comparison.StaticTemp)
+            {
+                richTextBox2.Text += t.fn1 + "\n" + t.fn2 + "\n" + t.comparisonResult.ToString() + "\n============================\n\n";
+            }
+            ////////////////////////////////////////////////////////////////////////////////
+        }
+
+    }
 }

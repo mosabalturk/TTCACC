@@ -9,12 +9,12 @@ namespace Analyzer
     {
 
 
-        public result result { get; set; }
-
+        public result result = new result();
+        int commentLines=0, commentLetters=0;
         public code code { set; get; }
         public List<token> holeCodeTokens;//done
         private string cStr;//done
-        public string fname;//done
+        public string name;//done
         private List<token> defines = new List<token>();
         //# define varName value
         // define.type = value of define 
@@ -22,32 +22,69 @@ namespace Analyzer
         private List<string> libraries = new List<string>();//done
         public List<string> getLibraries { get { return libraries; } }
         public List<token> getDefines { get { return defines; } }//ساويه من نوع ايدنتيفير
-        
+        public string RemoveCommentsAndSpaces(string value)
+        {
+            if (String.IsNullOrEmpty(value))
+            {
+                return value;
+            }
+            string lineSeparator = ((char)0x2028).ToString();
+            string paragraphSeparator = ((char)0x2029).ToString();
+            value = deleteBetween(value, "//", "\n");
+            string temp = value.Replace("  ", " ").Replace("} ;", "};").Replace("\r\n", " ").Replace("\n", " ").Replace("\t", " ").Replace("\r", " ").Replace(lineSeparator, " ").Replace(paragraphSeparator, " ");
+
+            if (value == temp)
+                return value.Replace("  ", " ").Replace("} ;", "};").Replace("\r\n", " ").Replace("\n", " ").Replace("\t", " ").Replace("\r", " ").Replace(lineSeparator, " ").Replace(paragraphSeparator, " ");
+            else return RemoveCommentsAndSpaces(temp);
+        }
+        public string deleteBetween(string strSource, string strStart, string strEnd)
+        {
+            int Start, End;
+            int strlength = strSource.Length;
+
+            if (strSource.Contains(strStart) && strSource.Contains(strEnd))
+            {
+                Start = strSource.IndexOf(strStart, 0);
+                End = strSource.IndexOf(strEnd, Start + strStart.Length) + strEnd.Length;
+                if (End == 0)//I added this if statment to delete comment lin if it was the last line in the code
+                    End = strlength;//you can delete this if  statement but it will make error if the fuction found start variable and didnt find the End
+                string get = strSource.Substring(Start, End - Start);
+                commentLetters += get.Length;
+                string result = strSource.Replace(get, " ");
+                if (strSource == result)
+                    return result;
+                else { this.commentLines++; return deleteBetween(result, strStart, strEnd); }
+            }
+            else
+            {
+                return strSource;
+            }
+        }
         public cppFile(string codestr, string filename)
         {
-            codestr = Program.RemoveCommentsAndSpaces(codestr);//delete comments
-
+            codestr = RemoveCommentsAndSpaces(codestr);//delete comments
             this.cStr = codestr;//add hole code to cStr string
-
-            this.fname = filename;//filename or class or struct name
-
+            this.name = filename;//filename or class or struct name
             Analyzer temp = new Analyzer(); // anlyzer class is the class that analyze code to tokens and lexemes
-
             holeCodeTokens = temp.Result2(codestr);//analyze code to tokens and lexemes to this list
-
-            findLibrariesAndDefines();
-
-            pointersArraysAnalzer();
-
-            code = new code(codestr, filename, ++code.idno, holeCodeTokens,  this,"GS");
-            
-            code.spitYourVariablesLn(code);
-            code.countAllSubScopes(code);
+            try
+            {
+                findLibrariesAndDefines();
+                pointersArraysAnalzer();
+                code = new code(codestr, filename, ++code.idno, holeCodeTokens,  this,"GS");
+            }
+            catch (Exception e)
+            { result.ERROR = true; result.errormsg = e.ToString(); }
+            try
+            {
+                code.recognizeIdentifiers(code);
+            }
+            catch (Exception e)
+            { result.ERROR = true; result.errormsg = e.ToString(); }
+            code.countAllScopes(code);
             setResults(code);
             token.zeroIdCounter();
-            code.zeroStatics();
-        }
-        
+        }        
         public void findLibrariesAndDefines()
         {
             if (holeCodeTokens != null)
@@ -85,7 +122,7 @@ namespace Analyzer
             {
 
                 bool structPtr = i > 1 ? ((holeCodeTokens[i - 1].getLexeme() == "struct") && (holeCodeTokens[i].isIdentifierTokenObject()) && (holeCodeTokens[i + 1].getLexeme() == "*")) : (false);
-                if ((holeCodeTokens[i].isDatatype() || (structPtr)) && holeCodeTokens[i + 1].getLexeme() == "*")
+                if ((holeCodeTokens[i].isDatatype()|| holeCodeTokens[i].getLexeme()=="," || (structPtr)) && holeCodeTokens[i + 1].getLexeme() == "*")
                 {
                     int k = 0;//  * counter
                     int j = i; //  i is data type index
@@ -95,7 +132,15 @@ namespace Analyzer
                     if (holeCodeTokens[j].isIdentifierTokenObject())
                     {// modifiye porpreties of identifier
                         pointer p = new pointer(holeCodeTokens[j], k);
-                        p.dataType = holeCodeTokens[i];
+                        if (holeCodeTokens[i].isDatatype())
+                            p.dataType = holeCodeTokens[i];
+                        else if (holeCodeTokens[i].getLexeme() == ",")
+                        {
+                            int kk = i ;
+                            while ((i > 0) && (!holeCodeTokens[kk].isDatatype()))
+                                kk--;
+                            p.dataType = holeCodeTokens[kk];
+                        }
                         holeCodeTokens[j] = p;
                     }
                     i++;
@@ -191,12 +236,10 @@ namespace Analyzer
             // and the result will be 
             // setup_duration = values 
             // setup_duration = values
-        }
-
-        
+        }        
         public void setResults( code t)
         {
-            result = new result();
+            
             result.keyWord = t.keywordsLL1(t);
             result.operations = t.operatorsLL1(t);
             result.datatypes = t.datatypesLL1(t);
@@ -207,10 +250,10 @@ namespace Analyzer
             result.libraries = libraries;
             result.specialChar = t.specialCharList(t);
             result.functionCalls = t.funcCalls(t);
-
+            result.commentLetters = commentLetters;
+            result.commentLines = commentLines;
             code.zeroStatics();
         }
-
     }
 
 }

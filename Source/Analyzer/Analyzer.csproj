@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Analyzer.cs" />
     <Compile Include="code.cs" />
+    <Compile Include="Comparison.cs" />
     <Compile Include="cppFile.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>

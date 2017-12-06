@@ -15,6 +15,8 @@ namespace Analyzer
         private string cStr;//done
         private string name;//done
         public static int idno = 0;
+        bool error;
+        string errormsg = "";
         public int ScopeId;
         public int containingScopeId;
         public List<code> classes = new List<code>();//done
@@ -25,7 +27,6 @@ namespace Analyzer
         public List<code> Allclasses { get { return classes; } }
         public static List<token> holeCodeTokens;
         List<token> globalScobeTokens;//no
-        List<token> thisCodeToken;//done
         private List<function> func_prototypes = new List<function>();//done
         private List<code> structes = new List<code>();//done
 
@@ -53,7 +54,7 @@ namespace Analyzer
         {
             AlltypdefNames = new List<string>();
             AllstructesClassesNames = new List<string>();
-            idno = 0;
+            code.idno = 0;
             scopeTokenCounterList1 = new List<scopeTokenCounter>();
             scopeTokenCounterList2 = new List<scopeTokenCounter>();
             scopeTokenCounterList3 = new List<scopeTokenCounter>();
@@ -67,7 +68,6 @@ namespace Analyzer
         }
         public string typedefName { get; set; }
 
-        public List<token> getAllTokens() { return thisCodeToken; }
         public List<token> getGSTokens() { return globalScobeTokens; }
         public string codeAsStr { get { return cStr; } set { cStr = value; } }
         public string filename { get { return name; } set { name = value; } }
@@ -137,7 +137,7 @@ namespace Analyzer
                 c.upperLevelArray = this.thisScopeArray.Concat(thisScopeArray).ToList(); 
             }
         }
-        public code(string codestr, string filename,int containingScopeId, List<token> thisCodeToken, cppFile cppfile,string type)
+        public code(string codestr, string filename,int containingScopeId, List<token> globalScobeTokens, cppFile cppfile,string type)
         {
             this.cppfile = cppfile;
             this.ScopeId = idno++;
@@ -145,18 +145,18 @@ namespace Analyzer
 
             this.type = type;
 
-            this.thisCodeToken = thisCodeToken;
+            this.globalScobeTokens = globalScobeTokens;
             holeCodeTokens = cppfile.holeCodeTokens;
 
 
-            codestr = Program.RemoveCommentsAndSpaces(codestr);//delete comments
+
 
             this.cStr = codestr;//add hole code to cStr string
 
             this.name = filename;//filename or class or struct name
 
             Analyzer temp = new Analyzer(); // anlyzer class is the class that analyze code to tokens and lexemes
-            globalScobeTokens = new List<token>(this.thisCodeToken); // copy allCodeTokens list
+           // globalScobeTokens = new List<token>(this.thisCodeToken); // copy allCodeTokens list
 
             findClassesAndStructs();
             
@@ -167,26 +167,31 @@ namespace Analyzer
         }
         public void count()//this functions fills counter lists  that exist in counter lists region
         {
-            foreach (token t in globalScobeTokens)
+            for(int ii=0;ii<globalScobeTokens.Count;ii++)
             {
-                if (t.getType()== "library")
+                if (globalScobeTokens[ii].getType() == "library")
                 { }
-                else if (t.isOperation())
-                    tokenCounter.AddOneByLexeme(t, operationsCounterGS);
-                else if (t.isKeyword())
-                { tokenCounter.AddOneByLexeme(t, KeyWordsCounterGS); }
-                else if (t.isDatatype())
-                    tokenCounter.AddOneByLexeme(t, dataTypesCounterGS);
-                else if (t.isValue())
-                    tokenCounter.AddOneValueByDataType(t, valuesCounterGS);
-                else if (t.isIdentifierObject())
-                    variableCounter.AddOneByToken((identifier)t, variablesCounterGS);
-                else if (t.isPointer)
-                    pointerCounter.AddOneByToken((pointer)t, pointersCounterGS);
-                else if (t.isArray)
-                    arrayCounter.AddOneByToken((array)t, arraysCounterGS);
+                else if (globalScobeTokens[ii].isOperation())
+                    tokenCounter.AddOneByLexeme(globalScobeTokens[ii], operationsCounterGS);
+                else if (globalScobeTokens[ii].isKeyword())
+                { tokenCounter.AddOneByLexeme(globalScobeTokens[ii], KeyWordsCounterGS); }
+                else if (globalScobeTokens[ii].isDatatype())
+                    tokenCounter.AddOneByLexeme(globalScobeTokens[ii], dataTypesCounterGS);
+                else if (globalScobeTokens[ii].isValue())
+                    tokenCounter.AddOneValueByDataType(globalScobeTokens[ii], valuesCounterGS);
+                else if (globalScobeTokens[ii].isIdentifierObject())
+                {
+                    variableCounter.AddOneByToken(globalScobeTokens[ii], variablesCounterGS);
+                    if((ii>0)&&((globalScobeTokens[ii-1].getLexeme()==",")||(globalScobeTokens[ii - 1].isDatatype()))&& (!globalScobeTokens[ii + 1].isOperation()))
+                        variablesCounterGS[variablesCounterGS.Count-1].decCount();// we want count to be zero at initilization unless there is assignment afetr it like int b = 5; or init a, b=10,c;  a and c count equal zero but b count is 1
+
+                }
+                else if (globalScobeTokens[ii].isPointer)
+                    pointerCounter.AddOneByToken((pointer)globalScobeTokens[ii], pointersCounterGS);
+                else if (globalScobeTokens[ii].isArray)
+                    arrayCounter.AddOneByToken((array)globalScobeTokens[ii], arraysCounterGS);
                 else
-                    tokenCounter.AddOneByLexeme(t, specialCharGS);
+                    tokenCounter.AddOneByLexeme(globalScobeTokens[ii], specialCharGS);
             }
         } 
         public static void  structAsDatatype(List<token> result) // in case like "struct struct_name object_name" the function merge struct struct_name into one token and set type of this token as datatype
@@ -221,10 +226,6 @@ namespace Analyzer
         public void findIdentifiers() // 1- recognize varibles and  change their tokens to variable and set data type if exists then if this variable repeated set the token object into same one that first time defined
         {
             structAsDatatype(this.globalScobeTokens);
-            //string s = "";
-            //foreach (token t in globalScobeTokens)
-            //    s += t.getLexeme() + " ";
-            //System.Windows.Forms.MessageBox.Show(s);
             for (int i = 0; i < globalScobeTokens.Count; i++)
             {
                 bool pointer = upperLevelPointers.Concat(thisScopePointers).ToList().Select(a => a.getLexeme()).ToList().Contains(globalScobeTokens[i].getLexeme());
@@ -234,17 +235,26 @@ namespace Analyzer
                 {
                     identifier id;
 
-                    if ((i > 0) && globalScobeTokens[i].isIdentifierTokenObject() && (globalScobeTokens[i - 1].isDatatype()))
+                    if ((i > 0) && globalScobeTokens[i].isIdentifierTokenObject() && ((globalScobeTokens[i - 1].isDatatype()|| globalScobeTokens[i - 1].getLexeme()==",")))
                     {
 
                         id = new identifier(globalScobeTokens[i]);
                         if ((i > 0) && (globalScobeTokens[i - 1].isDatatype()))
                             id.dataType = globalScobeTokens[i - 1];
+                        else if (globalScobeTokens[i - 1].getLexeme() == ",")
+                        {
+                            int k = i-1;
+                            while ((k > 0) && (!globalScobeTokens[k].isDatatype()))
+                                k--;
+                            if (k == 0)
+                                break;
+                            id.dataType = globalScobeTokens[k];
+                        }
                         thisScopeVars.Add(id);
 
-                        for (int q = 0; q < thisCodeToken.Count; q++)
-                            if (thisCodeToken[q].id == globalScobeTokens[i].id)
-                                thisCodeToken[q] = id;
+                        //for (int q = 0; q < thisCodeToken.Count; q++)
+                        //    if (thisCodeToken[q].id == globalScobeTokens[i].id)
+                        //        thisCodeToken[q] = id;
 
                         for (int q = 0; (holeCodeTokens != null) && (q < holeCodeTokens.Count); q++)
                             if (holeCodeTokens[q].id == globalScobeTokens[i].id)
@@ -256,9 +266,9 @@ namespace Analyzer
                     {
                         id = thisScopeVars.Find(a => a.getLexeme() == globalScobeTokens[i].getLexeme());
 
-                        for (int q = 0; q < thisCodeToken.Count; q++)
-                            if (thisCodeToken[q].id == globalScobeTokens[i].id)
-                                thisCodeToken[q] = id;
+                        //for (int q = 0; q < thisCodeToken.Count; q++)
+                        //    if (thisCodeToken[q].id == globalScobeTokens[i].id)
+                        //        thisCodeToken[q] = id;
                         for (int q = 0; (holeCodeTokens != null) && (q < holeCodeTokens.Count); q++)
                             if (holeCodeTokens[q].id == globalScobeTokens[i].id)
                                 holeCodeTokens[q] = id;
@@ -267,9 +277,9 @@ namespace Analyzer
                     else if (upperLevelVar.Select(a => a.getLexeme()).ToList().Contains(globalScobeTokens[i].getLexeme()))
                     {
                         id = upperLevelVar.Find(a => a.getLexeme() == globalScobeTokens[i].getLexeme());
-                        for (int q = 0; q < thisCodeToken.Count; q++)
-                            if (thisCodeToken[q].id == globalScobeTokens[i].id)
-                                thisCodeToken[q] = id;
+                        //for (int q = 0; q < thisCodeToken.Count; q++)
+                        //    if (thisCodeToken[q].id == globalScobeTokens[i].id)
+                        //        thisCodeToken[q] = id;
                         for (int q = 0; (holeCodeTokens != null) && (q < holeCodeTokens.Count); q++)
                             if (holeCodeTokens[q].id == globalScobeTokens[i].id)
                                 holeCodeTokens[q] = id;
@@ -282,9 +292,9 @@ namespace Analyzer
                         if ((i > 0) && (globalScobeTokens[i - 1].isDatatype()))
                             id.dataType = globalScobeTokens[i - 1];
                         thisScopeVars.Add(id);
-                        for (int q = 0; q < thisCodeToken.Count; q++)
-                            if (thisCodeToken[q].id == globalScobeTokens[i].id)
-                                thisCodeToken[q] = id;
+                        //for (int q = 0; q < thisCodeToken.Count; q++)
+                        //    if (thisCodeToken[q].id == globalScobeTokens[i].id)
+                        //        thisCodeToken[q] = id;
                         for (int q = 0; (q < holeCodeTokens.Count) && (holeCodeTokens != null); q++)
                             if (holeCodeTokens[q].id == globalScobeTokens[i].id)
                                 holeCodeTokens[q] = id;
@@ -513,11 +523,11 @@ namespace Analyzer
                     {
                         string funcBody = "";
                         List<token> funcTokens = new List<token>();
-                        while (globalScobeTokens[j].getLexeme() != "{")
+                        while ((j< globalScobeTokens.Count-1) &&(globalScobeTokens[j].getLexeme() != "{"))
                             j++;
-                        remove.Add(globalScobeTokens[j]);
+                            remove.Add(globalScobeTokens[j]);
                         j++;
-                        while ((globalScobeTokens[j].getLexeme() != "}") || (parentheses != 0))
+                        while ((((j < globalScobeTokens.Count))&&(globalScobeTokens[j].getLexeme() != "}") || (parentheses != 0)))
                         {
 
                             funcBody += globalScobeTokens[j].getLexeme() + " ";
@@ -528,7 +538,14 @@ namespace Analyzer
                             if (globalScobeTokens[j].getLexeme() == "}")
                                 parentheses--;
                             j++;
+                            if ((j >= globalScobeTokens.Count-2) && (globalScobeTokens[j].getLexeme() != "}"))
+                            {
+                                error = true;
+                                errormsg += "paratheses Errom between "+i.ToString()+"  "+j.ToString()+"  lines\n";
+                                break; }
                         }
+                        if (error)
+                            break;
                         remove.Add(globalScobeTokens[j]);
                         i = j - 1;
                         functions.Add(new function(funcBody, this.ScopeId, ref funcTokens, parameters, datatype, funcName, cppfile));
@@ -547,56 +564,57 @@ namespace Analyzer
 
         public void findClassesAndStructs()
         {
-            for (int i = 0; i < thisCodeToken.Count - 2; i++)
+            List<token> remove = new List<token>();
+            for (int i = 0; i < globalScobeTokens.Count - 2; i++)
             {
                 int parentheses = 0;
                 List<token> parameters = new List<token>();
-                bool id = thisCodeToken[i + 1].isPointer || thisCodeToken[i + 1].isArray || thisCodeToken[i + 1].isIdentifierTokenObject() || thisCodeToken[i + 1].isIdentifierTokenObject();
-                bool Isclass = (thisCodeToken[i].getLexeme() == "class") && (id) && (thisCodeToken[i + 2].getLexeme() == "{");
-                bool Isstruct = (thisCodeToken[i].getLexeme() == "struct") && (id) && (thisCodeToken[i + 2].getLexeme() == "{");
+                bool id = globalScobeTokens[i + 1].isPointer || globalScobeTokens[i + 1].isArray || globalScobeTokens[i + 1].isIdentifierTokenObject() || globalScobeTokens[i + 1].isIdentifierTokenObject();
+                bool Isclass = (globalScobeTokens[i].getLexeme() == "class") && (id) && (globalScobeTokens[i + 2].getLexeme() == "{");
+                bool Isstruct = (globalScobeTokens[i].getLexeme() == "struct") && (id) && (globalScobeTokens[i + 2].getLexeme() == "{");
 
-                bool typedefStruct = (thisCodeToken[i].getLexeme() == "typedef") && (thisCodeToken[i + 1].getLexeme() == "struct") && (thisCodeToken[i + 2].getLexeme() == "{");
-                bool typedefStructName = i > 0 ? (thisCodeToken[i - 1].getLexeme() == "typedef") && (thisCodeToken[i].getLexeme() == "struct") && (id) && (thisCodeToken[i + 2].getLexeme() == "{") : false;
+                bool typedefStruct = (globalScobeTokens[i].getLexeme() == "typedef") && (globalScobeTokens[i + 1].getLexeme() == "struct") && (globalScobeTokens[i + 2].getLexeme() == "{");
+                bool typedefStructName = i > 0 ? (globalScobeTokens[i - 1].getLexeme() == "typedef") && (globalScobeTokens[i].getLexeme() == "struct") && (id) && (globalScobeTokens[i + 2].getLexeme() == "{") : false;
                 if (typedefStructName)
-                    globalScobeTokens.Remove(thisCodeToken[i - 1]);
+                    remove.Add(globalScobeTokens[i - 1]);
                 if (Isclass || Isstruct || typedefStruct)
                 {
-                    globalScobeTokens.Remove(thisCodeToken[i]);
-                    globalScobeTokens.Remove(thisCodeToken[i + 1]);
-                    globalScobeTokens.Remove(thisCodeToken[i + 2]);
-                    string Name = thisCodeToken[i + 1].getLexeme();//it will change for typedefStruct down
+                    remove.Add(globalScobeTokens[i]);
+                    remove.Add(globalScobeTokens[i + 1]);
+                    remove.Add(globalScobeTokens[i + 2]);
+                    string Name = globalScobeTokens[i + 1].getLexeme();//it will change for typedefStruct down
                     i += 3;
                     string Body = "";
                     List<token> Tokens = new List<token>();
                     int kk = i;
-                    while ((thisCodeToken[i].getLexeme() != "}") || (parentheses != 0))
+                    while ((globalScobeTokens[i].getLexeme() != "}") || (parentheses != 0))
                     {
-                        Body += thisCodeToken[i].getLexeme() + " ";
-                        Tokens.Add(thisCodeToken[i]);
-                        globalScobeTokens.Remove(thisCodeToken[i]);
-                        if (thisCodeToken[i].getLexeme() == "{")
+                        Body += globalScobeTokens[i].getLexeme() + " ";
+                        Tokens.Add(globalScobeTokens[i]);
+                        remove.Add(globalScobeTokens[i]);
+                        if (globalScobeTokens[i].getLexeme() == "{")
                             parentheses++;
-                        if (thisCodeToken[i].getLexeme() == "}")
+                        if (globalScobeTokens[i].getLexeme() == "}")
                             parentheses--;
                         i++;
                     }
                     //now i reffer to }
-                    globalScobeTokens.Remove(thisCodeToken[i]);
+                    remove.Add(globalScobeTokens[i]);
                     if (Isclass)
                     {
 
                         classes.Add(new code(Body, Name, this.ScopeId, Tokens, cppfile, "class"));
                         AllstructesClassesNames.Add(Name);
-                        globalScobeTokens.Remove(thisCodeToken[++i]);
+                        remove.Add(globalScobeTokens[++i]);
                     }
                     else if (typedefStruct)
                     {
-                        if ((thisCodeToken[++i].isIdentifierTokenObject()) && (typedefStruct))
+                        if ((globalScobeTokens[++i].isIdentifierTokenObject()) && (typedefStruct))
                         {
-                            Name = thisCodeToken[i].getLexeme();
+                            Name = globalScobeTokens[i].getLexeme();
                         }
-                        globalScobeTokens.Remove(thisCodeToken[i]);
-                        globalScobeTokens.Remove(thisCodeToken[++i]);
+                        remove.Add(globalScobeTokens[i]);
+                        remove.Add(globalScobeTokens[++i]);
                         code temp = new code(Body, Name, this.ScopeId, Tokens, cppfile, "struct");
                         AllstructesClassesNames.Add(Name);
 
@@ -609,26 +627,29 @@ namespace Analyzer
                         AllstructesClassesNames.Add(Name);
                         structes.Add(temp);
                         if (!typedefStructName)
-                            while (thisCodeToken[++i].isIdentifierTokenObject())
+                            while (globalScobeTokens[++i].isIdentifierTokenObject())
                             {
-                                structObjects.Add(new token(thisCodeToken[i].getLexeme(), "object"));
-                                globalScobeTokens.Remove(thisCodeToken[i]);
+                                structObjects.Add(new token(globalScobeTokens[i].getLexeme(), "object"));
+                                remove.Add(globalScobeTokens[i]);
                             }
                         else
                         {
-                            if (thisCodeToken[++i].isIdentifierTokenObject())
+                            if (globalScobeTokens[++i].isIdentifierTokenObject())
                             {
-                                temp.typedefName = thisCodeToken[i].getLexeme();
+                                temp.typedefName = globalScobeTokens[i].getLexeme();
                                 AlltypdefNames.Add(Name);
-                                globalScobeTokens.Remove(thisCodeToken[i++]);//i++ not ++i they are different ! MUS
+                                remove.Add(globalScobeTokens[i++]);//i++ not ++i they are different ! MUS
                             }
                         }
-                        globalScobeTokens.Remove(thisCodeToken[i]);
+                        remove.Add(globalScobeTokens[i]);
                     }
 
                 }
             }
-        }
+            foreach (token t in remove)
+            {
+                globalScobeTokens.Remove(t);
+            } }
 
         #endregion
 
@@ -645,12 +666,12 @@ namespace Analyzer
         }
         public static void spitAllSnames(code something)
         {
-            string s= something.filename+ "\n ScopeId " + something.ScopeId.ToString()+ "\n containingScopeId " + something.containingScopeId.ToString();
+            string s= something.filename+ "\n ScopeId " + something.ScopeId.ToString()+ "\n containingScopeId " + something.containingScopeId.ToString()+" type:"+something.type;
             System.Windows.Forms.MessageBox.Show(s);
             s = "";
             foreach (var dodo in something.functions)
             {
-                 s = dodo.funcname + "\n ScopeId " + dodo.ScopeId.ToString() + "\n containingScopeId " + dodo.containingScopeId.ToString();
+                 s = dodo.funcname + "\n ScopeId " + dodo.ScopeId.ToString() + "\n containingScopeId " + dodo.containingScopeId.ToString() + " type: function";
                 System.Windows.Forms.MessageBox.Show(s);
                 s = "";
             }
@@ -664,35 +685,35 @@ namespace Analyzer
             }
 
         }
-        public void spitYourVariablesLn(code something)
+        public void recognizeIdentifiers(code something)
         {
             something.findIdentifiers();
             foreach (function f in something.functions)
                 f.findIdentifiers();
             foreach (var strct in something.Allstructs)
             {
-                    spitYourVariablesLn(strct);
+                    recognizeIdentifiers(strct);
             }
             foreach (var cls in something.classes)
             {
 
-                spitYourVariablesLn(cls);
+                recognizeIdentifiers(cls);
             }
 
         }
-        public void countAllSubScopes(code something)
+        public void countAllScopes(code something)
         {
             something.count();
             foreach (function f in something.functions)
                 f.count();
             foreach (var strct in something.Allstructs)
             {
-                countAllSubScopes(strct);
+                countAllScopes(strct);
             }
             foreach (var cls in something.classes)
             {
 
-                countAllSubScopes(cls);
+                countAllScopes(cls);
             }
 
         }
@@ -730,9 +751,9 @@ namespace Analyzer
 
         public List<scopeTokenCounter> keywordsLL1(code st)
         {
-            scopeTokenCounterList1.Add(new scopeTokenCounter(st.ScopeId, st.containingScopeId, st.name, KeyWordsCounterGS));
+            scopeTokenCounterList1.Add(new scopeTokenCounter(st.ScopeId, st.containingScopeId, st.name, KeyWordsCounterGS,st.type));
             foreach (function f in st.Allfunctions)
-                scopeTokenCounterList1.Add(new scopeTokenCounter(f.ScopeId, f.containingScopeId,f.fname, f.KeyWordsCounter));
+                scopeTokenCounterList1.Add(new scopeTokenCounter(f.ScopeId, f.containingScopeId,f.name, f.KeyWordsCounter, "function"));
             foreach (code cd in st.structes)
             { scopeTokenCounterList1.Concat(cd.keywordsLL1(cd)).ToList(); }
 
@@ -740,9 +761,9 @@ namespace Analyzer
         }
         public List<scopeTokenCounter> operatorsLL1(code st)
         {
-            scopeTokenCounterList2.Add(new scopeTokenCounter(st.ScopeId, st.containingScopeId, st.name, operationsCounterGS));
+            scopeTokenCounterList2.Add(new scopeTokenCounter(st.ScopeId, st.containingScopeId, st.name, operationsCounterGS, st.type));
             foreach (function f in st.Allfunctions)
-                scopeTokenCounterList2.Add(new scopeTokenCounter(f.ScopeId,f.containingScopeId, f.fname, f.operationsCounter));
+                scopeTokenCounterList2.Add(new scopeTokenCounter(f.ScopeId,f.containingScopeId, f.name, f.operationsCounter,"function"));
             foreach (code cd in st.structes)
             { scopeTokenCounterList2.Concat(cd.operatorsLL1(cd)).ToList(); }
 
@@ -751,9 +772,9 @@ namespace Analyzer
         public List<scopeTokenCounter> datatypesLL1(code st)
         {
 
-            scopeTokenCounterList3.Add(new scopeTokenCounter(st.ScopeId, st.containingScopeId, st.name, dataTypesCounterGS));
+            scopeTokenCounterList3.Add(new scopeTokenCounter(st.ScopeId, st.containingScopeId, st.name, dataTypesCounterGS, st.type));
             foreach (function f in st.Allfunctions)
-                scopeTokenCounterList3.Add(new scopeTokenCounter(f.ScopeId, f.containingScopeId, f.fname, f.dataTypesCounter));
+                scopeTokenCounterList3.Add(new scopeTokenCounter(f.ScopeId, f.containingScopeId, f.name, f.dataTypesCounter, "function"));
             foreach (code cd in st.structes)
             { scopeTokenCounterList3.Concat(cd.datatypesLL1(cd)).ToList(); }
 
@@ -762,9 +783,9 @@ namespace Analyzer
         public List<scopeTokenCounter> ValuesLL1(code st)
         {
 
-            scopeTokenCounterList4.Add(new scopeTokenCounter(st.ScopeId, st.containingScopeId, st.name, valuesCounterGS));
+            scopeTokenCounterList4.Add(new scopeTokenCounter(st.ScopeId, st.containingScopeId, st.name, valuesCounterGS, st.type));
             foreach (function f in st.Allfunctions)
-                scopeTokenCounterList4.Add(new scopeTokenCounter(f.ScopeId, f.containingScopeId, f.fname, f.valuesCounter));
+                scopeTokenCounterList4.Add(new scopeTokenCounter(f.ScopeId, f.containingScopeId, f.name, f.valuesCounter, "function"));
             foreach (code cd in st.structes)
             { scopeTokenCounterList4.Concat(cd.ValuesLL1(cd)).ToList(); }
 
@@ -772,9 +793,9 @@ namespace Analyzer
         }
         public List<scopeTokenCounter> specialCharList(code st)
         {
-            scopeTokenCounterList8.Add(new scopeTokenCounter(st.ScopeId, st.containingScopeId, st.name, specialCharGS));
+            scopeTokenCounterList8.Add(new scopeTokenCounter(st.ScopeId, st.containingScopeId, st.name, specialCharGS, st.type));
             foreach (function f in st.Allfunctions)
-                scopeTokenCounterList8.Add(new scopeTokenCounter(f.ScopeId, f.containingScopeId, f.fname, f.specialChar));
+                scopeTokenCounterList8.Add(new scopeTokenCounter(f.ScopeId, f.containingScopeId, f.name, f.specialChar, "function"));
             foreach (code cd in st.structes)
             { scopeTokenCounterList8.Concat(cd.specialCharList(cd)).ToList(); }
 
@@ -783,9 +804,9 @@ namespace Analyzer
         public List<scopeVarCounter> VarsLL1(code st)
         {
 
-            scopeTokenCounterList5.Add(new scopeVarCounter(st.ScopeId, st.containingScopeId, st.name, variablesCounterGS));
+            scopeTokenCounterList5.Add(new scopeVarCounter(st.ScopeId, st.containingScopeId, st.name, variablesCounterGS, st.type));
             foreach (function f in st.Allfunctions)
-                scopeTokenCounterList5.Add(new scopeVarCounter(f.ScopeId, f.containingScopeId, f.fname, f.variablesCounter));
+                scopeTokenCounterList5.Add(new scopeVarCounter(f.ScopeId, f.containingScopeId, f.name, f.variablesCounter, "function"));
             foreach (code cd in st.structes)
             { scopeTokenCounterList5.Concat(cd.VarsLL1(cd)).ToList(); }
 
@@ -794,9 +815,9 @@ namespace Analyzer
         public List<scopeArrayCounter> ArraysLL1(code st)
         {
 
-            scopeTokenCounterList6.Add(new scopeArrayCounter(st.ScopeId, st.containingScopeId,st.name, arraysCounterGS));
+            scopeTokenCounterList6.Add(new scopeArrayCounter(st.ScopeId, st.containingScopeId,st.name, arraysCounterGS, st.type));
             foreach (function f in st.Allfunctions)
-                scopeTokenCounterList6.Add(new scopeArrayCounter(f.ScopeId, f.containingScopeId, f.fname, f.arraysCounter));
+                scopeTokenCounterList6.Add(new scopeArrayCounter(f.ScopeId, f.containingScopeId, f.name, f.arraysCounter, "function"));
             foreach (code cd in st.structes)
             { scopeTokenCounterList6.Concat(cd.ArraysLL1(cd)).ToList(); }
 
@@ -805,9 +826,9 @@ namespace Analyzer
         public List<scopePointersCounter> pointersLL1(code st)
         {
 
-            scopeTokenCounterList7.Add(new scopePointersCounter(st.ScopeId, st.containingScopeId, st.name,pointersCounterGS));
+            scopeTokenCounterList7.Add(new scopePointersCounter(st.ScopeId, st.containingScopeId, st.name,pointersCounterGS, st.type));
             foreach (function f in st.Allfunctions)
-                scopeTokenCounterList7.Add(new scopePointersCounter(f.ScopeId, f.containingScopeId, f.fname, f.pointersCounter));
+                scopeTokenCounterList7.Add(new scopePointersCounter(f.ScopeId, f.containingScopeId, f.name, f.pointersCounter ,"function"));
             foreach (code cd in st.structes)
             { scopeTokenCounterList7.Concat(cd.pointersLL1(cd)).ToList(); }
 
@@ -817,7 +838,7 @@ namespace Analyzer
         {
 
             foreach (function f in st.Allfunctions)
-                scopeTokenCounterList9.Add(new scopefunctionCallCounter(f.ScopeId, f.containingScopeId, f.fname, f.functionCalls));
+                scopeTokenCounterList9.Add(new scopefunctionCallCounter(f.ScopeId, f.containingScopeId, f.name, f.functionCalls, "function"));
             foreach (code cd in st.structes)
             { scopeTokenCounterList9.Concat(cd.funcCalls(cd)).ToList(); }
 
