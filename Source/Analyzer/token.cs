@@ -35,18 +35,18 @@ namespace Analyzer
             this.lexeme = lexeme;
             this.type = type;
         }
-        public token(int id,string lexeme, string type)
+        public token(int id ,string lexeme, string type)
         {
             this.id = id;
             this.lexeme = lexeme;
             this.type = type;
         }
-        public token(token t)
-        {
-            this.id = t.id;
-            this.lexeme = t.getLexeme();
-            
-        }
+        //public token(token t)
+        //{
+        //    this.id = t.id;
+        //    this.lexeme = t.getLexeme();
+        //    //no set to type because this costructer will be called when declaring new variable or pointer or array so the type will be set there 
+        //}
         public void setLexeme(string lexeme) { this.lexeme = lexeme; }
         public void setType(string type) { this.type = type; }
         public string getType() { return type; }
@@ -99,14 +99,13 @@ namespace Analyzer
         public override bool isIdentifierObject() { return true; }
         public token dataType;
         public override bool isVariable { get { return true; } }
-        public identifier(token t, token dataType) : base(t)
+        public identifier(token t, token dataType,string type = "variable") : base(t.id,t.getLexeme(), type)
         {
             this.dataType = dataType;
-            type = "variable";
         }
-        public identifier(token t) : base(t)
+        public identifier(token t, string type = "variable") : base(t.id, t.getLexeme(), type)
         {
-            type = "variable";
+            this.dataType = new token("", "");
         }
     }
     public class array : identifier
@@ -121,14 +120,13 @@ namespace Analyzer
         {
             this.type = "array";
         }
-        public array(token t) : base(t)
+        public array(token t) : base(t, "array")
         {
-            this.type = "array";
+            this.dataType = new token("", "");
 
         }
-        public array(array a) : base(a, a.dataType)
+        public array(array a) : base(a, a.dataType, "array")
         {
-            this.type = "array";
 
 
         }
@@ -253,7 +251,7 @@ namespace Analyzer
     public class tokenCounter : token
     {
         int count;
-        public tokenCounter(token t) : base(t)
+        public tokenCounter(token t) : base(t.id,t.getLexeme(),t.getType())
         {
             this.count = 1;
             this.type = t.getType();
@@ -299,6 +297,7 @@ namespace Analyzer
     public class functionCallCounter : identifier
     {
         int count;
+        bool declaredFunc;
         public override bool isVariable { get { return false; } }
         public override bool isArray { get { return false; } }
         public override bool isPointer { get { return false; } }
