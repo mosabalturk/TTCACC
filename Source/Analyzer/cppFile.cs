@@ -252,6 +252,10 @@ namespace Analyzer
             result.functionCalls = t.funcCalls(t);
             result.commentLetters = commentLetters;
             result.commentLines = commentLines;
+            result.setOpAll();
+            result.setKWAll();
+            result.setDTAll();
+            result.setValuesAll();
             code.zeroStatics();
         }
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Windows.Forms;
+using static Analyzer.MusComp;
 
 namespace Analyzer
 {
@@ -126,19 +127,6 @@ namespace Analyzer
         //    }
         //}
 
-        private void structsbtn_Click(object sender, EventArgs e)
-        {
-            richTextBox2.Text = "";
-            foreach (cppFile cd in Program.cppFiles)
-            {
-                if (cd.result.ERROR)
-                {
-                    richTextBox2.Text += cd.result.errormsg + "\n";
-                }
-            }
-
-
-        }
 
         //private void button5_Click(object sender, EventArgs e)
         //{
@@ -360,9 +348,60 @@ namespace Analyzer
 
         private void button2_Click_2(object sender, EventArgs e)
         {
+            richTextBox2.Text = "";
             foreach (cppFile cd in Program.cppFiles)
-                cd.code.recognizeIdentifiers(cd.code);
+            {
+                richTextBox2.Text += cd.name + "\n";
+                richTextBox2.Text += "==================================================================\n";
+
+                foreach (var t in cd.result.valuesAllFile)
+                {
+                    richTextBox2.Text += t.getLexeme() + " count:" + t.getCount() + "\n";
+                }
+
+            }
         }
+        //static string BinaryToDec(string input1, string input2)
+        //{
+        //    char[] array1 = input1.ToCharArray();
+        //    char[] array2 = input2.ToCharArray();
+        //    if (array1.Length != array2.Length)
+        //        return null;
+
+        //    // Reverse since 16-8-4-2-1 not 1-2-4-8-16. 
+        //    Array.Reverse(array1);
+        //    Array.Reverse(array2);
+
+        //    /*
+        //     * [0] = 1
+        //     * [1] = 2
+        //     * [2] = 4
+        //     * etc
+        //     */
+        //    string xnor="";
+
+        //    for (int i = 0; i < array1.Length; i++)
+        //    {
+        //        if ((array1[i] == '1')&&(array1[i] == '1'))
+        //        {
+        //            xnor += '1';
+        //        }
+        //        else if ((array1[i] == '0') && (array1[i] == '1'))
+        //        {
+        //            xnor += '0';
+        //        }
+        //        else if((array1[i] == '1') && (array1[i] == '0'))
+        //        {
+        //            xnor += '0';
+        //        }
+        //        else if((array1[i] == '0') && (array1[i] == '0'))
+        //        {
+        //            xnor += '1';
+        //        }
+        //    }
+
+        //    return sum;
+        //}
 
         private void button8_Click(object sender, EventArgs e)
         {
@@ -653,5 +692,97 @@ namespace Analyzer
             ////////////////////////////////////////////////////////////////////////////////
         }
 
+        private void button5_Click(object sender, EventArgs e)
+        {
+        }
+        private void structsbtn_Click(object sender, EventArgs e)
+        {
+            richTextBox2.Text = "";
+            MusComp m = new MusComp();
+            m.CompareCppFiles(Program.cppFiles,1);
+            m.couples.Sort((x, y) => x.similarity.CompareTo(y.similarity));
+            foreach (coupleComp c in m.couples)
+            {
+                richTextBox2.Text += "\n" + c.file1 + "\n" + c.file2 + "\n============================\n" + c.getLastResult().ToString() + "<br/>============================<br/>";
+                foreach (myrow mr in c.towFiles)
+                    richTextBox2.Text += mr.lexeme + " similarity " + mr.similarity + " credit " + mr.credit +"\n";
+            }
+
+
+        }
+
+        private void keywordsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string s = "";
+            MusComp m = new MusComp();
+            m.CompareCppFiles(Program.cppFiles, 2);
+            m.couples.Sort((x, y) => x.similarity.CompareTo(y.similarity));
+            foreach (coupleComp c in m.couples)
+            {
+                s += "<br/>" + c.file1 + "<br/>" + c.file2 + "<br/>" + c.getLastResult().ToString() + "<br/>============================<br/>";
+            }
+            webBrowser1.DocumentText = s;
+
+        }
+
+        private void dataTypeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string s = "";
+            MusComp m = new MusComp();
+            m.CompareCppFiles(Program.cppFiles, 3);
+            m.couples.Sort((x, y) => x.similarity.CompareTo(y.similarity));
+            foreach (coupleComp c in m.couples)
+            {
+                s += "<br/>" + c.file1 + "<br/>" + c.file2 + "<br/>" + c.getLastResult().ToString() + "<br/>============================<br/>";
+            }
+            webBrowser1.DocumentText = s;
+
+        }
+
+        private void operationsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //richTextBox2.Text = "";
+            string s = "";
+            MusComp m = new MusComp();
+            m.CompareCppFiles(Program.cppFiles, 1);
+            m.couples.Sort((x, y) => x.similarity.CompareTo(y.similarity));
+            foreach (coupleComp c in m.couples)
+            {
+                s += "<br/>" + c.file1 + "<br/>" + c.file2 + "<br/>" + c.getLastResult().ToString() + "<br/>============================<br/>";
+            }
+            webBrowser1.DocumentText = s;
+
+        }
+
+        private void allOfThemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string s = "";
+            MusComp m = new MusComp();
+            m.CompareCppFiles(Program.cppFiles, 5);
+            m.couples.Sort((x, y) => x.similarity.CompareTo(y.similarity));
+            foreach (coupleComp c in m.couples)
+            {
+                s += "<br/>" + c.file1 + "<br/>" + c.file2 + "<br/>" + c.getLastResult().ToString() + "<br/>============================<br/>";
+            }
+            webBrowser1.DocumentText = s;
+
+
+        }
+
+        private void valuesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //string s = "";
+            //MusComp m = new MusComp();
+            //m.CompareCppFiles(Program.cppFiles, 4);
+            //m.couples.Sort((x, y) => x.similarity.CompareTo(y.similarity));
+            //foreach (coupleComp c in m.couples)
+            //{
+            //    s += "<br/>" + c.file1 + "<br/>" + c.file2 + "<br/>" + c.getLastResult().ToString() + "<br/>============================<br/>";
+            //}
+            //webBrowser1.DocumentText = s;
+
+        }
     }
+
+
 }

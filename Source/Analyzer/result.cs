@@ -20,7 +20,78 @@ namespace Analyzer
         public List<scopeArrayCounter> arrays = new List<scopeArrayCounter>();
         public List<scopefunctionCallCounter> functionCalls = new List<scopefunctionCallCounter>();
         public List<string> libraries = new List<string>();
-
+        public List<tokenCounter> operationsAllFile = new List<tokenCounter>();
+        public List<tokenCounter> keyWordsAllFile = new List<tokenCounter>();
+        public List<tokenCounter> dataTypesAllFile = new List<tokenCounter>();
+        public List<tokenCounter> valuesAllFile = new List<tokenCounter>();
+        public void setValuesAll()
+        {
+            foreach (var item in values)
+            {
+                foreach (tokenCounter t in item.counter)
+                {
+                    if (valuesAllFile.Select(a => a.getType()).Contains(t.getType()))
+                    {
+                        tokenCounter t2 = valuesAllFile.Find(a => a.getType() == t.getType());
+                        t2.setCount(t2.getCount() + t.getCount());
+                    }
+                    else
+                    {
+                        tokenCounter t5 = t.copy();
+                        t5.setLexeme(t.getType());
+                        valuesAllFile.Add(t5);
+                    }
+                }
+            }
+        }
+        public void setOpAll()
+        {
+            foreach (var item in operations)
+            {
+                foreach (tokenCounter t in item.counter)
+                {
+                    if (operationsAllFile.Select(a => a.getLexeme()).Contains(t.getLexeme()))
+                    {
+                        tokenCounter t2 = operationsAllFile.Find(a => a.getLexeme() == t.getLexeme());
+                        t2.setCount(t2.getCount() + t.getCount());
+                    }
+                    else
+                        operationsAllFile.Add(t.copy());
+                }
+            }
+        }
+        public void setKWAll()
+        {
+            foreach (var item in keyWord)
+            {
+                foreach (tokenCounter t in item.counter)
+                {
+                    if (keyWordsAllFile.Select(a => a.getLexeme()).Contains(t.getLexeme()))
+                    {
+                        tokenCounter t2 = keyWordsAllFile.Find(a => a.getLexeme() == t.getLexeme());
+                        t2.setCount(t2.getCount() + t.getCount());
+                    }
+                    else
+                        keyWordsAllFile.Add(t.copy());
+                }
+            }
+        }
+        public void setDTAll()
+        {
+            foreach (var item in datatypes)
+            {
+                foreach (tokenCounter t in item.counter)
+                {
+                    if (dataTypesAllFile.Select(a => a.getLexeme()).Contains(t.getLexeme()))
+                    {
+                        tokenCounter t2 = dataTypesAllFile.Find(a => a.getLexeme() == t.getLexeme());
+                        t2.setCount(t2.getCount() + t.getCount());
+                    }
+                    else
+                        dataTypesAllFile.Add(t.copy());
+                }
+            }
+        }
     }
     public class scopeTokenCounter
     {

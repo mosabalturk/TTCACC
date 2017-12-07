@@ -51,12 +51,20 @@
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.webBrowser1 = new System.Windows.Forms.WebBrowser();
             this.richTextBox2 = new System.Windows.Forms.RichTextBox();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.qweToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.operationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.keywordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.valuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dataTypeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.allOfThemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.splitContainer2.Panel1.SuspendLayout();
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // clearbtn
@@ -127,7 +135,7 @@
             // 
             // button18
             // 
-            this.button18.Location = new System.Drawing.Point(706, 40);
+            this.button18.Location = new System.Drawing.Point(722, 42);
             this.button18.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button18.Name = "button18";
             this.button18.Size = new System.Drawing.Size(122, 28);
@@ -248,7 +256,7 @@
             // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(580, 42);
+            this.button8.Location = new System.Drawing.Point(454, 5);
             this.button8.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(120, 28);
@@ -280,13 +288,14 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(448, 6);
+            this.button5.Location = new System.Drawing.Point(580, 40);
             this.button5.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(126, 28);
             this.button5.TabIndex = 49;
             this.button5.Text = "all prototypes";
             this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
             // allFuncsbtn
             // 
@@ -379,6 +388,7 @@
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.richTextBox2);
+            this.splitContainer2.Panel2.Controls.Add(this.menuStrip1);
             this.splitContainer2.Size = new System.Drawing.Size(1477, 601);
             this.splitContainer2.SplitterDistance = 679;
             this.splitContainer2.SplitterWidth = 5;
@@ -397,14 +407,72 @@
             // 
             this.richTextBox2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBox2.ForeColor = System.Drawing.Color.Black;
-            this.richTextBox2.Location = new System.Drawing.Point(0, 0);
+            this.richTextBox2.Location = new System.Drawing.Point(0, 28);
             this.richTextBox2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.richTextBox2.Name = "richTextBox2";
             this.richTextBox2.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.Vertical;
-            this.richTextBox2.Size = new System.Drawing.Size(793, 601);
+            this.richTextBox2.Size = new System.Drawing.Size(793, 573);
             this.richTextBox2.TabIndex = 5;
             this.richTextBox2.Text = "";
             this.richTextBox2.TextChanged += new System.EventHandler(this.richTextBox2_TextChanged);
+            // 
+            // menuStrip1
+            // 
+            this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.qweToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(793, 28);
+            this.menuStrip1.TabIndex = 6;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // qweToolStripMenuItem
+            // 
+            this.qweToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.operationsToolStripMenuItem,
+            this.keywordsToolStripMenuItem,
+            this.valuesToolStripMenuItem,
+            this.dataTypeToolStripMenuItem,
+            this.allOfThemToolStripMenuItem});
+            this.qweToolStripMenuItem.Name = "qweToolStripMenuItem";
+            this.qweToolStripMenuItem.Size = new System.Drawing.Size(125, 24);
+            this.qweToolStripMenuItem.Text = "مقارنات مصعبية";
+            // 
+            // operationsToolStripMenuItem
+            // 
+            this.operationsToolStripMenuItem.Name = "operationsToolStripMenuItem";
+            this.operationsToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.operationsToolStripMenuItem.Text = "operations";
+            this.operationsToolStripMenuItem.Click += new System.EventHandler(this.operationsToolStripMenuItem_Click);
+            // 
+            // keywordsToolStripMenuItem
+            // 
+            this.keywordsToolStripMenuItem.Name = "keywordsToolStripMenuItem";
+            this.keywordsToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.keywordsToolStripMenuItem.Text = "keywords";
+            this.keywordsToolStripMenuItem.Click += new System.EventHandler(this.keywordsToolStripMenuItem_Click);
+            // 
+            // valuesToolStripMenuItem
+            // 
+            this.valuesToolStripMenuItem.Name = "valuesToolStripMenuItem";
+            this.valuesToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.valuesToolStripMenuItem.Text = "values";
+            this.valuesToolStripMenuItem.Click += new System.EventHandler(this.valuesToolStripMenuItem_Click);
+            // 
+            // dataTypeToolStripMenuItem
+            // 
+            this.dataTypeToolStripMenuItem.Name = "dataTypeToolStripMenuItem";
+            this.dataTypeToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.dataTypeToolStripMenuItem.Text = "data type";
+            this.dataTypeToolStripMenuItem.Click += new System.EventHandler(this.dataTypeToolStripMenuItem_Click);
+            // 
+            // allOfThemToolStripMenuItem
+            // 
+            this.allOfThemToolStripMenuItem.Name = "allOfThemToolStripMenuItem";
+            this.allOfThemToolStripMenuItem.Size = new System.Drawing.Size(181, 26);
+            this.allOfThemToolStripMenuItem.Text = "all of them";
+            this.allOfThemToolStripMenuItem.Click += new System.EventHandler(this.allOfThemToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -412,6 +480,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1477, 683);
             this.Controls.Add(this.splitContainer1);
+            this.MainMenuStrip = this.menuStrip1;
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.Name = "Form1";
             this.Text = "Analyzer";
@@ -420,7 +489,10 @@
             this.splitContainer1.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
             this.splitContainer2.Panel2.ResumeLayout(false);
+            this.splitContainer2.Panel2.PerformLayout();
             this.splitContainer2.ResumeLayout(false);
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -455,6 +527,13 @@
         private System.Windows.Forms.Button button16;
         private System.Windows.Forms.Button button17;
         private System.Windows.Forms.Button button18;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem qweToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem keywordsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem valuesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem dataTypeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem allOfThemToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem operationsToolStripMenuItem;
     }
 }
 

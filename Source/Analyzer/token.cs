@@ -257,6 +257,8 @@ namespace Analyzer
             this.type = t.getType();
         }
         public int getCount() { return count; }
+        public void setCount(int value) { count =value; }
+
         public void incCount() { this.count++; }
         public static void AddOneByLexeme(token TknObj, List<tokenCounter> tkn)
         {
