@@ -142,7 +142,6 @@ namespace Analyzer
 
         private void button2_Click_2(object sender, EventArgs e)
         {
-            
         }
 
         private void button8_Click(object sender, EventArgs e)
@@ -634,8 +633,8 @@ namespace Analyzer
                         s += "id: "+ id.id +" : "+id.getLexeme()+" data type : "+id.dataType.getLexeme()+ " count:" + id.getCount() + "<br/>";
                     }
                 }
-                webBrowser1.DocumentText = s;
             }
+            webBrowser1.DocumentText = s;
         }
 
         private void عرضليستتالبوينترزToolStripMenuItem_Click(object sender, EventArgs e)
@@ -653,30 +652,108 @@ namespace Analyzer
                         s += "id: " + id.id + " : " + id.getLexeme() + " data type : " + id.dataType.getLexeme() +" pointer level: "+id.pointerLevel.ToString()+ " count:" + id.getCount() + "<br/>";
                     }
                 }
-                webBrowser1.DocumentText = s;
+                
             }
+            webBrowser1.DocumentText = s;
         }
 
         private void arraysToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            //string s = "";
+            //foreach (cppFile cd in Program.cppFiles)
+            //{
+            //    s += cd.name + "<br/>";
+            //    s += "==================================================================<br/>";
+            //    foreach (var t in cd.result.arrays)
+            //    {
+            //        foreach (var id in t.arrayCounter)
+            //        {
+            //            s += "<br/>id: " + id.id + " : " + id.getLexeme() + " data type : " + id.dataType.getLexeme() + "  dimensions : " + id.arrayIndices.Count.ToString()+" indeces ";
+            //            foreach (token index in id.arrayIndices)
+            //                s += index.getLexeme().ToString() + " ";
+            //            s += " count:" + id.getCount() + "<br/>";
+            //        }
+            //    }
+                
+            //}
+            //webBrowser1.DocumentText = s;
+        }
+
+        private void operationsToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
             string s = "";
             foreach (cppFile cd in Program.cppFiles)
             {
-                s += cd.name + "<br/>";
-                s += "==================================================================<br/>";
-                foreach (var t in cd.result.arrays)
+                s += cd.name + "\n";
+                s += "==================================================================\n";
+                foreach (var t in cd.result.operationsAllFile)
                 {
-                    s += "<br/>";
-                    foreach (var id in t.arrayCounter)
-                    {
-                        s += "id: " + id.id + " : " + id.getLexeme() + " data type : " + id.dataType.getLexeme() + "  dimensions : " + id.arrayIndices.Count.ToString()+" indeces ";
-                        foreach (token index in id.arrayIndices)
-                            s += index.getLexeme().ToString() + " ";
-                        s += " count:" + id.getCount() + "<br/>";
-                    }
+
+                    s += t.getLexeme() + " count:" + t.getCount() + "\n";
+
                 }
-                webBrowser1.DocumentText = s;
+                
             }
+            richTextBox2.Text = s;
+        }
+
+        private void keywordsToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            string s = "";
+            foreach (cppFile cd in Program.cppFiles)
+            {
+                s += cd.name + "\n";
+                s += "==================================================================\n";
+                foreach (var t in cd.result.keyWordsAllFile)
+                {
+
+                    s += t.getLexeme() + " count:" + t.getCount() + "\n";
+
+                }
+
+            }
+            richTextBox2.Text = s;
+        }
+
+        private void valuesToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            string s = "";
+            foreach (cppFile cd in Program.cppFiles)
+            {
+                s += cd.name + "\n";
+                s += "==================================================================\n";
+                foreach (var t in cd.result.valuesAllFile)
+                {
+
+                    s += t.getType() + " count:" + t.getCount() + "\n";
+
+                }
+
+            }
+            richTextBox2.Text = s;
+        }
+
+        private void datatypesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string s = "";
+            foreach (cppFile cd in Program.cppFiles)
+            {
+                s += cd.name + "\n";
+                s += "==================================================================\n";
+                foreach (var t in cd.result.dataTypesAllFile)
+                {
+
+                    s += t.getLexeme() + " count:" + t.getCount() + "\n";
+
+                }
+
+            }
+            richTextBox2.Text = s;
+        }
+
+        private void specialCharsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
         }
     }
 

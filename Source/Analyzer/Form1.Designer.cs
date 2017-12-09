@@ -69,10 +69,6 @@
             this.functionCallsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.specialCharsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.librariesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.نتيجةجمعكلالملفOperationsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.نتيجةجمعكلالملفKeywordsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.نتيجةجمعكلالملفValuesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.نتيجةجمعكلالملفDatatypesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -498,11 +494,7 @@
             this.datatypesToolStripMenuItem,
             this.functionCallsToolStripMenuItem,
             this.specialCharsToolStripMenuItem,
-            this.librariesToolStripMenuItem,
-            this.نتيجةجمعكلالملفOperationsToolStripMenuItem,
-            this.نتيجةجمعكلالملفKeywordsToolStripMenuItem,
-            this.نتيجةجمعكلالملفValuesToolStripMenuItem,
-            this.نتيجةجمعكلالملفDatatypesToolStripMenuItem});
+            this.librariesToolStripMenuItem});
             this.عرضليستاتالنتائجToolStripMenuItem.Name = "عرضليستاتالنتائجToolStripMenuItem";
             this.عرضليستاتالنتائجToolStripMenuItem.Size = new System.Drawing.Size(146, 24);
             this.عرضليستاتالنتائجToolStripMenuItem.Text = "عرض ليستات النتائج";
@@ -510,47 +502,51 @@
             // عرضليستتالفاريابلزToolStripMenuItem
             // 
             this.عرضليستتالفاريابلزToolStripMenuItem.Name = "عرضليستتالفاريابلزToolStripMenuItem";
-            this.عرضليستتالفاريابلزToolStripMenuItem.Size = new System.Drawing.Size(286, 26);
-            this.عرضليستتالفاريابلزToolStripMenuItem.Text = "عرض ليستت الفاريابلز";
+            this.عرضليستتالفاريابلزToolStripMenuItem.Size = new System.Drawing.Size(197, 26);
+            this.عرضليستتالفاريابلزToolStripMenuItem.Text = "vars";
             this.عرضليستتالفاريابلزToolStripMenuItem.Click += new System.EventHandler(this.عرضليستتالفاريابلزToolStripMenuItem_Click);
             // 
             // عرضليستتالبوينترزToolStripMenuItem
             // 
             this.عرضليستتالبوينترزToolStripMenuItem.Name = "عرضليستتالبوينترزToolStripMenuItem";
-            this.عرضليستتالبوينترزToolStripMenuItem.Size = new System.Drawing.Size(286, 26);
-            this.عرضليستتالبوينترزToolStripMenuItem.Text = "عرض ليستت البوينترز";
+            this.عرضليستتالبوينترزToolStripMenuItem.Size = new System.Drawing.Size(197, 26);
+            this.عرضليستتالبوينترزToolStripMenuItem.Text = "pointers";
             this.عرضليستتالبوينترزToolStripMenuItem.Click += new System.EventHandler(this.عرضليستتالبوينترزToolStripMenuItem_Click);
             // 
             // arraysToolStripMenuItem
             // 
             this.arraysToolStripMenuItem.Name = "arraysToolStripMenuItem";
-            this.arraysToolStripMenuItem.Size = new System.Drawing.Size(286, 26);
-            this.arraysToolStripMenuItem.Text = "arrays";
+            this.arraysToolStripMenuItem.Size = new System.Drawing.Size(275, 26);
+            this.arraysToolStripMenuItem.Text = "arrays  ";
             this.arraysToolStripMenuItem.Click += new System.EventHandler(this.arraysToolStripMenuItem_Click);
             // 
             // keywordsToolStripMenuItem1
             // 
             this.keywordsToolStripMenuItem1.Name = "keywordsToolStripMenuItem1";
-            this.keywordsToolStripMenuItem1.Size = new System.Drawing.Size(286, 26);
-            this.keywordsToolStripMenuItem1.Text = "keywords";
+            this.keywordsToolStripMenuItem1.Size = new System.Drawing.Size(275, 26);
+            this.keywordsToolStripMenuItem1.Text = "keywords  all file in  all files";
+            this.keywordsToolStripMenuItem1.Click += new System.EventHandler(this.keywordsToolStripMenuItem1_Click);
             // 
             // valuesToolStripMenuItem1
             // 
             this.valuesToolStripMenuItem1.Name = "valuesToolStripMenuItem1";
-            this.valuesToolStripMenuItem1.Size = new System.Drawing.Size(286, 26);
-            this.valuesToolStripMenuItem1.Text = "values";
+            this.valuesToolStripMenuItem1.Size = new System.Drawing.Size(275, 26);
+            this.valuesToolStripMenuItem1.Text = "values  all file in  all files";
+            this.valuesToolStripMenuItem1.Click += new System.EventHandler(this.valuesToolStripMenuItem1_Click);
             // 
             // operationsToolStripMenuItem1
             // 
             this.operationsToolStripMenuItem1.Name = "operationsToolStripMenuItem1";
-            this.operationsToolStripMenuItem1.Size = new System.Drawing.Size(286, 26);
-            this.operationsToolStripMenuItem1.Text = "operations";
+            this.operationsToolStripMenuItem1.Size = new System.Drawing.Size(275, 26);
+            this.operationsToolStripMenuItem1.Text = "operations  all file in  all files";
+            this.operationsToolStripMenuItem1.Click += new System.EventHandler(this.operationsToolStripMenuItem1_Click);
             // 
             // datatypesToolStripMenuItem
             // 
             this.datatypesToolStripMenuItem.Name = "datatypesToolStripMenuItem";
-            this.datatypesToolStripMenuItem.Size = new System.Drawing.Size(286, 26);
-            this.datatypesToolStripMenuItem.Text = "datatypes";
+            this.datatypesToolStripMenuItem.Size = new System.Drawing.Size(275, 26);
+            this.datatypesToolStripMenuItem.Text = "datatypes  all file in  all files";
+            this.datatypesToolStripMenuItem.Click += new System.EventHandler(this.datatypesToolStripMenuItem_Click);
             // 
             // functionCallsToolStripMenuItem
             // 
@@ -563,41 +559,14 @@
             this.specialCharsToolStripMenuItem.Name = "specialCharsToolStripMenuItem";
             this.specialCharsToolStripMenuItem.Size = new System.Drawing.Size(286, 26);
             this.specialCharsToolStripMenuItem.Text = "specialChars";
+            this.specialCharsToolStripMenuItem.Click += new System.EventHandler(this.specialCharsToolStripMenuItem_Click);
             // 
             // librariesToolStripMenuItem
             // 
             this.librariesToolStripMenuItem.Name = "librariesToolStripMenuItem";
-            this.librariesToolStripMenuItem.Size = new System.Drawing.Size(286, 26);
-            this.librariesToolStripMenuItem.Text = "libraries";
+            this.librariesToolStripMenuItem.Size = new System.Drawing.Size(275, 26);
+            this.librariesToolStripMenuItem.Text = "libraries  all files";
             this.librariesToolStripMenuItem.Click += new System.EventHandler(this.librariesToolStripMenuItem_Click);
-            // 
-            // نتيجةجمعكلالملفOperationsToolStripMenuItem
-            // 
-            this.نتيجةجمعكلالملفOperationsToolStripMenuItem.Name = "نتيجةجمعكلالملفOperationsToolStripMenuItem";
-            this.نتيجةجمعكلالملفOperationsToolStripMenuItem.Size = new System.Drawing.Size(286, 26);
-            this.نتيجةجمعكلالملفOperationsToolStripMenuItem.Text = "نتيجة جمع كل الملف operations";
-            this.نتيجةجمعكلالملفOperationsToolStripMenuItem.Click += new System.EventHandler(this.نتيجةجمعكلالملفOperationsToolStripMenuItem_Click);
-            // 
-            // نتيجةجمعكلالملفKeywordsToolStripMenuItem
-            // 
-            this.نتيجةجمعكلالملفKeywordsToolStripMenuItem.Name = "نتيجةجمعكلالملفKeywordsToolStripMenuItem";
-            this.نتيجةجمعكلالملفKeywordsToolStripMenuItem.Size = new System.Drawing.Size(286, 26);
-            this.نتيجةجمعكلالملفKeywordsToolStripMenuItem.Text = "نتيجة جمع كل الملف keywords";
-            this.نتيجةجمعكلالملفKeywordsToolStripMenuItem.Click += new System.EventHandler(this.نتيجةجمعكلالملفKeywordsToolStripMenuItem_Click);
-            // 
-            // نتيجةجمعكلالملفValuesToolStripMenuItem
-            // 
-            this.نتيجةجمعكلالملفValuesToolStripMenuItem.Name = "نتيجةجمعكلالملفValuesToolStripMenuItem";
-            this.نتيجةجمعكلالملفValuesToolStripMenuItem.Size = new System.Drawing.Size(286, 26);
-            this.نتيجةجمعكلالملفValuesToolStripMenuItem.Text = "نتيجة جمع كل الملف values";
-            this.نتيجةجمعكلالملفValuesToolStripMenuItem.Click += new System.EventHandler(this.نتيجةجمعكلالملفValuesToolStripMenuItem_Click);
-            // 
-            // نتيجةجمعكلالملفDatatypesToolStripMenuItem
-            // 
-            this.نتيجةجمعكلالملفDatatypesToolStripMenuItem.Name = "نتيجةجمعكلالملفDatatypesToolStripMenuItem";
-            this.نتيجةجمعكلالملفDatatypesToolStripMenuItem.Size = new System.Drawing.Size(286, 26);
-            this.نتيجةجمعكلالملفDatatypesToolStripMenuItem.Text = "نتيجة جمع كل الملف datatypes";
-            this.نتيجةجمعكلالملفDatatypesToolStripMenuItem.Click += new System.EventHandler(this.نتيجةجمعكلالملفDatatypesToolStripMenuItem_Click);
             // 
             // Form1
             // 
@@ -670,10 +639,6 @@
         private System.Windows.Forms.ToolStripMenuItem functionCallsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem specialCharsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem librariesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem نتيجةجمعكلالملفOperationsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem نتيجةجمعكلالملفKeywordsToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem نتيجةجمعكلالملفValuesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem نتيجةجمعكلالملفDatatypesToolStripMenuItem;
     }
 }
 
