@@ -22,18 +22,60 @@ namespace Analyzer
 
         private void button1_Click(object sender, EventArgs e)
         {
-            string tz;
-            tz = "All tokens..  <br/>";
-            foreach (cppFile cd in Program.cppFiles)
+            List<result> rs = new List<result>();
+            foreach (cppFile cq in Program.cppFiles)
+                rs.Add(cq.result);
+            choice c = new choice(rs);
+            var result = c.ShowDialog();
+            if (result == DialogResult.OK)
             {
-                tz += "file name: " + cd.code.filename + "<br/>";
-                foreach (token t in cd.holeCodeTokens)
-                {
-                    //richTextBox1.Text += "< " + t.getType() + " , " + t.getLexeme() + " >";
-                    tz += t.id.ToString() + " " + t.getType() + " ," + t.getLexeme() + ",<br/>";
-                }
+                scopeTokens val = choice.ReturnValue;
+
+                string s = "";
+                s += "<br/>=========================================================<br/> " + val.scopeName;
+                s += "<br/>========================================================<br/>";
+                if (val != null)
+                    foreach (token t in val.tokens)
+                    {
+                        if (t.isIdentifierObject())
+                        {
+                            identifier p = (identifier)t;
+                            s += "<br/>";
+                            s += "id: " + t.id + " , " + t.getLexeme() + " , DT: " + t.getType() + " , DATATYPE_LEXEME: " + p.dataType.getLexeme() + "<br/>";
+                        }
+                        else if (t.isPointer)
+                        {
+                            pointer p = (pointer)t;
+
+                            s += "<br/>";
+                            s += "id: " + t.id + " , " + t.getLexeme() + " , DT: " + t.getType() + " , DATATYPE_LEXEME: " + p.dataType.getLexeme()
+                                 + " , pointer_level: " + p.pointerLevel.ToString() + "<br/>";
+                        }
+                        else if (t.isArray)
+                        {
+                            array p = (array)t;
+                            s += "<br/>";
+                            s += "id: " + t.id + " , " + t.getLexeme() + " , DT: " + t.getType() + " , DATATYPE_LEXEME: " + p.dataType.getLexeme()
+                                 + " , array_indecies: <br/>";
+                            foreach (token i in p.arrayIndices)
+                                s += i.getLexeme().ToString() + "<br/>";
+                            s += "<br/>";
+                        }
+                        else if (t.isFunctionCall)
+                        {
+
+                            s += "<br/>";
+                            s += "id: " + t.id + " , " + t.getLexeme() + " , " + t.getType() + "<br/>";
+                        }
+                        else
+                        {
+                            s += "<br/>";
+                            s += "id: " + t.id + " , " + t.getLexeme() + " , " + t.getType() + "<br/>";
+                        }
+
+                    }
+                webBrowser1.DocumentText = s;
             }
-            webBrowser1.DocumentText = tz;
         }
 
         private void splitContainer1_Panel1_Paint(object sender, PaintEventArgs e)
@@ -65,203 +107,7 @@ namespace Analyzer
             }
         }
 
-        //private void librariesbtn_Click(object sender, EventArgs e)
-        //{
-        //    richTextBox2.Text = "Libraries\n";
-        //    foreach (code cd in Program.codes)
-        //    {
-        //        richTextBox2.Text += cd.filename + "\n";
-        //        foreach (string lib in cd.getLibraries)
-        //            richTextBox2.Text += lib + "\n";
-        //    }
-        //}
 
-        //private void definesbtn_Click(object sender, EventArgs e)
-        //{
-        //    richTextBox2.Text = "defines:\n";
-        //    foreach (code cd in Program.codes)
-        //    {
-        //        richTextBox2.Text += cd.filename + "\n";
-        //        foreach (token def in cd.getDefines)
-        //            richTextBox2.Text += def.getLexeme() + "     " + def.getType().ToString() + " \n";
-        //    }
-        //}
-
-        //private void mainbtn_Click(object sender, EventArgs e)
-        //{
-        //    richTextBox2.Text = "main function\n";
-        //    foreach (code cd in Program.codes)
-        //    {
-        //        richTextBox2.Text += cd.filename + "\n";
-        //        richTextBox2.Text += "Data type: " + cd.main.funcDataType + "\n body :" + cd.main.funcAsStr;
-
-        //    }
-        //}
-
-        //private void allFuncsbtn_Click(object sender, EventArgs e)
-        //{
-        //    richTextBox2.Text = "All functions:\n";
-        //    foreach (code cd in Program.codes)
-        //    {
-        //        richTextBox2.Text += cd.filename + "\n-----\n";
-        //        foreach (function func in cd.Allfunctions)
-        //        {
-        //            richTextBox2.Text += "\nfunction name:" + func.funcname + "\n";
-        //            richTextBox2.Text += "parameters: ";
-        //            foreach (token t in func.funcParameters)
-        //                richTextBox2.Text += t.getType() + " " + t.getLexeme() + " , ";
-        //            richTextBox2.Text += "\nData type: " + func.funcDataType + "\nbody :\n" + func.funcAsStr + "\n--------------\n--------------\n";
-
-        //        }
-        //    }
-        //}
-
-        //private void classesbtn_Click(object sender, EventArgs e)
-        //{
-        //    richTextBox2.Text = "classes:\n";
-        //    foreach (code cd in Program.codes)
-        //    {
-        //        richTextBox2.Text += cd.filename + "\n-----\n";
-        //        foreach (code clas in cd.Allclasses)
-        //            richTextBox2.Text += "class name:" + clas.codeAsStr + "\nbody :\n" + clas.codeAsStr + "\n--------------\n--------------\n";
-        //    }
-        //}
-
-
-        //private void button5_Click(object sender, EventArgs e)
-        //{
-        //    richTextBox2.Text = "";
-        //    foreach (code cd in Program.codes)
-        //    {
-        //        richTextBox2.Text += cd.filename + "\n-----\n";
-        //        foreach (function func in cd.Allfunc_prototypes)
-        //        {
-        //            foreach (token t in func.funcParameters)
-        //                richTextBox2.Text += "parameters:\n" + t.getType() + " " + t.getLexeme() + "\n";
-        //            richTextBox2.Text += "function name:" + func.funcname + "\nData type: " + func.funcDataType + "\nbody :\n" + func.funcAsStr + "\n--------------\n--------------\n";
-        //        }
-        //    }
-        //}
-        private void button6_Click(object sender, EventArgs e)
-        {
-            richTextBox2.Text = "";
-            foreach (cppFile cd in Program.cppFiles)
-            {
-                richTextBox2.Text += "file name: " + cd.code.filename + "\n";
-                foreach (token t in cd.code.getGSTokens())
-                {
-                    richTextBox2.Text += "< " + t.id.ToString() + " " + t.getType() + " , " + t.getLexeme() + " >\n";
-                }
-            }
-        }
-
-        //private void structObjects_Click(object sender, EventArgs e)
-        //{
-        //    richTextBox2.Text = "struct objectcs\n";
-        //    foreach (code cd in Program.codes)
-        //    {
-        //        richTextBox2.Text += "file name: " + cd.filename + "\n";
-        //        foreach (token t in cd.structObjectsGS)
-        //        {
-        //            richTextBox2.Text += "< " + t.id.ToString() + " type: " + t.getType() + " , " + t.getLexeme() + " >\n";
-        //        }
-        //    }
-        //}
-
-        //private void opCntrbtn_Click(object sender, EventArgs e)
-        //{
-        //    richTextBox2.Text = "operations counter:\n";
-        //    foreach (code cd in Program.codes)
-        //    {
-        //        richTextBox2.Text += "file name: " + cd.filename + "\n";
-        //        foreach (token t in cd.getOperationsCounterGS)
-        //        {
-        //            richTextBox2.Text += t.getLexeme() + " count: " + t.getCount() + " >\n";
-        //        }
-        //    }
-        //}
-
-        //private void button2_Click(object sender, EventArgs e)
-        //{
-        //    richTextBox2.Text = "data type counter:\n";
-        //    foreach (code cd in Program.codes)
-        //    {
-        //        richTextBox2.Text += "file name: " + cd.filename + "\n";
-        //        foreach (token t in cd.getDataTypesCounterGS)
-        //        {
-        //            richTextBox2.Text += t.getLexeme() + " count: " + t.getCount() + " >\n";
-        //        }
-        //    }
-        //}
-
-        //private void kewWordsCntrbtn_Click(object sender, EventArgs e)
-        //{
-        //    richTextBox2.Text = "key words counter:\n";
-        //    foreach (code cd in Program.codes)
-        //    {
-        //        richTextBox2.Text += "file name: " + cd.filename + "\n";
-        //        foreach (token t in cd.getKeyWordsCounterGS)
-        //        {
-        //            richTextBox2.Text += t.getLexeme() + " count: " + t.getCount() + " >\n";
-        //        }
-        //    }
-        //}
-
-        //private void valuesCntrbtn_Click(object sender, EventArgs e)
-        //{
-        //    richTextBox2.Text = "values counter:\n";
-        //    foreach (code cd in Program.codes)
-        //    {
-        //        richTextBox2.Text += "file name: " + cd.filename + "\n";
-        //        foreach (token t in cd.getValuesCounterGS)
-        //        {
-        //            richTextBox2.Text += t.getType() + " count: " + t.getCount() + " >\n";
-        //        }
-        //    }
-        //}
-
-        //private void getArraysCntrbtn_Click(object sender, EventArgs e)
-        //{
-        //    richTextBox2.Text = "arrays counter:\n";
-        //    foreach (code cd in Program.codes)
-        //    {
-        //        richTextBox2.Text += "file name: " + cd.filename + "\n";
-        //        foreach (token t in cd.getArraysCounterGS)
-        //        {
-        //            richTextBox2.Text += t.getLexeme() + " count: " + t.getCount() + " array demintions: " + t.arrayIndices.ToString() + " array boundaries "; ;
-        //            foreach (int i in t.arrayIndices)
-        //                richTextBox2.Text += "[" + i.ToString() + "] ";
-        //            richTextBox2.Text += " >\n";
-        //        }
-        //    }
-        //}
-
-        //private void varCounterbtn_Click(object sender, EventArgs e)
-        //{
-        //    richTextBox2.Text = "variables counter:\n";
-        //    foreach (code cd in Program.codes)
-        //    {
-        //        richTextBox2.Text += "file name: " + cd.filename + "\n";
-        //        foreach (token t in cd.getVariablesCounterGS)
-        //        {
-        //            richTextBox2.Text += t.getLexeme() + " count: " + t.getCount() + " >\n";
-        //        }
-        //    }
-        //}
-
-        //private void pointersCntrbtn_Click(object sender, EventArgs e)
-        //{
-        //    richTextBox2.Text = "pointers counter:\n";
-        //    foreach (code cd in Program.codes)
-        //    {
-        //        richTextBox2.Text += "file name: " + cd.filename + "\n";
-        //        foreach (token t in cd.getPointersCounterGS)
-        //        {
-        //            richTextBox2.Text += t.getLexeme() + " count: " + t.getCount() + " >\n";
-        //        }
-        //    }
-        //}
-        ////h
         private void counters(object sender, EventArgs e)
         {
             richTextBox2.Text = "counters\n";
@@ -269,59 +115,7 @@ namespace Analyzer
             {
                 richTextBox2.Text += code.spitYourCountersLan(cd.code);
             }
-            //foreach (cppFile cd in Program.cppFiles)
-            //{
-            //    foreach (tokenCounter t in cd.code.getDataTypesCounterGS)
-            //    {
-            //        richTextBox2.Text += t.getLexeme() + " count: " + t.getCount() + " >\n";
-            //    }
-            //}
-            //foreach (cppFile cd in Program.cppFiles)
-            //{
-            //    richTextBox2.Text += "file name: " + cd.code.filename + "\n";
-            //    foreach (tokenCounter t in cd.code.getKeyWordsCounterGS)
-            //    {
-            //        richTextBox2.Text += t.getLexeme() + " count: " + t.getCount() + " >\n";
-            //    }
-            //}
-            //foreach (cppFile cd in Program.cppFiles)
-            //{
-            //    richTextBox2.Text += "file name: " + cd.code.filename + "\n";
-            //    foreach (tokenCounter t in cd.code.getValuesCounterGS)
-            //    {
-            //        richTextBox2.Text += t.getType() + " count: " + t.getCount() + " >\n";
-            //    }
-            //}
-            //foreach (tokenCounter cd in Program.code.codes)
-            //{
-            //    richTextBox2.Text += "file name: " + cd.filename + "\n";
-            //    foreach (token t in cd.getArraysCounterGS)
-            //    {
-            //        richTextBox2.Text += t.getLexeme() + " count: " + t.getCount() + " array demintions: " + t.arrayIndices.ToString() + " array boundaries "; ;
-            //        foreach (int i in t.arrayIndices)
-            //            richTextBox2.Text += "[" + i.ToString() + "] ";
-            //        richTextBox2.Text += " >\n";
-            //    }
-            //}
-            //foreach (code cd in Program.codes)
-            //{
-            //    richTextBox2.Text += "file name: " + cd.filename + "\n";
-            //    foreach (token t in cd.getVariablesCounterGS)
-            //    {
-            //        richTextBox2.Text += t.getLexeme() + " count: " + t.getCount() + " >\n";
-            //    }
-
-            //}
-            //foreach (code cd in Program.codes)
-            //{
-            //    richTextBox2.Text += "file name: " + cd.filename + "\n";
-            //    foreach (token t in cd.getPointersCounterGS)
-            //    {
-            //        richTextBox2.Text += t.getLexeme() + " count: " + t.getCount() + " >\n";
-            //    }
-            //}
         }
-
         private void button3_Click(object sender, EventArgs e)
         {
             int i = 0;
@@ -348,60 +142,8 @@ namespace Analyzer
 
         private void button2_Click_2(object sender, EventArgs e)
         {
-            richTextBox2.Text = "";
-            foreach (cppFile cd in Program.cppFiles)
-            {
-                richTextBox2.Text += cd.name + "\n";
-                richTextBox2.Text += "==================================================================\n";
-
-                foreach (var t in cd.result.valuesAllFile)
-                {
-                    richTextBox2.Text += t.getLexeme() + " count:" + t.getCount() + "\n";
-                }
-
-            }
+            
         }
-        //static string BinaryToDec(string input1, string input2)
-        //{
-        //    char[] array1 = input1.ToCharArray();
-        //    char[] array2 = input2.ToCharArray();
-        //    if (array1.Length != array2.Length)
-        //        return null;
-
-        //    // Reverse since 16-8-4-2-1 not 1-2-4-8-16. 
-        //    Array.Reverse(array1);
-        //    Array.Reverse(array2);
-
-        //    /*
-        //     * [0] = 1
-        //     * [1] = 2
-        //     * [2] = 4
-        //     * etc
-        //     */
-        //    string xnor="";
-
-        //    for (int i = 0; i < array1.Length; i++)
-        //    {
-        //        if ((array1[i] == '1')&&(array1[i] == '1'))
-        //        {
-        //            xnor += '1';
-        //        }
-        //        else if ((array1[i] == '0') && (array1[i] == '1'))
-        //        {
-        //            xnor += '0';
-        //        }
-        //        else if((array1[i] == '1') && (array1[i] == '0'))
-        //        {
-        //            xnor += '0';
-        //        }
-        //        else if((array1[i] == '0') && (array1[i] == '0'))
-        //        {
-        //            xnor += '1';
-        //        }
-        //    }
-
-        //    return sum;
-        //}
 
         private void button8_Click(object sender, EventArgs e)
         {
@@ -754,6 +496,19 @@ namespace Analyzer
 
         }
 
+        private void valuesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string s = "";
+            MusComp m = new MusComp();
+            m.CompareCppFiles(Program.cppFiles, 4);
+            m.couples.Sort((x, y) => x.similarity.CompareTo(y.similarity));
+            foreach (coupleComp c in m.couples)
+            {
+                s += "<br/>" + c.file1 + "<br/>" + c.file2 + "<br/>" + c.getLastResult().ToString() + "<br/>============================<br/>";
+            }
+            webBrowser1.DocumentText = s;
+
+        }
         private void allOfThemToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string s = "";
@@ -769,18 +524,159 @@ namespace Analyzer
 
         }
 
-        private void valuesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            //string s = "";
-            //MusComp m = new MusComp();
-            //m.CompareCppFiles(Program.cppFiles, 4);
-            //m.couples.Sort((x, y) => x.similarity.CompareTo(y.similarity));
-            //foreach (coupleComp c in m.couples)
-            //{
-            //    s += "<br/>" + c.file1 + "<br/>" + c.file2 + "<br/>" + c.getLastResult().ToString() + "<br/>============================<br/>";
-            //}
-            //webBrowser1.DocumentText = s;
 
+        private void kwOpDtVToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string s = "";
+            MusComp m = new MusComp();
+            m.CompareCppFiles(Program.cppFiles, 6);
+            m.couples.Sort((x, y) => x.similarity.CompareTo(y.similarity));
+            foreach (coupleComp c in m.couples)
+            {
+                s += "<br/>" + c.file1 + "<br/>" + c.file2 + "<br/>" + c.getLastResult().ToString() + "<br/>============================<br/>";
+            }
+            webBrowser1.DocumentText = s;
+
+        }
+
+        private void نتيجةجمعكلالملفOperationsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox2.Text = "";
+            foreach (cppFile cd in Program.cppFiles)
+            {
+                richTextBox2.Text += cd.name + "\n";
+                richTextBox2.Text += "==================================================================\n";
+
+                foreach (var t in cd.result.operationsAllFile)
+                {
+                    richTextBox2.Text += t.getLexeme() + " count:" + t.getCount() + "\n";
+                }
+
+            }
+        }
+
+        private void نتيجةجمعكلالملفKeywordsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox2.Text = "";
+            foreach (cppFile cd in Program.cppFiles)
+            {
+                richTextBox2.Text += cd.name + "\n";
+                richTextBox2.Text += "==================================================================\n";
+
+                foreach (var t in cd.result.keyWordsAllFile)
+                {
+                    richTextBox2.Text += t.getLexeme() + " count:" + t.getCount() + "\n";
+                }
+
+            }
+        }
+
+        private void نتيجةجمعكلالملفValuesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox2.Text = "";
+            foreach (cppFile cd in Program.cppFiles)
+            {
+                richTextBox2.Text += cd.name + "\n";
+                richTextBox2.Text += "==================================================================\n";
+
+                foreach (var t in cd.result.valuesAllFile)
+                {
+                    richTextBox2.Text += t.getLexeme() + " count:" + t.getCount() + "\n";
+                }
+
+            }
+        }
+
+        private void نتيجةجمعكلالملفDatatypesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox2.Text = "";
+            foreach (cppFile cd in Program.cppFiles)
+            {
+                richTextBox2.Text += cd.name + "\n";
+                richTextBox2.Text += "==================================================================\n";
+
+                foreach (var t in cd.result.dataTypesAllFile)
+                {
+                    richTextBox2.Text += t.getLexeme() + " count:" + t.getCount() + "\n";
+                }
+
+            }
+        }
+
+        private void librariesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            richTextBox2.Text = "";
+            foreach (cppFile cd in Program.cppFiles)
+            {
+                richTextBox2.Text += cd.name + "\n";
+                richTextBox2.Text += "==================================================================\n";
+
+                foreach (var t in cd.result.libraries)
+                {
+                    richTextBox2.Text += t + "\n";
+                }
+
+            }
+        }
+
+        private void عرضليستتالفاريابلزToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string s = "";
+            foreach (cppFile cd in Program.cppFiles)
+            {
+                s += cd.name + "<br/>";
+                s += "==================================================================<br/>";
+                foreach (var t in cd.result.vars)
+                {
+                    s += t.scopeName+" <br/>";
+                    foreach (var id in t.vars)
+                    {
+                        s += "id: "+ id.id +" : "+id.getLexeme()+" data type : "+id.dataType.getLexeme()+ " count:" + id.getCount() + "<br/>";
+                    }
+                }
+                webBrowser1.DocumentText = s;
+            }
+        }
+
+        private void عرضليستتالبوينترزToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string s = "";
+            foreach (cppFile cd in Program.cppFiles)
+            {
+                s += cd.name + "<br/>";
+                s += "==================================================================<br/>";
+                foreach (var t in cd.result.pointrs)
+                {
+                    s += "<br/>";
+                    foreach (var id in t.pointerCounter)
+                    {
+                        s += "id: " + id.id + " : " + id.getLexeme() + " data type : " + id.dataType.getLexeme() +" pointer level: "+id.pointerLevel.ToString()+ " count:" + id.getCount() + "<br/>";
+                    }
+                }
+                webBrowser1.DocumentText = s;
+            }
+        }
+
+        private void arraysToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string s = "";
+            foreach (cppFile cd in Program.cppFiles)
+            {
+                s += cd.name + "<br/>";
+                s += "==================================================================<br/>";
+                foreach (var t in cd.result.arrays)
+                {
+                    s += "<br/>";
+                    foreach (var id in t.arrayCounter)
+                    {
+                        s += "id: " + id.id + " : " + id.getLexeme() + " data type : " + id.dataType.getLexeme() + "  dimensions : " + id.arrayIndices.Count.ToString()+" indeces ";
+                        foreach (token index in id.arrayIndices)
+                            s += index.getLexeme().ToString() + " ";
+                        s += " count:" + id.getCount() + "<br/>";
+                    }
+                }
+                webBrowser1.DocumentText = s;
+            }
         }
     }
 

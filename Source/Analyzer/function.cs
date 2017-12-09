@@ -69,34 +69,37 @@ namespace Analyzer
         public string funcname { get { return name; } set { name = value; } }
         public void count()
         {
-            foreach (token t in tokens)
+            for (int ii = 0; ii < tokens.Count; ii++)
             {
-                if (t.isOperation())
-                    tokenCounter.AddOneByLexeme(t, operationsCounter);
-                else if (t.isKeyword())
-                { tokenCounter.AddOneByLexeme(t, KeyWordsCounter); }
-                else if (t.isDatatype())
-                    tokenCounter.AddOneByLexeme(t, dataTypesCounter);
-                else if (t.isValue())
-                    tokenCounter.AddOneValueByDataType(t, valuesCounter);
-                else if (t.isIdentifierObject())
-                    variableCounter.AddOneByToken((identifier)t, variablesCounter);
-                else if (t.isPointer)
-                    pointerCounter.AddOneByToken((pointer)t, pointersCounter);
-                else if (t.isArray)
-                    arrayCounter.AddOneByToken((array)t, arraysCounter);
-                else if (t.isFunctionCall)
-                     functionCallCounter.AddOneByLexeme(t, functionCalls); 
-                else
+                if (tokens[ii].getType() == "library")
+                { }
+                else if (tokens[ii].isOperation())
+                    tokenCounter.AddOneByLexeme(tokens[ii], operationsCounter);
+                else if (tokens[ii].isKeyword())
+                { tokenCounter.AddOneByLexeme(tokens[ii], KeyWordsCounter); }
+                else if (tokens[ii].isDatatype())
+                    tokenCounter.AddOneByLexeme(tokens[ii], dataTypesCounter);
+                else if (tokens[ii].isValue())
+                    tokenCounter.AddOneValueByDataType(tokens[ii], valuesCounter);
+                else if (tokens[ii].isIdentifierObject())
                 {
-                    tokenCounter.AddOneByLexeme(t, specialChar);
+                    variableCounter.AddOneByToken(tokens[ii], ((identifier)tokens[ii]).dataType, variablesCounter);
+                    if ((ii > 0) && ((tokens[ii - 1].getLexeme() == ",") || (tokens[ii - 1].isDatatype())) && (!tokens[ii + 1].isOperation()))
+                        variablesCounter[variablesCounter.Count - 1].decCount();// we want count to be zero at initilization unless there is assignment afetr it like int b = 5; or init a, b=10,c;  a and c count equal zero but b count is 1
+
                 }
+                else if (tokens[ii].isPointer)
+                    pointerCounter.AddOneByToken((pointer)tokens[ii], pointersCounter);
+                else if (tokens[ii].isArray)
+                    arrayCounter.AddOneByToken((array)tokens[ii], arraysCounter);
+                else
+                    tokenCounter.AddOneByLexeme(tokens[ii], specialChar);
             }
         }
 
         public void findIdentifiers()
         {
-            code.structAsDatatype(this.tokens);
+          //  code.structAsDatatype(this.tokens);
             for (int i = 0; i < tokens.Count-1; i++)
             {
                 if ((tokens[i].isIdentifierTokenObject()) && (tokens[i + 1].getLexeme() == "("))
@@ -116,36 +119,44 @@ namespace Analyzer
                 
                 bool pointer = upperLevelPointers.Concat(thisScopePointers).ToList().Select(a => a.getLexeme()).ToList().Contains(tokens[i].getLexeme());
                 bool array = upperLevelArray.Concat(thisScopeArray).ToList().Select(a => a.getLexeme()).ToList().Contains(tokens[i].getLexeme());
-                if ((tokens[i].isIdentifierTokenObject()) && !tokens[i].isPointer && !tokens[i].isArray&&!pointer && !array)
+                if ((tokens[i].isIdentifierTokenObject()) && !tokens[i].isPointer && !tokens[i].isArray && !array && !pointer)
                 {
                     identifier id;
-                    if ((tokens[i].isIdentifierTokenObject()) && (tokens[i + 1].getLexeme() == "("))
-                        continue;
-                    if ((i > 0) && tokens[i].isIdentifierTokenObject() && (tokens[i - 1].isDatatype()))
+
+                    if ((i > 0) && tokens[i].isIdentifierTokenObject() && ((tokens[i - 1].isDatatype() || tokens[i - 1].getLexeme() == ",")))
                     {
                         id = new identifier(tokens[i]);
                         if ((i > 0) && (tokens[i - 1].isDatatype()))
-                            id.dataType = tokens[i - 1];
+                        { id.dataType = tokens[i - 1]; }
+                        else if (tokens[i - 1].getLexeme() == ",")
+                        {
+                            int k = i - 1;
+                            while ((k > 0) && (!tokens[k].isDatatype()))
+                                k--;
+                            if (k == 0)
+                                break;
+                            id.dataType = tokens[k];
+                        }
                         thisScopeVars.Add(id);
-                        for (int q = 0; q < holeCodeTokens.Count; q++)
-                            if (holeCodeTokens[q].id == tokens[i].id)
-                                holeCodeTokens[q] = id;
-                        tokens[i] = id;
-                    }
-                    else if (parameters.Select(a => a.getLexeme()).ToList().Contains(tokens[i].getLexeme()))
-                    {
-                        id = parameters.Find(a => a.getLexeme() == tokens[i].getLexeme());
 
-                        for (int q = 0; q < holeCodeTokens.Count; q++)
+                        //for (int q = 0; q < thisCodeToken.Count; q++)
+                        //    if (thisCodeToken[q].id == globalScobeTokens[i].id)
+                        //        thisCodeToken[q] = id;
+
+                        for (int q = 0; (holeCodeTokens != null) && (q < holeCodeTokens.Count); q++)
                             if (holeCodeTokens[q].id == tokens[i].id)
                                 holeCodeTokens[q] = id;
+
                         tokens[i] = id;
                     }
                     else if (thisScopeVars.Select(a => a.getLexeme()).ToList().Contains(tokens[i].getLexeme()))
                     {
                         id = thisScopeVars.Find(a => a.getLexeme() == tokens[i].getLexeme());
 
-                        for (int q = 0; q < holeCodeTokens.Count; q++)
+                        //for (int q = 0; q < thisCodeToken.Count; q++)
+                        //    if (thisCodeToken[q].id == globalScobeTokens[i].id)
+                        //        thisCodeToken[q] = id;
+                        for (int q = 0; (holeCodeTokens != null) && (q < holeCodeTokens.Count); q++)
                             if (holeCodeTokens[q].id == tokens[i].id)
                                 holeCodeTokens[q] = id;
                         tokens[i] = id;
@@ -153,20 +164,25 @@ namespace Analyzer
                     else if (upperLevelVar.Select(a => a.getLexeme()).ToList().Contains(tokens[i].getLexeme()))
                     {
                         id = upperLevelVar.Find(a => a.getLexeme() == tokens[i].getLexeme());
-                        for (int q = 0; q < holeCodeTokens.Count; q++)
+                        //for (int q = 0; q < thisCodeToken.Count; q++)
+                        //    if (thisCodeToken[q].id == globalScobeTokens[i].id)
+                        //        thisCodeToken[q] = id;
+                        for (int q = 0; (holeCodeTokens != null) && (q < holeCodeTokens.Count); q++)
                             if (holeCodeTokens[q].id == tokens[i].id)
                                 holeCodeTokens[q] = id;
                         tokens[i] = id;
 
                     }
-
                     else
                     {
                         id = new identifier(tokens[i]);
                         if ((i > 0) && (tokens[i - 1].isDatatype()))
                             id.dataType = tokens[i - 1];
                         thisScopeVars.Add(id);
-                        for (int q = 0; q < holeCodeTokens.Count; q++)
+                        //for (int q = 0; q < thisCodeToken.Count; q++)
+                        //    if (thisCodeToken[q].id == globalScobeTokens[i].id)
+                        //        thisCodeToken[q] = id;
+                        for (int q = 0; (q < holeCodeTokens.Count) && (holeCodeTokens != null); q++)
                             if (holeCodeTokens[q].id == tokens[i].id)
                                 holeCodeTokens[q] = id;
                         tokens[i] = id;
@@ -176,9 +192,22 @@ namespace Analyzer
                 }
                 if ((i > 0) && ((tokens[i].isPointer) || pointer))
                 {
-                    if ((i > 0) && tokens[i].isPointer && (tokens[i - 1].isDatatype()))
+                    if ((i > 0) && tokens[i].isPointer &&( (tokens[i - 1].isDatatype()||(tokens[i - 1].getLexeme()==","))))
                     {
-                        thisScopePointers.Add((pointer)tokens[i]);
+                        pointer p = (pointer)tokens[i];
+
+                        if (tokens[i - 1].isDatatype())
+                        { p.dataType = tokens[i - 1]; }
+                        else if (tokens[i - 1].getLexeme() == ",")
+                        {
+                            int k = i - 1;
+                            while ((k > 0) && (!tokens[k].isDatatype()))
+                                k--;
+                            if (k == 0)
+                                break;
+                            p.dataType = tokens[k];
+                        }
+                        thisScopePointers.Add(p);
                     }
                     else if (thisScopePointers.Select(a => a.getLexeme()).ToList().Contains(tokens[i].getLexeme()))
                     {
@@ -207,7 +236,19 @@ namespace Analyzer
                 {
                     if ((i > 0) && tokens[i].isPointer && (tokens[i - 1].isDatatype()))
                     {
-                        thisScopeArray.Add((array)tokens[i]);
+                        array p = (array)tokens[i];
+                        if (tokens[i - 1].isDatatype())
+                        { p.dataType = tokens[i - 1]; }
+                        else if (tokens[i - 1].getLexeme() == ",")
+                        {
+                            int k = i - 1;
+                            while ((k > 0) && (!tokens[k].isDatatype()))
+                                k--;
+                            if (k == 0)
+                                break;
+                            p.dataType = tokens[k];
+                        }
+                        thisScopeArray.Add(p);
                     }
                     else if (thisScopeArray.Select(a => a.getLexeme()).ToList().Contains(tokens[i].getLexeme()))
                     {

@@ -66,7 +66,7 @@ namespace Analyzer
         public virtual bool isPointer { get { return false; } }
         public virtual int pointerLevel { get { return 0; } set { value = 0; } }
         public virtual bool isArray { get { return false; } }
-        public virtual List<int> arrayIndices { get { return null; } set { } }
+        public virtual List<token> arrayIndices { get { return null; } set { } }
         public virtual bool isVariable { get { return false; } }
         public virtual bool isFunctionCall { get { return false; } }
 
@@ -111,11 +111,11 @@ namespace Analyzer
     public class array : identifier
     {
         public override bool isIdentifierObject() { return false; }
-        List<int> _arrayIndices = new List<int>();
+        List<token> _arrayIndices = new List<token>();
         public override bool isArray { get { return true; } }
         public override bool isVariable { get { return false; } }
         public override bool isPointer { get { return false; } }
-        public override List<int> arrayIndices { get { return _arrayIndices; } set { _arrayIndices = new List<int>(value); } }
+        public override List<token> arrayIndices { get { return _arrayIndices; } set { _arrayIndices = new List<token>(value); } }
         public array(token t, token dataType) : base(t, dataType)
         {
             this.type = "array";
@@ -152,7 +152,7 @@ namespace Analyzer
         }
         public pointer(pointer p) : base(p, p.dataType)
         {
-            p.pointerLevel = this.pointerLevel;
+            this.pointerLevel = p.pointerLevel;
             this.type = "pointer";
 
         }
@@ -179,7 +179,7 @@ namespace Analyzer
         public int getCount() { return count; }
         public void incCount() { this.count++; }
         public void decCount() { this.count--; }
-        public static void AddOneByToken(token TknObj, List<variableCounter> tkn)
+        public static void AddOneByToken(token TknObj,token dt, List<variableCounter> tkn)
         {
             var t = tkn.FirstOrDefault(x => x.id == TknObj.id);
             if (t != null)
@@ -188,7 +188,7 @@ namespace Analyzer
             }
             else
             {
-                tkn.Add(new variableCounter(TknObj));
+                tkn.Add(new variableCounter(TknObj,dt));
             }
         }
     }
@@ -299,7 +299,6 @@ namespace Analyzer
     public class functionCallCounter : identifier
     {
         int count;
-        bool declaredFunc;
         public override bool isVariable { get { return false; } }
         public override bool isArray { get { return false; } }
         public override bool isPointer { get { return false; } }

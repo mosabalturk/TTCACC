@@ -60,3 +60,4 @@ C:\Users\Mosab AlTurk\Desktop\3-12\TTCACC\Source\Analyzer\obj\Debug\Analyzer.csp
 C:\Users\Mosab AlTurk\Desktop\3-12\TTCACC\Source\Analyzer\obj\Debug\Analyzer.exe
 C:\Users\Mosab AlTurk\Desktop\3-12\TTCACC\Source\Analyzer\obj\Debug\Analyzer.pdb
 C:\Users\Mosab AlTurk\Desktop\3-12\TTCACC\Source\Analyzer\obj\Debug\Analyzer.csprojResolveAssemblyReference.cache
+C:\Users\Mosab AlTurk\Desktop\3-12\TTCACC\Source\Analyzer\obj\Debug\Analyzer.choice.resources

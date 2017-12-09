@@ -7,23 +7,26 @@ namespace Analyzer
 {
     public class result
     {
+        private string _filename;
+        public string filename { get { return _filename; } set { _filename = value; } }
         public bool ERROR = false;
         public string errormsg = "";
         public int commentLines, commentLetters;
-        public List<scopeTokenCounter> keyWord = new List<scopeTokenCounter>();
-        public List<scopeTokenCounter> operations = new List<scopeTokenCounter>();
-        public List<scopeTokenCounter> datatypes = new List<scopeTokenCounter>();
-        public List<scopeTokenCounter> values = new List<scopeTokenCounter>();
-        public List<scopeTokenCounter> specialChar = new List<scopeTokenCounter>();
-        public List<scopeVarCounter> vars = new List<scopeVarCounter>();
-        public List<scopePointersCounter> pointrs = new List<scopePointersCounter>();
-        public List<scopeArrayCounter> arrays = new List<scopeArrayCounter>();
-        public List<scopefunctionCallCounter> functionCalls = new List<scopefunctionCallCounter>();
-        public List<string> libraries = new List<string>();
-        public List<tokenCounter> operationsAllFile = new List<tokenCounter>();
-        public List<tokenCounter> keyWordsAllFile = new List<tokenCounter>();
-        public List<tokenCounter> dataTypesAllFile = new List<tokenCounter>();
-        public List<tokenCounter> valuesAllFile = new List<tokenCounter>();
+        public List<scopeTokens> tokens = new List<scopeTokens>();
+        public List<scopeTokenCounter> keyWord = new List<scopeTokenCounter>();//1
+        public List<scopeTokenCounter> operations = new List<scopeTokenCounter>();//2
+        public List<scopeTokenCounter> datatypes = new List<scopeTokenCounter>();//3
+        public List<scopeTokenCounter> values = new List<scopeTokenCounter>();//4
+        public List<scopeTokenCounter> specialChar = new List<scopeTokenCounter>();//5
+        public List<scopeVarCounter> vars = new List<scopeVarCounter>();//6
+        public List<scopePointersCounter> pointrs = new List<scopePointersCounter>();//7
+        public List<scopeArrayCounter> arrays = new List<scopeArrayCounter>();//8
+        public List<scopefunctionCallCounter> functionCalls = new List<scopefunctionCallCounter>();//9
+        public List<string> libraries = new List<string>();//10
+        public List<tokenCounter> operationsAllFile = new List<tokenCounter>();//11
+        public List<tokenCounter> keyWordsAllFile = new List<tokenCounter>();//12
+        public List<tokenCounter> dataTypesAllFile = new List<tokenCounter>();//13
+        public List<tokenCounter> valuesAllFile = new List<tokenCounter>();//14
         public void setValuesAll()
         {
             foreach (var item in values)
@@ -204,5 +207,26 @@ namespace Analyzer
         }
 
     }
+    public class scopeTokens
+    {
+        public string scopeName { get; set; }
+        public int scopeId;
+        public int containId;
+        public List<token> tokens;
+        string scopeType;
+        public string getScopeType() { return scopeType; }
+        bool isClass { get { if (scopeType == "class") return true; else return false; } }
+        bool isStruct { get { if (scopeType == "struct") return true; else return false; } }
+        bool isGS { get { if (scopeType == "GS") return true; else return false; } }
+        bool isFunction { get { if (scopeType == "function") return true; else return false; } }
+        public scopeTokens(int scopeId, int containId, string scopeName, List<token> tokens, string type)
+        {
+            this.scopeType = type;
+            this.scopeName = scopeName;
+            this.scopeId = scopeId;
+            this.containId = containId;
+            this.tokens = tokens;
+        }
 
+    }
 }

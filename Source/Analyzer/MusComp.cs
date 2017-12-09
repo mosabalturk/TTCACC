@@ -39,13 +39,17 @@ namespace Analyzer
                     temp1 = new List<tokenCounter>(f1.result.dataTypesAllFile);
                     temp2 = new List<tokenCounter>(f2.result.dataTypesAllFile);
                     break;
-                //case 4:
-                //    temp1 = new List<tokenCounter>(f1.result.valuesAllFile);
-                //    temp2 = new List<tokenCounter>(f2.result.valuesAllFile);
-                //    break;
+                case 4:
+                    temp1 = new List<tokenCounter>(f1.result.valuesAllFile);
+                    temp2 = new List<tokenCounter>(f2.result.valuesAllFile);
+                    break;
                 case 5:
                     temp1 = temp1.Concat(f1.result.keyWordsAllFile).Concat(f1.result.dataTypesAllFile).ToList()/*Concat(f1.result.valuesAllFile)*/;
                     temp2 = temp2.Concat(f2.result.keyWordsAllFile).Concat(f2.result.dataTypesAllFile).ToList()/*Concat(f2.result.valuesAllFile)*/;
+                    break;
+                case 6:
+                    temp1 = temp1.Concat(f1.result.keyWordsAllFile).Concat(f1.result.dataTypesAllFile).Concat(f1.result.valuesAllFile).ToList();
+                    temp2 = temp2.Concat(f2.result.keyWordsAllFile).Concat(f2.result.dataTypesAllFile).Concat(f2.result.valuesAllFile).ToList()/**/;
                     break;
             }
             foreach (tokenCounter tt in temp1)
@@ -117,7 +121,7 @@ namespace Analyzer
                     ratio += (float)m.similarity * (float)m.credit;
                     credit += m.credit;
                 }
-                //System.Windows.Forms.MessageBox.Show(s);
+               // System.Windows.Forms.MessageBox.Show(s);
                 ratio /= credit;
                 return ratio;
             }
