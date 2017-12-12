@@ -12,11 +12,11 @@ namespace Analyzer
         public List<variableCounter> variablesCounter = new List<variableCounter>();
         public List<pointerCounter> pointersCounter = new List<pointerCounter>();
         public List<arrayCounter> arraysCounter = new List<arrayCounter>();
+        public List<functionCallCounter> functionCallsCounter = new List<functionCallCounter>();
         public List<tokenCounter> KeyWordsCounter = new List<tokenCounter>();
         public List<tokenCounter> dataTypesCounter = new List<tokenCounter>();
         public List<tokenCounter> valuesCounter = new List<tokenCounter>();
         public List<tokenCounter> operationsCounter = new List<tokenCounter>();
-        public List<functionCallCounter> functionCalls = new List<functionCallCounter>();
 
         #endregion
 
@@ -92,6 +92,8 @@ namespace Analyzer
                     pointerCounter.AddOneByToken((pointer)tokens[ii], pointersCounter);
                 else if (tokens[ii].isArray)
                     arrayCounter.AddOneByToken((array)tokens[ii], arraysCounter);
+                else if (tokens[ii].isFunctionCall)
+                    functionCallCounter.AddOneByLexeme(tokens[ii], functionCallsCounter);
                 else
                     tokenCounter.AddOneByLexeme(tokens[ii], specialChar);
             }
@@ -99,7 +101,7 @@ namespace Analyzer
 
         public void findIdentifiers()
         {
-          //  code.structAsDatatype(this.tokens);
+            //  code.structAsDatatype(this.tokens);
             for (int i = 0; i < tokens.Count-1; i++)
             {
                 if ((tokens[i].isIdentifierTokenObject()) && (tokens[i + 1].getLexeme() == "("))
@@ -117,12 +119,97 @@ namespace Analyzer
             for (int i = 0; i < tokens.Count; i++)
             {
                 
-                bool pointer = upperLevelPointers.Concat(thisScopePointers).ToList().Select(a => a.getLexeme()).ToList().Contains(tokens[i].getLexeme());
+                bool pointer = (upperLevelPointers.Concat(thisScopePointers).ToList().Select(a => a.getLexeme()).ToList()).Contains(tokens[i].getLexeme());
                 bool array = upperLevelArray.Concat(thisScopeArray).ToList().Select(a => a.getLexeme()).ToList().Contains(tokens[i].getLexeme());
+                if ( ((tokens[i].isPointer) || pointer))
+                {
+                    if ((i > 0) && tokens[i].isPointer &&( (tokens[i - 1].isDatatype()||(tokens[i - 1].getLexeme()==","))))
+                    {
+                        pointer p = (pointer)tokens[i];
+
+                        if (tokens[i - 1].isDatatype())
+                        { p.dataType = tokens[i - 1]; }
+                        else if (tokens[i - 1].getLexeme() == ",")
+                        {
+                            int k = i - 1;
+                            while ((k > 0) && (!tokens[k].isDatatype()))
+                                k--;
+                            if (k != 0)
+                                p.dataType = tokens[k];
+                        }
+                        thisScopePointers.Add(p);
+                        for (int q = 0; (holeCodeTokens != null) && (q < holeCodeTokens.Count); q++)
+                            if (holeCodeTokens[q].id == tokens[i].id)
+                                holeCodeTokens[q] = p;
+
+                        tokens[i] = p;
+                    }
+                    else if (thisScopePointers.Select(a => a.getLexeme()).ToList().Contains(tokens[i].getLexeme()))
+                    {
+                        pointer id;
+                        id = thisScopePointers.Find(a => a.getLexeme() == tokens[i].getLexeme());
+
+                        for (int q = 0; (holeCodeTokens != null) && (q < holeCodeTokens.Count); q++)
+                            if (holeCodeTokens[q].id == tokens[i].id)
+                                holeCodeTokens[q] = id;
+                        tokens[i] = id;
+                    }
+                    else if (upperLevelPointers.Select(a => a.getLexeme()).ToList().Contains(tokens[i].getLexeme()))
+                    {
+                        pointer id;
+                        id = upperLevelPointers.Find(a => a.getLexeme() == tokens[i].getLexeme());
+
+                        for (int q = 0; (holeCodeTokens != null) && (q < holeCodeTokens.Count); q++)
+                            if (holeCodeTokens[q].id == tokens[i].id)
+                                holeCodeTokens[q] = id;
+                        tokens[i] = id;
+                    }
+                    continue;
+                }
+                if ((i > 0) && ((tokens[i].isArray) || array))
+                {
+                    if ((i > 0) && tokens[i].isPointer && (tokens[i - 1].isDatatype()))
+                    {
+                        array p = (array)tokens[i];
+                        if (tokens[i - 1].isDatatype())
+                        { p.dataType = tokens[i - 1]; }
+                        else if (tokens[i - 1].getLexeme() == ",")
+                        {
+                            int k = i - 1;
+                            while ((k > 0) && (!tokens[k].isDatatype()))
+                                k--;
+                            if (k != 0)
+
+                                p.dataType = tokens[k];
+                        }
+                        thisScopeArray.Add(p);
+                    }
+                    else if (thisScopeArray.Select(a => a.getLexeme()).ToList().Contains(tokens[i].getLexeme()))
+                    {
+                        array id;
+                        id = thisScopeArray.Find(a => a.getLexeme() == tokens[i].getLexeme());
+
+                        for (int q = 0; (holeCodeTokens != null) && (q < holeCodeTokens.Count); q++)
+                            if (holeCodeTokens[q].id == tokens[i].id)
+                                holeCodeTokens[q] = id;
+                        tokens[i] = id;
+                    }
+                    else if (upperLevelArray.Select(a => a.getLexeme()).ToList().Contains(tokens[i].getLexeme()))
+                    {
+                        array id;
+                        id = upperLevelArray.Find(a => a.getLexeme() == tokens[i].getLexeme());
+
+                        for (int q = 0; (holeCodeTokens != null) && (q < holeCodeTokens.Count); q++)
+                            if (holeCodeTokens[q].id == tokens[i].id)
+                                holeCodeTokens[q] = id;
+                        tokens[i] = id;
+
+                    }
+                    continue;
+                }
                 if ((tokens[i].isIdentifierTokenObject()) && !tokens[i].isPointer && !tokens[i].isArray && !array && !pointer)
                 {
                     identifier id;
-
                     if ((i > 0) && tokens[i].isIdentifierTokenObject() && ((tokens[i - 1].isDatatype() || tokens[i - 1].getLexeme() == ",")))
                     {
                         id = new identifier(tokens[i]);
@@ -130,12 +217,12 @@ namespace Analyzer
                         { id.dataType = tokens[i - 1]; }
                         else if (tokens[i - 1].getLexeme() == ",")
                         {
+
                             int k = i - 1;
                             while ((k > 0) && (!tokens[k].isDatatype()))
                                 k--;
-                            if (k == 0)
-                                break;
-                            id.dataType = tokens[k];
+                            if (k != 0)
+                                id.dataType = tokens[k];
                         }
                         thisScopeVars.Add(id);
 
@@ -190,91 +277,9 @@ namespace Analyzer
                     }
                     continue;
                 }
-                if ((i > 0) && ((tokens[i].isPointer) || pointer))
-                {
-                    if ((i > 0) && tokens[i].isPointer &&( (tokens[i - 1].isDatatype()||(tokens[i - 1].getLexeme()==","))))
-                    {
-                        pointer p = (pointer)tokens[i];
 
-                        if (tokens[i - 1].isDatatype())
-                        { p.dataType = tokens[i - 1]; }
-                        else if (tokens[i - 1].getLexeme() == ",")
-                        {
-                            int k = i - 1;
-                            while ((k > 0) && (!tokens[k].isDatatype()))
-                                k--;
-                            if (k == 0)
-                                break;
-                            p.dataType = tokens[k];
-                        }
-                        thisScopePointers.Add(p);
-                    }
-                    else if (thisScopePointers.Select(a => a.getLexeme()).ToList().Contains(tokens[i].getLexeme()))
-                    {
-                        pointer id;
-                        id = thisScopePointers.Find(a => a.getLexeme() == tokens[i].getLexeme());
-
-                        for (int q = 0; (holeCodeTokens != null) && (q < holeCodeTokens.Count); q++)
-                            if (holeCodeTokens[q].id == tokens[i].id)
-                                holeCodeTokens[q] = id;
-                        tokens[i] = id;
-                    }
-                    else if (upperLevelPointers.Select(a => a.getLexeme()).ToList().Contains(tokens[i].getLexeme()))
-                    {
-                        pointer id;
-                        id = upperLevelPointers.Find(a => a.getLexeme() == tokens[i].getLexeme());
-
-                        for (int q = 0; (holeCodeTokens != null) && (q < holeCodeTokens.Count); q++)
-                            if (holeCodeTokens[q].id == tokens[i].id)
-                                holeCodeTokens[q] = id;
-                        tokens[i] = id;
-
-                    }
-                    continue;
-                }
-                if ((i > 0) && ((tokens[i].isArray) || array))
-                {
-                    if ((i > 0) && tokens[i].isPointer && (tokens[i - 1].isDatatype()))
-                    {
-                        array p = (array)tokens[i];
-                        if (tokens[i - 1].isDatatype())
-                        { p.dataType = tokens[i - 1]; }
-                        else if (tokens[i - 1].getLexeme() == ",")
-                        {
-                            int k = i - 1;
-                            while ((k > 0) && (!tokens[k].isDatatype()))
-                                k--;
-                            if (k == 0)
-                                break;
-                            p.dataType = tokens[k];
-                        }
-                        thisScopeArray.Add(p);
-                    }
-                    else if (thisScopeArray.Select(a => a.getLexeme()).ToList().Contains(tokens[i].getLexeme()))
-                    {
-                        array id;
-                        id = thisScopeArray.Find(a => a.getLexeme() == tokens[i].getLexeme());
-
-                        for (int q = 0; (holeCodeTokens != null) && (q < holeCodeTokens.Count); q++)
-                            if (holeCodeTokens[q].id == tokens[i].id)
-                                holeCodeTokens[q] = id;
-                        tokens[i] = id;
-                    }
-                    else if (upperLevelArray.Select(a => a.getLexeme()).ToList().Contains(tokens[i].getLexeme()))
-                    {
-                        array id;
-                        id = upperLevelArray.Find(a => a.getLexeme() == tokens[i].getLexeme());
-
-                        for (int q = 0; (holeCodeTokens != null) && (q < holeCodeTokens.Count); q++)
-                            if (holeCodeTokens[q].id == tokens[i].id)
-                                holeCodeTokens[q] = id;
-                        tokens[i] = id;
-
-                    }
-                    continue;
-                }
             }
-            
+
         }
     }
 }

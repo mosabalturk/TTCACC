@@ -303,7 +303,6 @@ namespace Analyzer
         public override bool isArray { get { return false; } }
         public override bool isPointer { get { return false; } }
         public override bool isIdentifierObject() { return false; }
-
         public functionCallCounter copy()
         {
             functionCallCounter fcc = new functionCallCounter(this);

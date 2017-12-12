@@ -141,10 +141,10 @@ namespace Analyzer
         public static List<ComparisonTable> CompareCppFiles(cppFile file1, cppFile file2)
         {
             List<ComparisonTable> CT = new List<ComparisonTable>();
-            CT = CT.Concat(CompareScopesAddToComparisonTable(file1.result.keyWord, file2.result.keyWord)).ToList();
+            CT = CT.Concat(CompareScopesAddToComparisonTable(file1.result.keyWords, file2.result.keyWords)).ToList();
             CT = CT.Concat(CompareScopesAddToComparisonTable(file1.result.operations, file2.result.operations)).ToList();
             CT = CT.Concat(CompareScopesAddToComparisonTable(file1.result.values, file2.result.values)).ToList();
-            CT = CT.Concat(CompareScopesAddToComparisonTable(file1.result.specialChar, file2.result.specialChar)).ToList();
+            CT = CT.Concat(CompareScopesAddToComparisonTable(file1.result.specialChars, file2.result.specialChars)).ToList();
             //CT = CT.Concat(CompareScopesAddToComparisonTable(file1.result.pointrs, file2.result.pointrs)).ToList();
             //CT = CT.Concat(CompareScopesAddToComparisonTable(file1.result.arrays, file2.result.arrays)).ToList();
             //CT = CT.Concat(CompareScopesAddToComparisonTable(file1.result.vars, file2.result.vars)).ToList();

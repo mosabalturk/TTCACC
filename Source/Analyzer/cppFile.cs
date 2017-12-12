@@ -17,8 +17,8 @@ namespace Analyzer
         //# define varName value
         // define.type = value of define 
         // defin.lexeme = varName
-        private List<string> libraries = new List<string>();//done
-        public List<string> getLibraries { get { return libraries; } }
+        private List<tokenCounter> libraries = new List<tokenCounter>();//done
+        public List<tokenCounter> getLibraries { get { return libraries; } }
         public List<token> getDefines { get { return defines; } }//ساويه من نوع ايدنتيفير
         public string RemoveCommentsAndSpaces(string value)
         {
@@ -29,6 +29,7 @@ namespace Analyzer
             string lineSeparator = ((char)0x2028).ToString();
             string paragraphSeparator = ((char)0x2029).ToString();
             value = deleteBetween(value, "//", "\n");
+            value = deleteBetween(value, "/*", "*/");
             string temp = value.Replace("  ", " ").Replace("} ;", "};").Replace("\r\n", " ").Replace("\n", " ").Replace("\t", " ").Replace("\r", " ").Replace(lineSeparator, " ").Replace(paragraphSeparator, " ");
 
             if (value == temp)
@@ -72,7 +73,7 @@ namespace Analyzer
                 code = new code(codestr, filename, ++code.idno, holeCodeTokens,  this,"GS");
             }
             catch (Exception e)
-            { result.ERROR = true; result.errormsg = e.ToString(); }
+            { result.ERROR = true; result.errormsg = e.ToString(); System.Windows.Forms.MessageBox.Show(e.ToString()); }
             try
             {
                 code.recognizeIdentifiers(code);
@@ -100,7 +101,7 @@ namespace Analyzer
                             holeCodeTokens.RemoveAt(i + 1);
                         holeCodeTokens[i].setLexeme(lib);
                         holeCodeTokens[i].setType("library");
-                        libraries.Add(lib);
+                        libraries.Add(new tokenCounter( holeCodeTokens[i]));
                     }
                     if ((holeCodeTokens[i].getLexeme() == "#") && (holeCodeTokens[i + 1].getLexeme() == "define"))
                     {
@@ -117,7 +118,7 @@ namespace Analyzer
         public void setResults( code t)
         {
             
-            result.keyWord = t.keywordsLL1(t);
+            result.keyWords = t.keywordsLL1(t);
             result.operations = t.operatorsLL1(t);
             result.datatypes = t.datatypesLL1(t);
             result.values = t.ValuesLL1(t);
@@ -125,7 +126,7 @@ namespace Analyzer
             result.pointrs = t.pointersLL1(t);
             result.arrays = t.ArraysLL1(t);
             result.libraries = libraries;
-            result.specialChar = t.specialCharList(t);
+            result.specialChars = t.specialCharList(t);
             result.functionCalls = t.funcCalls(t);
             result.commentLetters = commentLetters;
             result.commentLines = commentLines;
@@ -133,7 +134,9 @@ namespace Analyzer
             result.setKWAll();
             result.setDTAll();
             result.setValuesAll();
-            result.tokens = t.scopeTokens(t);            
+            result.setSpecialCahrAll();
+            result.tokens = t.scopeTokens(t);
+            result.allTokens = new List<token>(holeCodeTokens);
             code.zeroStatics();
         }
     }

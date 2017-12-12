@@ -7,26 +7,29 @@ namespace Analyzer
 {
     public class result
     {
-        private string _filename;
-        public string filename { get { return _filename; } set { _filename = value; } }
-        public bool ERROR = false;
-        public string errormsg = "";
-        public int commentLines, commentLetters;
-        public List<scopeTokens> tokens = new List<scopeTokens>();
-        public List<scopeTokenCounter> keyWord = new List<scopeTokenCounter>();//1
+        private string _filename;//done
+        public string filename { get { return _filename; } set { _filename = value; } }//done
+        public bool ERROR = false;//done
+        public string errormsg = "";//done
+        public int commentLines, commentLetters;//done
+        public List<token> allTokens = new List<token>();//done
+        public List<scopeTokens> tokens = new List<scopeTokens>();//done
+
+        public List<scopeTokenCounter> keyWords = new List<scopeTokenCounter>();//1
         public List<scopeTokenCounter> operations = new List<scopeTokenCounter>();//2
         public List<scopeTokenCounter> datatypes = new List<scopeTokenCounter>();//3
         public List<scopeTokenCounter> values = new List<scopeTokenCounter>();//4
-        public List<scopeTokenCounter> specialChar = new List<scopeTokenCounter>();//5
+        public List<scopeTokenCounter> specialChars = new List<scopeTokenCounter>();//5
         public List<scopeVarCounter> vars = new List<scopeVarCounter>();//6
         public List<scopePointersCounter> pointrs = new List<scopePointersCounter>();//7
         public List<scopeArrayCounter> arrays = new List<scopeArrayCounter>();//8
         public List<scopefunctionCallCounter> functionCalls = new List<scopefunctionCallCounter>();//9
-        public List<string> libraries = new List<string>();//10
+        public List<tokenCounter> libraries = new List<tokenCounter>();//10
         public List<tokenCounter> operationsAllFile = new List<tokenCounter>();//11
         public List<tokenCounter> keyWordsAllFile = new List<tokenCounter>();//12
         public List<tokenCounter> dataTypesAllFile = new List<tokenCounter>();//13
         public List<tokenCounter> valuesAllFile = new List<tokenCounter>();//14
+        public List<tokenCounter> specialCharAllFile = new List<tokenCounter>();//14
         public void setValuesAll()
         {
             foreach (var item in values)
@@ -44,6 +47,23 @@ namespace Analyzer
                         t5.setLexeme(t.getType());
                         valuesAllFile.Add(t5);
                     }
+                }
+            }
+        }
+        public void setSpecialCahrAll()
+        {
+            foreach (var item in specialChars)
+            {
+                foreach (tokenCounter t in item.counter)
+                {
+                    if (specialCharAllFile.Select(a => a.getLexeme()).Contains(t.getLexeme()))
+                    {
+                        tokenCounter t2 = specialCharAllFile.Find(a => a.getLexeme() == t.getLexeme());
+                        t2.setCount(t2.getCount() + t.getCount());
+                    }
+                    else
+                        specialCharAllFile.Add(t.copy());
+                    
                 }
             }
         }
@@ -65,7 +85,7 @@ namespace Analyzer
         }
         public void setKWAll()
         {
-            foreach (var item in keyWord)
+            foreach (var item in keyWords)
             {
                 foreach (tokenCounter t in item.counter)
                 {
@@ -85,7 +105,22 @@ namespace Analyzer
             {
                 foreach (tokenCounter t in item.counter)
                 {
-                    if (dataTypesAllFile.Select(a => a.getLexeme()).Contains(t.getLexeme()))
+                   if( !(new List<string>(){
+                "bool", "char","short","float","int","FILE","int32","double","long","void"}.Exists(element => t.getLexeme() == element)))
+                    {
+                        if (dataTypesAllFile.Select(a => a.getLexeme()).Contains(""))
+                        {
+                            tokenCounter t2 = dataTypesAllFile.Find(a => a.getLexeme() == "");
+                            t2.setCount(t2.getCount() + t.getCount());
+                        }
+                        else
+                        {
+                            tokenCounter t2 = new tokenCounter(new token("", ""));
+                            t2.setCount(t.getCount());
+                            dataTypesAllFile.Add(t2.copy());
+                        }
+                    }
+                    else if (dataTypesAllFile.Select(a => a.getLexeme()).Contains(t.getLexeme()))
                     {
                         tokenCounter t2 = dataTypesAllFile.Find(a => a.getLexeme() == t.getLexeme());
                         t2.setCount(t2.getCount() + t.getCount());
@@ -94,6 +129,14 @@ namespace Analyzer
                         dataTypesAllFile.Add(t.copy());
                 }
             }
+        }
+        public static void adjustKeywords(List<scopeTokenCounter> stc)
+        {
+
+        }
+        public static functionCallCounter[] getList()
+        {
+            return new functionCallCounter [] {new functionCallCounter(new token("",""))};
         }
     }
     public class scopeTokenCounter

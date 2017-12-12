@@ -9,17 +9,17 @@ namespace Analyzer
     {
         public List<coupleComp> couples = new List<coupleComp>();
 
-        public void CompareCppFiles(List<cppFile> allFilesList,int x)
+        public void CompareCppFiles(List<cppFile> allFilesList, int x)
         {
             for (int i = 0; i < allFilesList.Count - 1; i++)
             {
                 for (int j = i + 1; j < allFilesList.Count; j++)
                 {
-                    couples.Add(compare(allFilesList[i], allFilesList[j],x));
+                    couples.Add(compare(allFilesList[i], allFilesList[j], x));
                 }
             }
         }
-        public coupleComp compare(cppFile f1, cppFile f2,int x)
+        public coupleComp compare(cppFile f1, cppFile f2, int x)
         {
             coupleComp c = new coupleComp();
             List<myrow> l = new List<myrow>();
@@ -32,8 +32,8 @@ namespace Analyzer
                 case 1:
                     break;
                 case 2:
-                     temp1 = new List<tokenCounter>(f1.result.keyWordsAllFile);
-                     temp2 = new List<tokenCounter>(f2.result.keyWordsAllFile);
+                    temp1 = new List<tokenCounter>(f1.result.keyWordsAllFile);
+                    temp2 = new List<tokenCounter>(f2.result.keyWordsAllFile);
                     break;
                 case 3:
                     temp1 = new List<tokenCounter>(f1.result.dataTypesAllFile);
@@ -44,12 +44,20 @@ namespace Analyzer
                     temp2 = new List<tokenCounter>(f2.result.valuesAllFile);
                     break;
                 case 5:
-                    temp1 = temp1.Concat(f1.result.keyWordsAllFile).Concat(f1.result.dataTypesAllFile).ToList()/*Concat(f1.result.valuesAllFile)*/;
-                    temp2 = temp2.Concat(f2.result.keyWordsAllFile).Concat(f2.result.dataTypesAllFile).ToList()/*Concat(f2.result.valuesAllFile)*/;
+                    temp1 = temp1.Concat(f1.result.keyWordsAllFile).Concat(f1.result.dataTypesAllFile).ToList();
+                    temp2 = temp2.Concat(f2.result.keyWordsAllFile).Concat(f2.result.dataTypesAllFile).ToList();
                     break;
                 case 6:
                     temp1 = temp1.Concat(f1.result.keyWordsAllFile).Concat(f1.result.dataTypesAllFile).Concat(f1.result.valuesAllFile).ToList();
                     temp2 = temp2.Concat(f2.result.keyWordsAllFile).Concat(f2.result.dataTypesAllFile).Concat(f2.result.valuesAllFile).ToList()/**/;
+                    break;
+                case 7:
+                    temp1 = new List<tokenCounter>(f1.result.specialCharAllFile);
+                    temp2 = new List<tokenCounter>(f2.result.specialCharAllFile);
+                    break;
+                case 8:
+                    temp1 = temp1.Concat(f1.result.keyWordsAllFile).Concat(f1.result.dataTypesAllFile).Concat(f1.result.valuesAllFile).Concat(f1.result.specialCharAllFile).ToList();
+                    temp2 = temp2.Concat(f2.result.keyWordsAllFile).Concat(f2.result.dataTypesAllFile).Concat(f2.result.valuesAllFile).Concat(f2.result.specialCharAllFile).ToList()/**/;
                     break;
             }
             foreach (tokenCounter tt in temp1)
@@ -75,18 +83,19 @@ namespace Analyzer
 
                     int a = temp1.Find(aa => aa.getLexeme() == t2.getLexeme()).getCount();
                     int b = t2.getCount();
-                    
-                        l.Add(new myrow(a, b, t2.getLexeme(), f1.name, f2.name));
+
+                    l.Add(new myrow(a, b, t2.getLexeme(), f1.name, f2.name));
 
                 }
 
             }
-                c.towFiles = l;
-                return c;
-            
+            c.towFiles = l;
+            return c;
+
         }
+    }
         public class myrow
-        {
+    {
             public int first_;
             public int seconde;
             public string firstfile;
@@ -127,4 +136,3 @@ namespace Analyzer
             }
         }
     }
-}

@@ -33,21 +33,22 @@
             this.button1 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.comboBox2 = new System.Windows.Forms.ComboBox();
+            this.button2 = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(94, 24);
+            this.comboBox1.Location = new System.Drawing.Point(36, 24);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(192, 24);
+            this.comboBox1.Size = new System.Drawing.Size(518, 24);
             this.comboBox1.TabIndex = 0;
             this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(308, 64);
+            this.label1.Location = new System.Drawing.Point(575, 61);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(44, 17);
             this.label1.TabIndex = 2;
@@ -55,7 +56,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(311, 102);
+            this.button1.Location = new System.Drawing.Point(531, 102);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(151, 46);
             this.button1.TabIndex = 3;
@@ -66,7 +67,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(308, 27);
+            this.label2.Location = new System.Drawing.Point(575, 24);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(23, 17);
             this.label2.TabIndex = 5;
@@ -75,16 +76,27 @@
             // comboBox2
             // 
             this.comboBox2.FormattingEnabled = true;
-            this.comboBox2.Location = new System.Drawing.Point(94, 61);
+            this.comboBox2.Location = new System.Drawing.Point(36, 61);
             this.comboBox2.Name = "comboBox2";
-            this.comboBox2.Size = new System.Drawing.Size(192, 24);
+            this.comboBox2.Size = new System.Drawing.Size(518, 24);
             this.comboBox2.TabIndex = 4;
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(374, 102);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(151, 46);
+            this.button2.TabIndex = 6;
+            this.button2.Text = "all tokens of this file";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // choice
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(474, 160);
+            this.ClientSize = new System.Drawing.Size(694, 160);
+            this.Controls.Add(this.button2);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.comboBox2);
             this.Controls.Add(this.button1);
@@ -105,5 +117,6 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox comboBox2;
+        private System.Windows.Forms.Button button2;
     }
 }
