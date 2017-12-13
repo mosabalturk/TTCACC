@@ -62,6 +62,20 @@ namespace Analyzer
         public cppFile(string codestr, string filename)
         {
             codestr = RemoveCommentsAndSpaces(codestr);//delete comments
+            codestr = codestr.Replace("ü", "u"); //yazi= yazi.Replace("eski değer","yeni değer") anlamına gelir.Yani yazi değişkenindeki eski değer ile yeni değiştirip tekrardan yazi değişkenime yeni değerimi atıyorum
+            codestr = codestr.Replace("ı", "i");
+            codestr = codestr.Replace("ö", "o");
+            codestr = codestr.Replace("ü", "u");
+            codestr = codestr.Replace("ş", "s");
+            codestr = codestr.Replace("ğ", "g");
+            codestr = codestr.Replace("ç", "c");
+            codestr = codestr.Replace("Ü", "U");
+            codestr = codestr.Replace("İ", "I");
+            codestr = codestr.Replace("Ö", "O");
+            codestr = codestr.Replace("Ü", "U");
+            codestr = codestr.Replace("Ş", "S");
+            codestr = codestr.Replace("Ğ", "G");
+            codestr = codestr.Replace("Ç", "C");
             this.cStr = codestr;//add hole code to cStr string
             this.name = filename;//filename or class or struct name
             Analyzer temp = new Analyzer(); // anlyzer class is the class that analyze code to tokens and lexemes
@@ -127,16 +141,22 @@ namespace Analyzer
             result.arrays = t.ArraysLL1(t);
             result.libraries = libraries;
             result.specialChars = t.specialCharList(t);
-            result.functionCalls = t.funcCalls(t);
+            result.codeFunctionCalls = t.codeFuncCalls(t);
+            result.frequentlyUsedFunctionCalls = t.freqUsedFuncCalls(t);
             result.commentLetters = commentLetters;
             result.commentLines = commentLines;
             result.setOpAll();
+            result.setAllCodeFuncCalls();
+            //result.setAllVars();
             result.setKWAll();
             result.setDTAll();
             result.setValuesAll();
+            result.setAllfreqUsedFuncCalls();
             result.setSpecialCahrAll();
             result.tokens = t.scopeTokens(t);
             result.allTokens = new List<token>(holeCodeTokens);
+            result.ERROR = t.error;
+            result.errormsg = t.errormsg;
             code.zeroStatics();
         }
     }

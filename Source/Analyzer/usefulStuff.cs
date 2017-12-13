@@ -48,5 +48,25 @@ namespace Analyzer
             string fileName = Path.GetFileName(path);
             File.Copy(path, Path.Combine(newPath, foldername+".cpp"), true);
         }
+        public static List<functionCallCounter> frequentlyUsedFunctions()
+        {
+            List<string> fu = new List<string>() {
+               "fopen","fgetc","fclose","malloc","feof","fscanf","scanf","ceil","printf","fprintf","free","strlen","fseek",
+"fgets","puts"
+            };
+            List<functionCallCounter> fc = new List<functionCallCounter>();
+            foreach (string s in fu)
+                fc.Add(new functionCallCounter(new token(s, "functionCall"), 0));
+            return fc;
+        }
+        public static List<tokenCounter> dataTypes()
+        {
+            var sDataType2 = new List<string>(){
+                "bool", "char","short","float","int","FILE","int32","double","long","void"};
+            List<tokenCounter> fc = new List<tokenCounter>();
+            foreach (string s in sDataType2)
+                fc.Add(new tokenCounter(new tokenCounter(new token(s, "datatype"),0)));
+            return fc;
+        }
     }
 }

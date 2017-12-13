@@ -15,8 +15,8 @@ namespace Analyzer
         private string cStr;//done
         private string name;//done
         public static int idno = 0;
-        bool error;
-        string errormsg = "";
+        public  bool error;
+        public  string errormsg = "";
         public int ScopeId;
         public int containingScopeId;
         public List<code> classes = new List<code>();//done
@@ -65,6 +65,7 @@ namespace Analyzer
             scopeTokenCounterList8 = new List<scopeTokenCounter>();
             scopeTokenCounterList9 = new List<scopefunctionCallCounter>();
             scopeTokenCounterList10 = new List<scopeTokens>();
+            scopeTokenCounterList11 = new List<scopefunctionCallCounter>();
         }
         public string typedefName { get; set; }
 
@@ -84,6 +85,7 @@ namespace Analyzer
         public static List<scopeTokenCounter> scopeTokenCounterList8 = new List<scopeTokenCounter>();
         public static List<scopefunctionCallCounter> scopeTokenCounterList9 = new List<scopefunctionCallCounter>();
         public static List<scopeTokens> scopeTokenCounterList10 = new List<scopeTokens>();
+        public static List<scopefunctionCallCounter> scopeTokenCounterList11 = new List<scopefunctionCallCounter>();
         #endregion
 
         #region type of code
@@ -569,17 +571,11 @@ namespace Analyzer
                         remove.Add(globalScobeTokens[i]);
                         //globalScobeTokens.Remove(globalScobeTokens[i]);
                         i++;
-                        if ((i < globalScobeTokens.Count))
-                        {
-                            error = true;
-                            errormsg += "paratheses Errom couldnt find } ";
-                            break;
-                        }
                     }
                     remove.Add(globalScobeTokens[i]);
                     //globalScobeTokens.Remove(globalScobeTokens[i]);
                     i++;
-                    while ((globalScobeTokens[i].getLexeme() != "}") || (parentheses != 0))
+                    while ((i < globalScobeTokens.Count) &&((globalScobeTokens[i].getLexeme() != "}") || (parentheses != 0)))
                     {
                         funcBody += globalScobeTokens[i].getLexeme() + " ";
                         funcTokens.Add(globalScobeTokens[i]);
@@ -590,12 +586,12 @@ namespace Analyzer
                         if (globalScobeTokens[i].getLexeme() == "}")
                             parentheses--;
                         i++;
-                        if ((i < globalScobeTokens.Count))
-                        {
-                            error = true;
-                            errormsg += "paratheses Errom couldnt find } ";
-                            break;
-                        }
+                    }
+                    if (!(i < globalScobeTokens.Count))
+                    {
+                        error = true;
+                        errormsg += "paratheses Error  "+"\n";
+                        break;
                     }
                     remove.Add(globalScobeTokens[i]);
                     main = new function(funcBody, this.ScopeId, ref funcTokens, new List<identifier>(), datatype, "main", cppfile);
@@ -624,7 +620,7 @@ namespace Analyzer
                         i++;
                     }
                     i++;
-                    while ((globalScobeTokens[i].getLexeme() != "}") || (parentheses != 0))
+                    while ((i < globalScobeTokens.Count)&&((globalScobeTokens[i].getLexeme() != "}") || (parentheses != 0)))
                     {
                         if (globalScobeTokens[i].getLexeme() == "{")
                             parentheses++;
@@ -715,15 +711,21 @@ namespace Analyzer
                             if (globalScobeTokens[j].getLexeme() == "}")
                                 parentheses--;
                             j++;
-                            if ((j < globalScobeTokens.Count) )
-                            {
-                                error = true;
-                                errormsg += "paratheses Errom between " + i.ToString() + "  " + j.ToString() + "  lines\n";
-                                break;
-                            }
+                            //if (!(j < globalScobeTokens.Count) && (globalScobeTokens[j].getLexeme() != "}"))
+                            //{
+                            //    error = true;
+                            //    errormsg += "paratheses Error between " + i.ToString() + "  " + j.ToString() + "  lines\n";
+                            //    break;
+                            //}
                         }
-                        if (error)
+                        //if (error)
+                        //    continue;
+                        if ((j >= globalScobeTokens.Count))
+                        {
+                            error = true;
+                            errormsg += "paratheses Error between " + i.ToString() + "  " + j.ToString() + "  lines\n";
                             break;
+                        }
                         remove.Add(globalScobeTokens[j]);
                         i = j - 1;
                         functions.Add(new function(funcBody, this.ScopeId, ref funcTokens, parameters, datatype, funcName, cppfile));
@@ -1017,15 +1019,25 @@ namespace Analyzer
 
             return scopeTokenCounterList7;
         }
-        public List<scopefunctionCallCounter> funcCalls(code st)
+        public List<scopefunctionCallCounter> codeFuncCalls(code st)
         {
 
             foreach (function f in st.Allfunctions)
-                scopeTokenCounterList9.Add(new scopefunctionCallCounter(f.ScopeId, f.containingScopeId, f.name, f.functionCallsCounter, "function"));
+                scopeTokenCounterList9.Add(new scopefunctionCallCounter(f.ScopeId, f.containingScopeId, f.name, f.codeFunctionCallsCounter, "function"));
             foreach (code cd in st.structes)
-            { scopeTokenCounterList9.Concat(cd.funcCalls(cd)).ToList(); }
+            { scopeTokenCounterList9.Concat(cd.codeFuncCalls(cd)).ToList(); }
 
             return scopeTokenCounterList9;
+        }
+        public List<scopefunctionCallCounter> freqUsedFuncCalls(code st)
+        {
+
+            foreach (function f in st.Allfunctions)
+                scopeTokenCounterList11.Add(new scopefunctionCallCounter(f.ScopeId, f.containingScopeId, f.name, f.frequentlyUsedFunctionCallsCounter, "function"));
+            foreach (code cd in st.structes)
+            { scopeTokenCounterList11.Concat(cd.freqUsedFuncCalls(cd)).ToList(); }
+
+            return scopeTokenCounterList11;
         }
         public List<scopeTokens> scopeTokens(code st)
         {

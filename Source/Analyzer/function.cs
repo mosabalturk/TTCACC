@@ -12,7 +12,8 @@ namespace Analyzer
         public List<variableCounter> variablesCounter = new List<variableCounter>();
         public List<pointerCounter> pointersCounter = new List<pointerCounter>();
         public List<arrayCounter> arraysCounter = new List<arrayCounter>();
-        public List<functionCallCounter> functionCallsCounter = new List<functionCallCounter>();
+        public List<functionCallCounter> codeFunctionCallsCounter = new List<functionCallCounter>();
+        public List<functionCallCounter> frequentlyUsedFunctionCallsCounter = usefulStuff.frequentlyUsedFunctions();
         public List<tokenCounter> KeyWordsCounter = new List<tokenCounter>();
         public List<tokenCounter> dataTypesCounter = new List<tokenCounter>();
         public List<tokenCounter> valuesCounter = new List<tokenCounter>();
@@ -92,8 +93,10 @@ namespace Analyzer
                     pointerCounter.AddOneByToken((pointer)tokens[ii], pointersCounter);
                 else if (tokens[ii].isArray)
                     arrayCounter.AddOneByToken((array)tokens[ii], arraysCounter);
+                else if (tokens[ii].isFunctionCall&&(!frequentlyUsedFunctionCallsCounter.Select(a=>a.getLexeme()).Contains(tokens[ii].getLexeme())))
+                    functionCallCounter.AddOneByLexeme(tokens[ii], codeFunctionCallsCounter);
                 else if (tokens[ii].isFunctionCall)
-                    functionCallCounter.AddOneByLexeme(tokens[ii], functionCallsCounter);
+                    functionCallCounter.AddOneByLexeme(tokens[ii], frequentlyUsedFunctionCallsCounter);
                 else
                     tokenCounter.AddOneByLexeme(tokens[ii], specialChar);
             }

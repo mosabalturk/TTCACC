@@ -160,6 +160,7 @@ namespace Analyzer
     public class variableCounter : identifier
     {
         int count;
+        public void setCount(int value) { count = value; }
         public variableCounter copy()
         {
             variableCounter vc = new variableCounter(this);
@@ -256,10 +257,16 @@ namespace Analyzer
             this.count = 1;
             this.type = t.getType();
         }
+        public tokenCounter(token t,int cout) : base(t.id, t.getLexeme(), t.getType())
+        {
+            this.count = cout;
+            this.type = t.getType();
+        }
         public int getCount() { return count; }
         public void setCount(int value) { count =value; }
 
         public void incCount() { this.count++; }
+        public void decCount() { this.count--; }
         public static void AddOneByLexeme(token TknObj, List<tokenCounter> tkn)
         {
             string sToken = TknObj.getLexeme();
@@ -299,6 +306,7 @@ namespace Analyzer
     public class functionCallCounter : identifier
     {
         int count;
+        public void setCount(int value) { count = value; }
         public override bool isVariable { get { return false; } }
         public override bool isArray { get { return false; } }
         public override bool isPointer { get { return false; } }
@@ -314,6 +322,11 @@ namespace Analyzer
         public functionCallCounter(token t) : base(t)
         {
             this.count = 1;
+            type = "functionCall";
+        }
+        public functionCallCounter(token t,int count) : base(t)
+        {
+            this.count = count;
             type = "functionCall";
         }
         public int getCount() { return count; }

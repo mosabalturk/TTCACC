@@ -26,6 +26,8 @@
             this.clearbtn = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.button5 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.button18 = new System.Windows.Forms.Button();
             this.button16 = new System.Windows.Forms.Button();
             this.button15 = new System.Windows.Forms.Button();
@@ -51,24 +53,26 @@
             this.dataTypeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.allOfThemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.kwOpDtVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.specialCharToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.kwOpDtVScToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.frequentlyUsedFunctionCallsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.codeFuncsAndFuncCallCountToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.kwOpDtvfuncToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.librariesToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.عرضليستاتالنتائجToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.عرضليستتالفاريابلزToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.عرضليستتالبوينترزToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.arraysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.codeFuncCallAllFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.keywordsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.valuesToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.operationsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.datatypesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.librariesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.specialCharsAllFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.functionCallsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.librariesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.commentsLettersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.tokensToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.عرضToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.button2 = new System.Windows.Forms.Button();
             this.eRRORSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.الفنكشناتالجاهزةToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.codeFuncsAndFuncCallCountToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -91,7 +95,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(375, 6);
+            this.button1.Location = new System.Drawing.Point(317, 13);
             this.button1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(117, 51);
@@ -110,6 +114,7 @@
             // 
             // splitContainer1.Panel1
             // 
+            this.splitContainer1.Panel1.Controls.Add(this.button5);
             this.splitContainer1.Panel1.Controls.Add(this.button2);
             this.splitContainer1.Panel1.Controls.Add(this.button18);
             this.splitContainer1.Panel1.Controls.Add(this.button16);
@@ -136,6 +141,28 @@
             this.splitContainer1.SplitterDistance = 77;
             this.splitContainer1.SplitterWidth = 5;
             this.splitContainer1.TabIndex = 9;
+            // 
+            // button5
+            // 
+            this.button5.Location = new System.Drawing.Point(468, 13);
+            this.button5.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button5.Name = "button5";
+            this.button5.Size = new System.Drawing.Size(96, 28);
+            this.button5.TabIndex = 66;
+            this.button5.Text = "bla";
+            this.button5.UseVisualStyleBackColor = true;
+            this.button5.Click += new System.EventHandler(this.button5_Click_1);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(97, 36);
+            this.button2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(214, 28);
+            this.button2.TabIndex = 65;
+            this.button2.Text = "transfer cpp files from directories";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button18
             // 
@@ -339,8 +366,7 @@
             this.menuStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.qweToolStripMenuItem,
-            this.عرضليستاتالنتائجToolStripMenuItem,
-            this.tokensToolStripMenuItem});
+            this.عرضليستاتالنتائجToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(793, 28);
@@ -350,14 +376,16 @@
             // qweToolStripMenuItem
             // 
             this.qweToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.librariesToolStripMenuItem1,
             this.operationsToolStripMenuItem,
             this.keywordsToolStripMenuItem,
             this.valuesToolStripMenuItem,
             this.dataTypeToolStripMenuItem,
             this.allOfThemToolStripMenuItem,
             this.kwOpDtVToolStripMenuItem,
-            this.specialCharToolStripMenuItem,
-            this.kwOpDtVScToolStripMenuItem});
+            this.frequentlyUsedFunctionCallsToolStripMenuItem,
+            this.codeFuncsAndFuncCallCountToolStripMenuItem,
+            this.kwOpDtvfuncToolStripMenuItem});
             this.qweToolStripMenuItem.Name = "qweToolStripMenuItem";
             this.qweToolStripMenuItem.Size = new System.Drawing.Size(125, 24);
             this.qweToolStripMenuItem.Text = "مقارنات مصعبية";
@@ -365,58 +393,72 @@
             // operationsToolStripMenuItem
             // 
             this.operationsToolStripMenuItem.Name = "operationsToolStripMenuItem";
-            this.operationsToolStripMenuItem.Size = new System.Drawing.Size(226, 26);
+            this.operationsToolStripMenuItem.Size = new System.Drawing.Size(284, 26);
             this.operationsToolStripMenuItem.Text = "operations";
             this.operationsToolStripMenuItem.Click += new System.EventHandler(this.operationsToolStripMenuItem_Click);
             // 
             // keywordsToolStripMenuItem
             // 
             this.keywordsToolStripMenuItem.Name = "keywordsToolStripMenuItem";
-            this.keywordsToolStripMenuItem.Size = new System.Drawing.Size(226, 26);
+            this.keywordsToolStripMenuItem.Size = new System.Drawing.Size(284, 26);
             this.keywordsToolStripMenuItem.Text = "keywords";
             this.keywordsToolStripMenuItem.Click += new System.EventHandler(this.keywordsToolStripMenuItem_Click);
             // 
             // valuesToolStripMenuItem
             // 
             this.valuesToolStripMenuItem.Name = "valuesToolStripMenuItem";
-            this.valuesToolStripMenuItem.Size = new System.Drawing.Size(226, 26);
+            this.valuesToolStripMenuItem.Size = new System.Drawing.Size(284, 26);
             this.valuesToolStripMenuItem.Text = "values";
             this.valuesToolStripMenuItem.Click += new System.EventHandler(this.valuesToolStripMenuItem_Click);
             // 
             // dataTypeToolStripMenuItem
             // 
             this.dataTypeToolStripMenuItem.Name = "dataTypeToolStripMenuItem";
-            this.dataTypeToolStripMenuItem.Size = new System.Drawing.Size(226, 26);
+            this.dataTypeToolStripMenuItem.Size = new System.Drawing.Size(284, 26);
             this.dataTypeToolStripMenuItem.Text = "data type";
             this.dataTypeToolStripMenuItem.Click += new System.EventHandler(this.dataTypeToolStripMenuItem_Click);
             // 
             // allOfThemToolStripMenuItem
             // 
             this.allOfThemToolStripMenuItem.Name = "allOfThemToolStripMenuItem";
-            this.allOfThemToolStripMenuItem.Size = new System.Drawing.Size(226, 26);
+            this.allOfThemToolStripMenuItem.Size = new System.Drawing.Size(284, 26);
             this.allOfThemToolStripMenuItem.Text = "kw + op + dt";
             this.allOfThemToolStripMenuItem.Click += new System.EventHandler(this.allOfThemToolStripMenuItem_Click);
             // 
             // kwOpDtVToolStripMenuItem
             // 
             this.kwOpDtVToolStripMenuItem.Name = "kwOpDtVToolStripMenuItem";
-            this.kwOpDtVToolStripMenuItem.Size = new System.Drawing.Size(226, 26);
+            this.kwOpDtVToolStripMenuItem.Size = new System.Drawing.Size(284, 26);
             this.kwOpDtVToolStripMenuItem.Text = "kw + op + dt + v";
             this.kwOpDtVToolStripMenuItem.Click += new System.EventHandler(this.kwOpDtVToolStripMenuItem_Click);
             // 
-            // specialCharToolStripMenuItem
+            // frequentlyUsedFunctionCallsToolStripMenuItem
             // 
-            this.specialCharToolStripMenuItem.Name = "specialCharToolStripMenuItem";
-            this.specialCharToolStripMenuItem.Size = new System.Drawing.Size(226, 26);
-            this.specialCharToolStripMenuItem.Text = "special char";
-            this.specialCharToolStripMenuItem.Click += new System.EventHandler(this.specialCharToolStripMenuItem_Click);
+            this.frequentlyUsedFunctionCallsToolStripMenuItem.Name = "frequentlyUsedFunctionCallsToolStripMenuItem";
+            this.frequentlyUsedFunctionCallsToolStripMenuItem.Size = new System.Drawing.Size(284, 26);
+            this.frequentlyUsedFunctionCallsToolStripMenuItem.Text = "frequently used function calls";
+            this.frequentlyUsedFunctionCallsToolStripMenuItem.Click += new System.EventHandler(this.frequentlyUsedFunctionCallsToolStripMenuItem_Click);
             // 
-            // kwOpDtVScToolStripMenuItem
+            // codeFuncsAndFuncCallCountToolStripMenuItem
             // 
-            this.kwOpDtVScToolStripMenuItem.Name = "kwOpDtVScToolStripMenuItem";
-            this.kwOpDtVScToolStripMenuItem.Size = new System.Drawing.Size(226, 26);
-            this.kwOpDtVScToolStripMenuItem.Text = "kw + op + dt + v + sc";
-            this.kwOpDtVScToolStripMenuItem.Click += new System.EventHandler(this.kwOpDtVScToolStripMenuItem_Click);
+            this.codeFuncsAndFuncCallCountToolStripMenuItem.Name = "codeFuncsAndFuncCallCountToolStripMenuItem";
+            this.codeFuncsAndFuncCallCountToolStripMenuItem.Size = new System.Drawing.Size(284, 26);
+            this.codeFuncsAndFuncCallCountToolStripMenuItem.Text = "code funcs and func call count";
+            this.codeFuncsAndFuncCallCountToolStripMenuItem.Click += new System.EventHandler(this.codeFuncsAndFuncCallCountToolStripMenuItem_Click);
+            // 
+            // kwOpDtvfuncToolStripMenuItem
+            // 
+            this.kwOpDtvfuncToolStripMenuItem.Name = "kwOpDtvfuncToolStripMenuItem";
+            this.kwOpDtvfuncToolStripMenuItem.Size = new System.Drawing.Size(284, 26);
+            this.kwOpDtvfuncToolStripMenuItem.Text = "kw + op + dt +v +funcs";
+            this.kwOpDtvfuncToolStripMenuItem.Click += new System.EventHandler(this.kwOpDtvfuncToolStripMenuItem_Click);
+            // 
+            // librariesToolStripMenuItem1
+            // 
+            this.librariesToolStripMenuItem1.Name = "librariesToolStripMenuItem1";
+            this.librariesToolStripMenuItem1.Size = new System.Drawing.Size(284, 26);
+            this.librariesToolStripMenuItem1.Text = "libraries";
+            this.librariesToolStripMenuItem1.Click += new System.EventHandler(this.librariesToolStripMenuItem1_Click);
             // 
             // عرضليستاتالنتائجToolStripMenuItem
             // 
@@ -424,15 +466,18 @@
             this.عرضليستتالفاريابلزToolStripMenuItem,
             this.عرضليستتالبوينترزToolStripMenuItem,
             this.arraysToolStripMenuItem,
+            this.codeFuncCallAllFileToolStripMenuItem,
             this.keywordsToolStripMenuItem1,
             this.valuesToolStripMenuItem1,
             this.operationsToolStripMenuItem1,
             this.datatypesToolStripMenuItem,
+            this.librariesToolStripMenuItem,
             this.specialCharsAllFileToolStripMenuItem,
             this.functionCallsToolStripMenuItem,
-            this.librariesToolStripMenuItem,
             this.commentsLettersToolStripMenuItem,
-            this.eRRORSToolStripMenuItem});
+            this.eRRORSToolStripMenuItem,
+            this.الفنكشناتالجاهزةToolStripMenuItem,
+            this.codeFuncsAndFuncCallCountToolStripMenuItem1});
             this.عرضليستاتالنتائجToolStripMenuItem.Name = "عرضليستاتالنتائجToolStripMenuItem";
             this.عرضليستاتالنتائجToolStripMenuItem.Size = new System.Drawing.Size(146, 24);
             this.عرضليستاتالنتائجToolStripMenuItem.Text = "عرض ليستات النتائج";
@@ -440,111 +485,107 @@
             // عرضليستتالفاريابلزToolStripMenuItem
             // 
             this.عرضليستتالفاريابلزToolStripMenuItem.Name = "عرضليستتالفاريابلزToolStripMenuItem";
-            this.عرضليستتالفاريابلزToolStripMenuItem.Size = new System.Drawing.Size(275, 26);
+            this.عرضليستتالفاريابلزToolStripMenuItem.Size = new System.Drawing.Size(284, 26);
             this.عرضليستتالفاريابلزToolStripMenuItem.Text = "vars";
             this.عرضليستتالفاريابلزToolStripMenuItem.Click += new System.EventHandler(this.عرضليستتالفاريابلزToolStripMenuItem_Click);
             // 
             // عرضليستتالبوينترزToolStripMenuItem
             // 
             this.عرضليستتالبوينترزToolStripMenuItem.Name = "عرضليستتالبوينترزToolStripMenuItem";
-            this.عرضليستتالبوينترزToolStripMenuItem.Size = new System.Drawing.Size(275, 26);
+            this.عرضليستتالبوينترزToolStripMenuItem.Size = new System.Drawing.Size(284, 26);
             this.عرضليستتالبوينترزToolStripMenuItem.Text = "pointers";
             this.عرضليستتالبوينترزToolStripMenuItem.Click += new System.EventHandler(this.عرضليستتالبوينترزToolStripMenuItem_Click);
             // 
             // arraysToolStripMenuItem
             // 
             this.arraysToolStripMenuItem.Name = "arraysToolStripMenuItem";
-            this.arraysToolStripMenuItem.Size = new System.Drawing.Size(275, 26);
+            this.arraysToolStripMenuItem.Size = new System.Drawing.Size(284, 26);
             this.arraysToolStripMenuItem.Text = "arrays  ";
             this.arraysToolStripMenuItem.Click += new System.EventHandler(this.arraysToolStripMenuItem_Click);
+            // 
+            // codeFuncCallAllFileToolStripMenuItem
+            // 
+            this.codeFuncCallAllFileToolStripMenuItem.Name = "codeFuncCallAllFileToolStripMenuItem";
+            this.codeFuncCallAllFileToolStripMenuItem.Size = new System.Drawing.Size(284, 26);
+            this.codeFuncCallAllFileToolStripMenuItem.Text = "code func call all file";
+            this.codeFuncCallAllFileToolStripMenuItem.Click += new System.EventHandler(this.codeFuncCallAllFileToolStripMenuItem_Click_1);
             // 
             // keywordsToolStripMenuItem1
             // 
             this.keywordsToolStripMenuItem1.Name = "keywordsToolStripMenuItem1";
-            this.keywordsToolStripMenuItem1.Size = new System.Drawing.Size(275, 26);
+            this.keywordsToolStripMenuItem1.Size = new System.Drawing.Size(284, 26);
             this.keywordsToolStripMenuItem1.Text = "keywords  all file in  all files";
             this.keywordsToolStripMenuItem1.Click += new System.EventHandler(this.keywordsToolStripMenuItem1_Click);
             // 
             // valuesToolStripMenuItem1
             // 
             this.valuesToolStripMenuItem1.Name = "valuesToolStripMenuItem1";
-            this.valuesToolStripMenuItem1.Size = new System.Drawing.Size(275, 26);
+            this.valuesToolStripMenuItem1.Size = new System.Drawing.Size(284, 26);
             this.valuesToolStripMenuItem1.Text = "values  all file in  all files";
             this.valuesToolStripMenuItem1.Click += new System.EventHandler(this.valuesToolStripMenuItem1_Click);
             // 
             // operationsToolStripMenuItem1
             // 
             this.operationsToolStripMenuItem1.Name = "operationsToolStripMenuItem1";
-            this.operationsToolStripMenuItem1.Size = new System.Drawing.Size(275, 26);
+            this.operationsToolStripMenuItem1.Size = new System.Drawing.Size(284, 26);
             this.operationsToolStripMenuItem1.Text = "operations  all file in  all files";
             this.operationsToolStripMenuItem1.Click += new System.EventHandler(this.operationsToolStripMenuItem1_Click);
             // 
             // datatypesToolStripMenuItem
             // 
             this.datatypesToolStripMenuItem.Name = "datatypesToolStripMenuItem";
-            this.datatypesToolStripMenuItem.Size = new System.Drawing.Size(275, 26);
+            this.datatypesToolStripMenuItem.Size = new System.Drawing.Size(284, 26);
             this.datatypesToolStripMenuItem.Text = "datatypes  all file in  all files";
             this.datatypesToolStripMenuItem.Click += new System.EventHandler(this.datatypesToolStripMenuItem_Click);
+            // 
+            // librariesToolStripMenuItem
+            // 
+            this.librariesToolStripMenuItem.Name = "librariesToolStripMenuItem";
+            this.librariesToolStripMenuItem.Size = new System.Drawing.Size(284, 26);
+            this.librariesToolStripMenuItem.Text = "libraries  all files";
+            this.librariesToolStripMenuItem.Click += new System.EventHandler(this.librariesToolStripMenuItem_Click);
             // 
             // specialCharsAllFileToolStripMenuItem
             // 
             this.specialCharsAllFileToolStripMenuItem.Name = "specialCharsAllFileToolStripMenuItem";
-            this.specialCharsAllFileToolStripMenuItem.Size = new System.Drawing.Size(275, 26);
+            this.specialCharsAllFileToolStripMenuItem.Size = new System.Drawing.Size(284, 26);
             this.specialCharsAllFileToolStripMenuItem.Text = "special chars all file ";
             this.specialCharsAllFileToolStripMenuItem.Click += new System.EventHandler(this.specialCharsAllFileToolStripMenuItem_Click);
             // 
             // functionCallsToolStripMenuItem
             // 
             this.functionCallsToolStripMenuItem.Name = "functionCallsToolStripMenuItem";
-            this.functionCallsToolStripMenuItem.Size = new System.Drawing.Size(275, 26);
-            this.functionCallsToolStripMenuItem.Text = "function calls";
+            this.functionCallsToolStripMenuItem.Size = new System.Drawing.Size(284, 26);
+            this.functionCallsToolStripMenuItem.Text = "new function calls";
             this.functionCallsToolStripMenuItem.Click += new System.EventHandler(this.functionCallsToolStripMenuItem_Click);
-            // 
-            // librariesToolStripMenuItem
-            // 
-            this.librariesToolStripMenuItem.Name = "librariesToolStripMenuItem";
-            this.librariesToolStripMenuItem.Size = new System.Drawing.Size(275, 26);
-            this.librariesToolStripMenuItem.Text = "libraries  all files";
-            this.librariesToolStripMenuItem.Click += new System.EventHandler(this.librariesToolStripMenuItem_Click);
             // 
             // commentsLettersToolStripMenuItem
             // 
             this.commentsLettersToolStripMenuItem.Name = "commentsLettersToolStripMenuItem";
-            this.commentsLettersToolStripMenuItem.Size = new System.Drawing.Size(275, 26);
+            this.commentsLettersToolStripMenuItem.Size = new System.Drawing.Size(284, 26);
             this.commentsLettersToolStripMenuItem.Text = "comments letters and lines";
             this.commentsLettersToolStripMenuItem.Click += new System.EventHandler(this.commentsLettersToolStripMenuItem_Click);
-            // 
-            // tokensToolStripMenuItem
-            // 
-            this.tokensToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.عرضToolStripMenuItem});
-            this.tokensToolStripMenuItem.Name = "tokensToolStripMenuItem";
-            this.tokensToolStripMenuItem.Size = new System.Drawing.Size(64, 24);
-            this.tokensToolStripMenuItem.Text = "tokens";
-            // 
-            // عرضToolStripMenuItem
-            // 
-            this.عرضToolStripMenuItem.Name = "عرضToolStripMenuItem";
-            this.عرضToolStripMenuItem.Size = new System.Drawing.Size(122, 26);
-            this.عرضToolStripMenuItem.Text = "عرض ";
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(97, 36);
-            this.button2.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(214, 28);
-            this.button2.TabIndex = 65;
-            this.button2.Text = "transfer cpp files from directories";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // eRRORSToolStripMenuItem
             // 
             this.eRRORSToolStripMenuItem.Name = "eRRORSToolStripMenuItem";
-            this.eRRORSToolStripMenuItem.Size = new System.Drawing.Size(275, 26);
+            this.eRRORSToolStripMenuItem.Size = new System.Drawing.Size(284, 26);
             this.eRRORSToolStripMenuItem.Text = "ERRORS";
             this.eRRORSToolStripMenuItem.Click += new System.EventHandler(this.eRRORSToolStripMenuItem_Click);
+            // 
+            // الفنكشناتالجاهزةToolStripMenuItem
+            // 
+            this.الفنكشناتالجاهزةToolStripMenuItem.Name = "الفنكشناتالجاهزةToolStripMenuItem";
+            this.الفنكشناتالجاهزةToolStripMenuItem.Size = new System.Drawing.Size(284, 26);
+            this.الفنكشناتالجاهزةToolStripMenuItem.Text = "frequently used funcs";
+            this.الفنكشناتالجاهزةToolStripMenuItem.Click += new System.EventHandler(this.الفنكشناتالجاهزةToolStripMenuItem_Click);
+            // 
+            // codeFuncsAndFuncCallCountToolStripMenuItem1
+            // 
+            this.codeFuncsAndFuncCallCountToolStripMenuItem1.Name = "codeFuncsAndFuncCallCountToolStripMenuItem1";
+            this.codeFuncsAndFuncCallCountToolStripMenuItem1.Size = new System.Drawing.Size(284, 26);
+            this.codeFuncsAndFuncCallCountToolStripMenuItem1.Text = "code funcs and func call count";
+            this.codeFuncsAndFuncCallCountToolStripMenuItem1.Click += new System.EventHandler(this.codeFuncsAndFuncCallCountToolStripMenuItem1_Click);
             // 
             // Form1
             // 
@@ -611,12 +652,16 @@
         private System.Windows.Forms.ToolStripMenuItem librariesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem commentsLettersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem specialCharsAllFileToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem specialCharToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem kwOpDtVScToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem tokensToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem عرضToolStripMenuItem;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.ToolStripMenuItem eRRORSToolStripMenuItem;
+        private System.Windows.Forms.Button button5;
+        private System.Windows.Forms.ToolStripMenuItem الفنكشناتالجاهزةToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem frequentlyUsedFunctionCallsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem kwOpDtvfuncToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem librariesToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem codeFuncCallAllFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem codeFuncsAndFuncCallCountToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem codeFuncsAndFuncCallCountToolStripMenuItem1;
     }
 }
 
